@@ -435,7 +435,7 @@ END;
 
         } else {
             // Try to auto make the optimised image.
-            list($message, $genuinedebug, $result, $commandline)
+            list($message, $genuinedebug, $result, $commandline, $rawcommand)
                     = stack_connection_helper::stackmaxima_auto_maxima_optimise($genuinedebug);
 
             if (!$result) {
@@ -475,7 +475,7 @@ END;
             self::create_maximalocal();
             return array(false, $errmsg);
         } else {
-            return array(true, "DONE.");
+            return array(true, $rawcommand);
         }
     }
 }
