@@ -50,9 +50,14 @@ class stack_cas_configuration {
         global $CFG;
         $this->settings = get_config('qtype_stack');
         $this->date = date("F j, Y, g:i a");
-
-        $this->maximacodepath = stack_utils::convert_slash_paths(
-                $CFG->dirroot . '/question/type/stack/stack/maxima');
+        $maximacodepath = $CFG->dirroot;
+        // Make sure we have flexibility for the api, moodle and, e.g., Ilias.
+        if (!property_exists($this->settings, 'useaspartof')) {
+            // Assume we have Moodle.  The api, and others, should set this config setting.
+            $maximacodepath .= '/question/type/stack';
+        }
+        $maximacodepath .= '/stack/maxima';
+        $this->maximacodepath = stack_utils::convert_slash_paths($maximacodepath);
 
         $this->logpath = stack_utils::convert_slash_paths($CFG->dataroot . '/stack/logs');
 
