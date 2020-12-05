@@ -111,6 +111,8 @@ class stack_answertest_test_data {
         array('AlgEquiv', '', '2^((1/5.1)*t)', '2^((1/5.1)*t)', 1, '', ''),
         array('AlgEquiv', '', '2^((1/5.1)*t)', '2^(0.196078431373*t)', 0, '', ''),
         array('AlgEquiv', '', 'a^b*a^c', 'a^(b+c)', 1, '', ''),
+        array('AlgEquiv', '', '(assume(x>2),6*((x-2)^2)^k)', '6*(x-2)^(2*k)', 1, '', ''),
+        array('AlgEquiv', '', '6*((x-2)^3)^k', '6*(x-2)^(3*k)', 1, '', ''),
         array('AlgEquiv', '', '(4*sqrt(3)*%i+4)^(1/5)', '6^(1/5)*cos(%pi/15)-6^(1/5)*%i*sin(%pi/15)', 0, '', ''),
         array('AlgEquiv', '', '2+2*sqrt(3+x)', '2+sqrt(12+4*x)', 1, '', ''),
         array('AlgEquiv', '', '6*e^(6*(y^2+x^2))+72*x^2*e^(6*(y^2+x^2))',
@@ -131,6 +133,7 @@ class stack_answertest_test_data {
         array('AlgEquiv', '', '1/(4*x-(%pi+sqrt(2)))', '1/(x+1)', 0, '', ''),
         array('AlgEquiv', '', '(x-a)^6000', '(x-a)^6000', 1, '', ''),
         array('AlgEquiv', '', '(a-x)^6000', '(x-a)^6000', 1, '', ''),
+        array('AlgEquiv', '', '(4*a-x)^6000', '(x-4*a)^6000', 1, '', ''),
         array('AlgEquiv', '', '(x-a)^6000', '(x-a)^5999', 0, '', ''),
         array('AlgEquiv', '', '(k+8)/(k^2+4*k-12)', '(k+8)/(k^2+4*k-12)', 1, '', ''),
         array('AlgEquiv', '', '(k+7)/(k^2+4*k-12)', '(k+8)/(k^2+4*k-12)', 0, '', ''),
@@ -168,6 +171,19 @@ class stack_answertest_test_data {
             '(6*cos(6*x)*sin(7*x)-7*sin(6*x)*cos(7*x))/sin(6*x)^2', 0, '', ''),
         array('AlgEquiv', '', '-(7*x^6+4*x^3)/sin(7*y+x^7+x^4+1)^2',
             '-(7*x^6+4*x^3)*csc(7*y+x^7+x^4+1)^2', 1, '', ''),
+        array('AlgEquiv', '', 'sin((2*%pi*n-%pi)/2)', '-cos(n*%pi)', 1, '', ''),
+        array('AlgEquiv', '', 'sin(x/2)/(1+tan(x)*tan(x/2))', 'sin(x/2)*cos(x)', 1, '', ''),
+        array('AlgEquiv', '', '(declare(n,integer),trigrat(sin((2*%pi*n-%pi)/2)))', '-(-1)^n', 1, '', ''),
+        // According to Twitter!  Not sure this is even true, but just for fun!
+        array('AlgEquiv', '', 'cot(%pi/20)+cot(%pi/24)-cot(%pi/10)', 'sqrt(1)+sqrt(2)+sqrt(3)+sqrt(4)+sqrt(5)+sqrt(6)',
+            -3, '', '', ''),
+        array('AlgEquiv', '', 'trigeval(cot(%pi/20)+cot(%pi/24)-cot(%pi/10))', 'sqrt(1)+sqrt(2)+sqrt(3)+sqrt(4)+sqrt(5)+sqrt(6)',
+            1, '', '', ''),
+        array('AlgEquiv', '', 'sin([1/8,1/6, 1/4, 1/3, 1/2, 1]*%pi)', '[sqrt(2-sqrt(2))/2,1/2,1/sqrt(2),sqrt(3)/2,1,0]',
+            -3, '(ATList_wrongentries 1).', '', ''),
+        array('AlgEquiv', '', 'trigeval(sin([1/8,1/6, 1/4, 1/3, 1/2, 1]*%pi))', '[sqrt(2-sqrt(2))/2,1/2,1/sqrt(2),sqrt(3)/2,1,0]',
+            1, '', '', ''),
+
         array('AlgEquiv', '', 'log(a^2*b)', '2*log(a)+log(b)', 1, '', 'Logarithms'),
         array('AlgEquiv', '', '(2*log(2*x)+x)/(2*x)', '(log(2*x)+2)/(2*sqrt(x))', 0, '', ''),
         array('AlgEquiv', '', 'log(abs((x^2-9)))', 'log(abs(x-3))+log(abs(x+3))', 0, '', ''),
@@ -327,6 +343,8 @@ class stack_answertest_test_data {
         array('AlgEquiv', '', 'oo(-inf,1)', 'oo(-inf,1)', 1, 'ATRealSet_true.', ''),
         array('AlgEquiv', '', 'oo(-1,inf)', 'oo(0,inf)', 0, 'ATRealSet_false.', ''),
         array('AlgEquiv', '', '%union(oc(-inf,0),oo(-1,4))', 'oo(-inf,4)', 1, 'ATRealSet_true.', ''),
+        array('AlgEquiv', '', '%union(oo(-inf,1),oo(-1,inf))', 'oo(-inf,inf)', 1, 'ATRealSet_true.', ''),
+        array('AlgEquiv', '', 'all', 'oo(-inf,inf)', 1, 'ATRealSet_true.', ''),
 
         array('AlgEquiv', '', 'a=b/%i', '%i*a=b', 1, 'ATEquation_num_i', 'Complex numbers'),
         array('AlgEquiv', '', 'b/%i=a', '%i*a=b', 1, 'ATEquation_num_i', ''),
@@ -401,6 +419,13 @@ class stack_answertest_test_data {
         array('AlgEquiv', '', 'abs(x)<1', 'abs(x)<1', 1, '', ''),
         array('AlgEquiv', '', 'abs(x)<1', 'abs(x)<2', 0, '', ''),
         array('AlgEquiv', '', 'abs(x)<1', 'abs(x)>1', 0, 'ATInequality_backwards.', ''),
+        array('AlgEquiv', '', 'abs(x)<2', '-2<x and x<2', -3, '', ''),
+        array('AlgEquiv', '', '-2<x and x<2', 'abs(x)<2',-3, '', ''),
+        array('AlgEquiv', '', 'abs(x)<2', '-1<x and x<1', 0, '', ''),
+        array('AlgEquiv', '', 'x^2<=9', 'abs(x)<3', 0, '', ''),
+        array('AlgEquiv', '', 'x^2<=9', 'abs(x)<=3', -3, '', ''),
+        array('AlgEquiv', '', 'x^6<1', 'abs(x)<1', -3, '', ''),
+        array('AlgEquiv', '', 'abs(x)>1', 'x<-1 or x>1', -3, '', ''),
 
         array('AlgEquiv', '', 'sqrt(12)', '2*sqrt(3)', 1, '', 'Surds'),
         array('AlgEquiv', '', 'sqrt(11+6*sqrt(2))', '3+sqrt(2)', 1, '', ''),
@@ -430,7 +455,7 @@ class stack_answertest_test_data {
         array('AlgEquiv', '', 'stackunits(2,m)^2', 'stackunits(4,m^2)', 1, '', ''),
         array('AlgEquiv', '', 'stackunits(2,s)^2', 'stackunits(4,m^2)', 0, '', ''),
         array('AlgEquiv', '', '-inf', 'minf', 0, '', 'Maxima does not simplify -inf (I agree!)'),
-        array('AlgEquiv', '', '2/%i*ln(sqrt((1+z)/2)+%i*sqrt((1-z)/2))', '-%i*ln(z+i*sqrt(1-z^2))', -3,
+        array('AlgEquiv', '', '2/%i*ln(sqrt((1+z)/2)+%i*sqrt((1-z)/2))', '-%i*ln(z+%i*sqrt(1-z^2))', -3,
             '', 'These currently fail'),
         array('AlgEquiv', '', 'abs(x^2-4)/(abs(x-2)*abs(x+2))', '1', -3, '', ''),
         array('AlgEquiv', '', 'abs(x^2-4)', 'abs(x-2)*abs(x+2)', -3, '', ''),
@@ -455,9 +480,6 @@ class stack_answertest_test_data {
         // An example due to Gauss.  Just for fun!
         array('AlgEquiv', '', 'cos(2*%pi/17)', '(-1+sqrt(17)+sqrt(34-2*sqrt(17)))/16+' .
             '(2*sqrt(17+3*sqrt(17)-sqrt(34-2*sqrt(17))-2*sqrt(34+2*sqrt(17))))/16', -3, '', '', ''),
-        // According to Twitter!  Not sure this is even true, but just for fun!
-        array('AlgEquiv', '', 'cot(%pi/20)+cot(%pi/24)-cot(%pi/10)', 'sqrt(1)+sqrt(2)+sqrt(3)+sqrt(4)+sqrt(5)+sqrt(6)',
-            -3, '', '', ''),
 
         array('AlgEquiv', '', 'true and false', 'false', 1, 'ATLogic_True.', 'Logical expressions'),
         array('AlgEquiv', '', 'true or false', 'false', 0, '', ''),
@@ -488,6 +510,11 @@ class stack_answertest_test_data {
         // Note evaluated functions.
         array('AlgEquiv', '', 'diff(y(x),x)', '0', 0, '', ''),
 
+        array('AlgEquiv', '', '"Hello"', '"Hello"', 1, 'ATAlgEquiv_String', 'Basic support for strings'),
+        array('AlgEquiv', '', '"hello"', '"Hello"', 0, 'ATAlgEquiv_String', ''),
+        array('AlgEquiv', '', 'W', '"Hello"', 0, 'ATAlgEquiv_SA_not_string.', ''),
+        array('AlgEquiv', '', '"Hello"', 'x^2', 0, 'ATAlgEquiv_SA_not_expression.', ''),
+
         array('AlgEquivNouns', '', '1/0', '1', -1, 'ATAlgEquivNouns_STACKERROR_SAns.', ''),
         array('AlgEquivNouns', '', '1', '1/0', -1, 'ATAlgEquivNouns_STACKERROR_TAns.', ''),
         array('AlgEquivNouns', '', '', '(x-1)^2', -1, 'ATAlgEquivNounsTEST_FAILED-Empty SA.', ''),
@@ -510,11 +537,6 @@ class stack_answertest_test_data {
         array('AlgEquivNouns', '', 'y(t)=\'int(s^2,s,0,t)', 'y(t)=nounint(s^2,s,0,t)', 1, 'ATEquation_sides', ''),
         array('AlgEquivNouns', '', 'true nounand false', 'false', 1, 'ATLogic_True.',
                 'Logic nouns are still evaluated'),
-
-        array('AlgEquiv', '', '"Hello"', '"Hello"', 1, 'ATAlgEquiv_String', 'Basic support for strings'),
-        array('AlgEquiv', '', '"hello"', '"Hello"', 0, 'ATAlgEquiv_String', ''),
-        array('AlgEquiv', '', 'W', '"Hello"', 0, 'ATAlgEquiv_SA_not_string.', ''),
-        array('AlgEquiv', '', '"Hello"', 'x^2', 0, 'ATAlgEquiv_SA_not_expression.', ''),
 
         array('SubstEquiv', '', '1/0', 'x^2-2*x+1', -1, 'ATSubstEquiv_STACKERROR_SAns.', ''),
         array('SubstEquiv', '[1/0]', 'x^2', 'x^2-2*x+1', -1, 'ATSubstEquiv_STACKERROR_Opt.', ''),
@@ -548,7 +570,7 @@ class stack_answertest_test_data {
         array('SubstEquiv', '', '{x^2-1,x^2}', '{A^2+1,A^2}', 0, 'ATSet_wrongentries.', ''),
         array('SubstEquiv', '', '{A+1,B^2,C}', '{B,C+1,A^2}', 1, 'ATSubstEquiv_Subst [A = C,B = A,C = B].', ''),
         array('SubstEquiv', '', '{1,{A,B},C}', '{1,{a,b},C}', 1, 'ATSubstEquiv_Subst [A = a,B = b,C = C].', ''),
-        /* Optional argument to fix some variables within an expression. */
+        // Optional argument to fix some variables within an expression.
         array('SubstEquiv', '', 'A*cos(t)+B*sin(t)', 'P*cos(t)+Q*sin(t)', 1, 'ATSubstEquiv_Subst [A = P,B = Q,t = t].', ''),
         array('SubstEquiv', '', 'A*cos(t)+B*sin(t)', 'P*cos(x)+Q*sin(x)', 1, 'ATSubstEquiv_Subst [A = P,B = Q,t = x].', ''),
         array('SubstEquiv', '[x]', 'A*cos(t)+B*sin(t)', 'P*cos(x)+Q*sin(x)', 0, '', 'Fix some variables.'),

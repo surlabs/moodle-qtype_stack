@@ -53,7 +53,8 @@ class stack_potentialresponse_node_test extends qtype_stack_testcase {
 
         $options = new stack_options();
         $result = new stack_potentialresponse_tree_state(1);
-        $nextnode = $node->do_test($sans, $tans, '', $options, $result);
+        $contextsession = array();
+        $nextnode = $node->do_test($sans, $tans, '', $options, $contextsession, $result);
 
         $this->assertEquals(true, $result->valid);
         $this->assertEquals('', $result->errors);
@@ -72,7 +73,8 @@ class stack_potentialresponse_node_test extends qtype_stack_testcase {
 
         $options = new stack_options();
         $result = new stack_potentialresponse_tree_state(1);
-        $nextnode = $node->do_test($sans, $tans, '', $options, $result);
+        $contextsession = array();
+        $nextnode = $node->do_test($sans, $tans, '', $options, $contextsession, $result);
 
         $this->assertEquals(true, $result->valid);
         $this->assertEquals('', $result->errors);
@@ -92,7 +94,8 @@ class stack_potentialresponse_node_test extends qtype_stack_testcase {
 
         $options = new stack_options();
         $result = new stack_potentialresponse_tree_state(1);
-        $nextnode = $node->do_test($foo, $tans, '', $options, $result);
+        $contextsession = array();
+        $nextnode = $node->do_test($foo, $tans, '', $options, $contextsession, $result);
 
         $this->assertEquals(false, $result->valid);
         $this->assertNotEquals('', $result->errors);
@@ -115,7 +118,8 @@ class stack_potentialresponse_node_test extends qtype_stack_testcase {
 
         $options = new stack_options();
         $result = new stack_potentialresponse_tree_state(1);
-        $nextnode = $node->do_test($sans, $tans, $opt, $options, $result);
+        $contextsession = array();
+        $nextnode = $node->do_test($sans, $tans, $opt, $options, $contextsession, $result);
 
         $this->assertEquals(true, $result->valid);
         $this->assertEquals('', $result->errors);
@@ -136,7 +140,8 @@ class stack_potentialresponse_node_test extends qtype_stack_testcase {
 
         $options = new stack_options();
         $result = new stack_potentialresponse_tree_state(1);
-        $nextnode = $node->do_test($foo, $tans, $opt, $options, $result);
+        $contextsession = array();
+        $nextnode = $node->do_test($foo, $tans, $opt, $options, $contextsession, $result);
 
         $this->assertEquals(true, $result->valid);
         $this->assertEquals('', $result->errors);
@@ -160,12 +165,42 @@ class stack_potentialresponse_node_test extends qtype_stack_testcase {
 
         $options = new stack_options();
         $result = new stack_potentialresponse_tree_state(1, true, 1);
-        $nextnode = $node->do_test($foo, $tans, $opt, $options, $result);
+        $contextsession = array();
+        $nextnode = $node->do_test($foo, $tans, $opt, $options, $contextsession, $result);
 
         $this->assertEquals(1, count($result->feedback));
         $this->assertEquals('Boo! Your answer should be in factored form, i.e. {@factor(ans1)@}.',
                 $result->feedback[0]->feedback);
 
         $this->assertEquals(1.5, $result->score);
+    }
+
+    public function test_do_test_copntext_vars() {
+        $cv1  = stack_ast_container::make_from_teacher_source('declare(n,integer)');
+        $sans = stack_ast_container::make_from_teacher_source('cos(n*%pi)');
+        $tans = stack_ast_container::make_from_teacher_source('(-1)^n');
+        $tans->get_valid();
+        $opt  = stack_ast_container::make_from_teacher_source('');
+        $node = new stack_potentialresponse_node($sans, $tans, 'AlgEquiv', $opt, true);
+        $node->add_branch(0, '+', 0, '', -1, 'Oh dear, context variables needed.',
+                FORMAT_HTML, '1-0-0');
+        $node->add_branch(1, '=', 1, '', -1, 'Correct simplification happened!', FORMAT_HTML, '1-0-1');
+
+        $options = new stack_options();
+
+        $result = new stack_potentialresponse_tree_state(1, true, 0);
+        $contextsession = array();
+        $nextnode = $node->do_test($sans, $tans, $opt, $options, $contextsession, $result);
+        $this->assertEquals(1, count($result->feedback));
+        $this->assertEquals('Oh dear, context variables needed.', $result->feedback[0]->feedback);
+        $this->assertEquals(0, $result->score);
+
+        $result = new stack_potentialresponse_tree_state(1, true, 1);
+        $contextsession = array($cv1);
+        $nextnode = $node->do_test($sans, $tans, $opt, $options, $contextsession, $result);
+        $this->assertEquals(1, count($result->feedback));
+        $this->assertEquals('Correct simplification happened!', $result->feedback[0]->feedback);
+        $this->assertEquals(1, $result->score);
+
     }
 }

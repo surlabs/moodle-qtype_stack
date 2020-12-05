@@ -51,6 +51,12 @@ abstract class stack_input {
     protected $name;
 
     /**
+     * Special variables in the question which should be exposed to the inputs and answer tests.
+     * @var cas_evaluatable[]
+     */
+    protected $contextsession = array();
+
+    /**
      * @var string Every input must have a non-empty "teacher's answer".
      * This is assumed to be a valid Maxima string in inputform.
      */
@@ -382,6 +388,13 @@ abstract class stack_input {
         // By default, do nothing.
     }
 
+    /*
+     * Set the contextsession values.
+     */
+    public function add_contextsession($contextsession) {
+        $this->contextsession = $contextsession;
+    }
+
     /**
      * @param string $param a settings parameter name.
      * @return bool whether this input type uses this parameter.
@@ -656,7 +669,7 @@ abstract class stack_input {
         }
         $lvarsdisp   = '';
         $note        = '';
-        $sessionvars = array();
+        $sessionvars = $this->contextsession;
 
         // Clone answer so we can get the displayed form without the set validation context function, which simplifies.
         $answerd = clone $answer;

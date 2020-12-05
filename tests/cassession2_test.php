@@ -1405,7 +1405,7 @@ class stack_cas_session2_test extends qtype_stack_testcase {
         $this->assertTrue($at1->get_valid());
         $at1->instantiate();
 
-        $this->assertEquals('', $at1->get_errors());
+        $this->assertEquals($at1->get_errors(), '');
         // All these tests should work with simp:false.
         foreach ($tests as $key => $c) {
             if ($s1[$key]->is_correctly_evaluated()) {
@@ -1984,7 +1984,7 @@ class stack_cas_session2_test extends qtype_stack_testcase {
             $this->assertEquals('true', $test->get_value());
         }
 
-            $truetests = array('3',
+        $truetests = array('3',
                     '-3',
                     '3.1',
                     '3E-5',
@@ -1998,7 +1998,7 @@ class stack_cas_session2_test extends qtype_stack_testcase {
                     '3.3*10^x',
                     '3.3*a^2',
                     '3.3*7^2',
-            );
+        );
 
         $s1 = array();
         foreach ($truetests as $key => $c) {
@@ -2085,6 +2085,53 @@ class stack_cas_session2_test extends qtype_stack_testcase {
         $t1[] = array('l0:safe_op(2/3)', '"/"');
         $t1[] = array('l1:[1,-2,2/3,-4/3, 4/16, 9/3]', '[1,-2,2/3,-(4/3),1/4,3]');
         $t1[] = array('l2:map(rational_numberp, l1);', '[false,false,true,true,true,false]');
+
+        foreach ($t1 as $i => $case) {
+            $s1[] = stack_ast_container::make_from_teacher_source($case[0], '', new stack_cas_security(), array());
+        }
+
+        $options = new stack_options();
+        $s = new stack_cas_session2($s1, $options, 0);
+        $s->instantiate();
+
+        foreach ($t1 as $i => $t) {
+            $this->assertEquals($t[1], $s1[$i]->get_value());
+        }
+    }
+
+    public function test_stack_numerical_not_alg_equiv_edge() {
+
+        $s1 = array();
+        $t1 = array();
+        $t1[] = array('numerical_not_alg_equiv(p2/p1,p2/p1)', 'false');
+        $t1[] = array('numerical_not_alg_equiv(2,p1)', 'true');
+        $t1[] = array('numerical_not_alg_equiv(p2,2)', 'true');
+        $t1[] = array('numerical_not_alg_equiv(x,p1)', 'true');
+        $t1[] = array('numerical_not_alg_equiv(p2,x)', 'true');
+
+        foreach ($t1 as $i => $case) {
+            $s1[] = stack_ast_container::make_from_teacher_source($case[0], '', new stack_cas_security(), array());
+        }
+
+        $options = new stack_options();
+        $s = new stack_cas_session2($s1, $options, 0);
+        $s->instantiate();
+
+        foreach ($t1 as $i => $t) {
+            $this->assertEquals($t[1], $s1[$i]->get_value());
+        }
+    }
+
+    public function test_stack_blockexternal() {
+
+        $s1 = array();
+        $t1 = array();
+        // Block external commands, such as ordergreat, are pulled out the front.
+        $t1[] = array('f:x*y*z', 'z*y*x');
+        $t1[] = array('ordergreat(x,y,z)', 'done');
+        $t1[] = array('g:x*y*z', 'z*y*x');
+        $t1[] = array('h:exdowncase(X*Y*Z)', 'z*y*x');
+        $t1[] = array('ATAlgEquiv(exdowncase(x),x)', '[true,true,"",""]');
 
         foreach ($t1 as $i => $case) {
             $s1[] = stack_ast_container::make_from_teacher_source($case[0], '', new stack_cas_security(), array());

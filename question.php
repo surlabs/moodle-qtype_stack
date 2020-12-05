@@ -123,6 +123,12 @@ class qtype_stack_question extends question_graded_automatically_with_countback
     protected $session;
 
     /**
+     * Special variables in the question which should be exposed to the inputs and answer tests.
+     * @var cas_evaluatable[]
+     */
+    protected $contextsession;
+
+    /**
      * @var stack_ast_container[] STACK specific: the teacher's answers for each input.
      */
     private $tas;
@@ -420,6 +426,24 @@ class qtype_stack_question extends question_graded_automatically_with_countback
             $this->runtimeerrors[$s] = true;
         }
 
+        // Set up the context session for this question.
+        $contextsession = array();
+        $remainder = array();
+        foreach ($this->session->get_session() as $statement) {
+            if (method_exists($statement, 'is_toplevel_property') &&
+                $statement->is_toplevel_property('contextvariable')) {
+                    $contextsession[] = $statement;
+            } else {
+                $remainder[] = $statement;
+            }
+        }
+        $this->contextsession = $contextsession;
+        $this->session = new stack_cas_session2(array_merge($contextsession, $remainder), $this->options, $this->seed);
+
+        foreach ($this->prts as $name => $prt) {
+            $prt->add_contextsession($contextsession);
+        }
+
         // Allow inputs to update themselves based on the model answers.
         $this->adapt_inputs();
         if ($this->runtimeerrors) {
@@ -470,6 +494,7 @@ class qtype_stack_question extends question_graded_automatically_with_countback
                 $teacheranswer = $this->tas[$name]->get_value();
             }
             $input->adapt_to_model_answer($teacheranswer);
+            $input->add_contextsession($this->contextsession);
         }
     }
 
@@ -666,7 +691,7 @@ class qtype_stack_question extends question_graded_automatically_with_countback
 
     public function is_complete_response(array $response) {
 
-        // If all PRTs are gradable, then the question is complete. (Optional inputs may be blank.)
+        // If all PRTs are gradable, then the question is complete. Optional inputs may be blank.
         foreach ($this->prts as $index => $prt) {
             // Formative PRTs do not contribute to complete responses.
             if (!$prt->is_formative() && !$this->can_execute_prt($prt, $response, false)) {

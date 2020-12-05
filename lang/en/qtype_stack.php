@@ -93,7 +93,7 @@ $string['defaultprtincorrectfeedback'] = 'Incorrect answer.';
 $string['defaultprtpartiallycorrectfeedback'] = 'Your answer is partially correct.';
 $string['symbolicprtcorrectfeedback'] = '<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span>';
 $string['symbolicprtincorrectfeedback'] = '<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span>';
-$string['symbolicprtpartiallycorrectfeedback'] = '<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i>';
+$string['symbolicprtpartiallycorrectfeedback'] = '<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span>';
 $string['branchfeedback'] = 'Node branch feedback';
 $string['branchfeedback_help'] = 'This is CASText which may depend on any of the question variables, input elements or the feedback variables. This is evaluated and displayed to the student if they pass down this branch.';
 $string['inputtest'] = 'Input test';
@@ -421,12 +421,16 @@ $string['settingparsercacheinputlength'] = 'Cache parsed expressions longer than
 $string['settingparsercacheinputlength_desc'] = 'The expression parser gets quite slow on long expressions (for example complicated question variables). Therefore we cache the result of parsing expressions longer than a this limit. Ideally, this setting should be set to a value where doign the cache lookup takes about as long as doing the parsing. 50 characters is an educated guess at this. If set to 0, the cache is disabled.';
 $string['settingplatformtype'] = 'Platform type';
 $string['settingplatformtype_desc'] = 'STACK needs to know what sort of operating system it is running on. The "Server" option gives better performance at the cost of having to set up an additional server. The option "Linux (optimised)" is explained on the Optimising Maxima page in the documentation.';
-$string['settingplatformtypeunix'] = 'Linux';
-$string['settingplatformtypeunixoptimised'] = 'Linux (optimised)';
+$string['settingplatformtypelinux'] = 'Linux';
+$string['settingplatformtypelinuxoptimised'] = 'Linux (optimised)';
 $string['settingplatformtypewin']  = 'Windows';
 $string['settingplatformtypeserver'] = 'Server';
 $string['settingplatformmaximacommand'] = 'Maxima command';
-$string['settingplatformmaximacommand_desc'] = 'For Platform type: Server, this is must be set to the URL of the Maxima Pool servlet. For other platform types, if this is blank, STACK will make an educated guess as to where to find Maxima. If that fails, this should be set to the full path of the maxima or maxima-optimised executable.  Consider using the timeout command on unix based systems. E.g. timeout --kill-after=10s 10s maxima';
+$string['settingplatformmaximacommand_desc'] = 'If this is blank, STACK will make an educated guess as to where to find Maxima. If that fails, this should be set to the full path of the maxima or maxima-optimised executable.  Use for development and debugging only. Do not use on a production system: use optimised, or better, the Maxima Pool option.';
+$string['settingplatformmaximacommandopt'] = 'Optimised Maxima command';
+$string['settingplatformmaximacommandopt_desc'] = 'This should be set to the full path of the maxima-optimised executable.  Consider using the timeout command on linux based systems. E.g. timeout --kill-after=10s 10s maxima';
+$string['settingplatformmaximacommandserver'] = 'URL of the Maxima Pool';
+$string['settingplatformmaximacommandserver_desc'] = 'For Platform type: Server, this is must be set to the URL of the Maxima Pool servlet.';
 $string['settingplatformplotcommand'] = 'Plot command';
 $string['settingplatformplotcommand_desc'] = 'Normally this can be left blank, but if graph plotting is not working, you may need to supply the full path to the gnuplot command here.';
 $string['settingreplacedollars'] = 'Replace <code>$</code> and <code>$$</code>';
@@ -541,7 +545,7 @@ $string['basicreportinputsummary'] = 'Raw inputs, regardless of which variant wa
 $string['equivnocomments'] = 'You are not permitted to use comments in this input type.  Please just work line by line.';
 $string['equivfirstline'] = 'You have used the wrong first line in your argument!';
 
-// Support scripts (CAS chat, healthcheck, etc.)
+// Support scripts: CAS chat, healthcheck, etc.
 $string['all'] = 'All';
 $string['chat'] = 'Send to the CAS';
 $string['castext'] = 'CAS text';
@@ -592,9 +596,9 @@ $string['healthuncachedstack_CAS_not'] = 'CAS returned some data as expected, bu
 $string['healthuncachedstack_CAS_version'] = 'Expected Maxima version : "{$a->expected}".  Actual Maxima version: {$a->actual}.';
 $string['healthuncachedstack_CAS_versionnotchecked'] = 'You have chosen the "default" version of Maxima, so no Maxima version checking is being done.  Your raw connection is actually using version {$a->actual}.';
 $string['healthuncachedstack_CAS_calculation'] = 'Expected CAS calculation : {$a->expected}.  Actual CAS calculation: {$a->actual}.';
-$string['healthunabletolistavail'] = 'Platform type not currently set to "unix", so unable to list available versions of Maxima.';
+$string['healthunabletolistavail'] = 'Platform type not currently set to "linux", so unable to list available versions of Maxima.';
 $string['healthautomaxopt'] = 'Automatically create an optimised Maxima image';
-$string['healthautomaxoptintro'] = 'For best performance we need to optimize maxima on a linux machine.  See the <a href="doc/doc.php/CAS/Optimising_Maxima.md">documentation</a> on this issue.';
+$string['healthautomaxoptintro'] = 'For best performance we need to optimize maxima on a linux machine.  Use the plugin "healthcheck" page and see the documentation on this issue.';
 $string['healthautomaxopt_succeeded'] = 'Create Optimised Maxima Image SUCCEEDED';
 $string['healthautomaxopt_failed'] = 'Create Optimised Maxima Image FAILED : [{$a->errmsg}]';
 $string['healthautomaxopt_ok'] = 'Maxima image created at: <tt>{$a->command}</tt>';

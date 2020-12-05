@@ -35,6 +35,7 @@ stack_reset(not_used) := block(
   exptdispflag: true,
   linsolvewarn: false,
   ratprint: false,
+  factor_max_degree_print_warning:false,
   /* Suppress warnings printed by mtell, e.g. by solve, rat and other functions. */
   stack_mtell_quiet:false,
   fpprintprec: 12,     /* Print only 12 digits. */
@@ -73,6 +74,9 @@ stack_reset_vars(ex) := block(kill(i, j, e, pi, Pi, PI));
 
 /* Execute this command to ensure values have been set. */
 stack_reset(true);
+
+/* Make sure this is at least defined. */
+debug:false;
 
 alias(int,integrate);        /* Allows integrate to be called with int()    */
 alias(cosec,csc);            /* Corresponds to current student expectations */
@@ -145,19 +149,6 @@ matchfix("|", "|");
 /* Does not quite work yet ..... */
 /* load("noninteractive.mac"); */
 
-/*load("sqdnst")*/
-sqrtdenest(a) :=
-  subst("^" = lambda([a, b],
-     block([discr, max, min],
-       if evenp(denom(b)) and not atom(a) and inpart(a, 0) = "+"
-           and (max:max(first(a), rest(a)),
-                   min:a-max,
-                   numberp(discr:sqrt(1-(min/max)^2)))
-      then (sqrt(max*(1+discr)/2)+signum(min)*sqrt(max*(1-discr)/2))^(2*b)
-      else a^b)),
-      a
-)$
-
 /* ********************************** */
 /* Load STACK packages                */
 /* ********************************** */
@@ -168,9 +159,15 @@ load("intervals.mac");
 load("stackunits.mac");
 load("stacktex.lisp");
 load("stackstrings.mac");
+
+/* This file is a modified core Maxima function with local variable name clashes fixed. */
+load("trigrat.lisp");
+load("trigtools");
+
 load("sregex");
 /* Ensure back compatability with versions before 5.41.0. */
 if is(MAXIMA_VERSION_NUM<40.1) then load("stacktex40.lisp");
+if is(MAXIMA_VERSION_NUM<44.0) then load("stack44.mac");
 load("utils.mac");
 load("numericaltest.mac");
 load("errortostring.lisp");
@@ -1233,10 +1230,17 @@ ATAlgEquivfun(SA, SB) :=  block([SApoly, SBpoly, keepfloat, RawMark, FeedBack, A
     if expressionp(SA)=false then
         return(StackBasicReturn(false, false, "ATAlgEquiv_SA_not_expression")),
     /* Otherwise we have two expressions*/
-    if algebraic_equivalence(SA, SB) then
+    if SA=SB then
        RawMark:true
-    else if algebraic_equivalence(exdowncase(SA), exdowncase(SB)) then
-       AnswerNote:StackAddNote("", "ATAlgEquiv_WrongCase"),
+    else if algebraic_equivalence(SA, SB) then
+       RawMark:true
+    else block([SAd, SBd],
+        /* algebraic_equivalence is not free, so only execute this when we need to do so. */
+        SAd:exdowncase(SA),
+        SBd:exdowncase(SB),
+        if (SAd#SA or SBd#SB) and algebraic_equivalence(SAd, SBd) then
+            AnswerNote:StackAddNote("", "ATAlgEquiv_WrongCase")
+        ),
     ret:[Validity, RawMark, AnswerNote, FeedBack],
     return(ret)
     )$
@@ -1363,7 +1367,6 @@ ATEquation(SA, SB) := block([keepfloat, RawMark, SA1, SB1, SB2, Rationalex1, Rat
         if algebraic_equivalence(rhs(SA), lhs(SB)) then
              return([true, true, "ATEquation_sides_op", ""])
         else return([true, false, "ATEquation_lhs_notrhs_op", ""]),
-
     /* First try without expanding out the equations */
     Rationalex1:ev(lhs(factor(SA))-rhs(factor(SA)), simp),
     Rationalex2:ev(lhs(factor(SB))-rhs(factor(SB)), simp),
@@ -2934,39 +2937,44 @@ ATDiff(sa, sb, so) :=
         ),
     simp:old_simp,
     return(ret)
-    )$
+)$
 
-Difffun(SA,SB,v) := block([val,rawmk,ansnote,fb,ret,lSAv,lSBv,mSAv,mSBv],
+Difffun(SA, SB, v) := block([val, rawmk, ansnote, fb, ret, lSAv, lSBv, mSAv, mSBv],
     val:true, rawmk:false, fb:"", ansnote:"",
-    ret:[val,rawmk,ansnote,fb],
-    if algebraic_equivalence(SA,SB) then
-        (rawmk:true, ansnote:StackAddNote("","ATDiff_true"))
+    ret:[val, rawmk, ansnote, fb],
+    if algebraic_equivalence(SA, SB) then
+        (rawmk:true, ansnote:StackAddNote("", "ATDiff_true"))
     else
-        if ev(algebraic_equivalence(diff(SA,v), int(SB,v)), simp) then
-        (rawmk:false, ansnote:StackAddNote("","ATDiff_int"), fb:StackAddFeedback("","ATDiff_int"))
-        else (
+        if ev(algebraic_equivalence(diff(SA,v), int(SB,v)), simp) then (
+            rawmk:false,
+            ansnote:StackAddNote("", "ATDiff_int"),
+            fb:StackAddFeedback("", "ATDiff_int")
+        ) else (
             lSAv:listofvars(SA),
             lSBv:listofvars(SB),
-            mSAv:member(v,lSAv),
-            mSBv:member(v,lSBv),
+            mSAv:member(v, lSAv),
+            mSBv:member(v, lSBv),
             if not(mSBv) then (
                 if mSAv then
-                    ansnote:StackAddNote(ansnote,"ATDiff_var_SA_notSB")
-                else if not(listscontain(lSAv,lSBv,v)) and not(listsoverlap(lSAv,lSBv)) then
-                    ansnote:StackAddNote(ansnote,"ATDiff_var_notSASB_SAnceSB") ) /* not in SA or SB, and no variable common to SA and SB */
+                    ansnote:StackAddNote(ansnote, "ATDiff_var_SA_notSB")
+                else if not(listscontain(lSAv, lSBv, v)) and not(listsoverlap(lSAv, lSBv)) then
+                    ansnote:StackAddNote(ansnote, "ATDiff_var_notSASB_SAnceSB") )
+            /* Not in SA or SB, and no variable common to SA and SB. */
             else if not(mSAv) then (
                 if mSBv then
-                    ansnote:StackAddNote(ansnote,"ATDiff_var_SB_notSA") )  ),
-    ret:[val,rawmk,ansnote,fb],
+                    ansnote:StackAddNote(ansnote, "ATDiff_var_SB_notSA")
+            )
+        ),
+    ret:[val, rawmk, ansnote, fb],
     return(ret)
-    )$
+)$
 
 /* Look over an expression and find all the variables wrt which we are differentiating. */
 ATDiffGetVar(ex):= block(
     if atom(ex) then return([]),
     if safe_op(ex)="diff" then return([second(args(ex))]),
     flatten(map(ATDiffGetVar, args(ex)))
-);
+)$
 
 /* ****************************************************** */
 /*                                                        */
@@ -3056,5 +3064,5 @@ load(linearalgebra);
 
 /* Stack expects some output with the version number the output happens at */
 /* maximalocal.mac after additional library loading */
-stackmaximaversion:2020101501$
+stackmaximaversion:2020113000$
 
