@@ -17,13 +17,13 @@ $CFG->dataroot = "/var/data/api";
 // URL of your web server, e.g.
 $CFG->dataurl = "http://localhost/api/";
 
-// You will need to replace this with the compiled version.
 $CFG->maximacommand = 'maxima';
 $CFG->maximaversion = 'default';
 // Once you have compiled maxima you will need to change this.
-$CFG->platform     = 'unix';
-// $CFG->platform     = 'unix-optimised';
-// $CFG->maximacommand = 'timeout --kill-after=10s 10s ' . $CFG->dataroot . '/stack/maxima_opt_auto'; 
+$CFG->platform            = 'linux';
+//$CFG->platform            = 'linux-optimised';
+$CFG->maximacommandopt    = 'timeout --kill-after=10s 10s ' . $CFG->dataroot . '/stack/maxima_opt_auto'; 
+$CFG->maximacommandserver = '';
 /*
  * These settings are hard-wired here.  See settings.php for more details.
  * You probably don't need to change many of the following.
