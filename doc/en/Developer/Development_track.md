@@ -5,6 +5,10 @@ past development history is documented on [Development history](Development_hist
 
 How to report bugs and make suggestions is described on the [community](../About/Community.md) page.
 
+## Version 4.3.9
+
+1. Add in the "builder" input type, thanks to Neil Strickland of the University of Sheffield.
+
 ## Version 4.4
 
 1. Caching validation.

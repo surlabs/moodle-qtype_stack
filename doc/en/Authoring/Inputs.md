@@ -96,6 +96,10 @@ If the teacher's correct answer should leave this blank (e.g. not answered at al
 
 The dropdown, checkbox and radio input types enable teachers to create [multiple-choice](Multiple_choice_questions.md) questions.  See the separate documentation.
 
+#### Builder ####
+
+The [Builder](Builder.md) is an input that allows the student to build a section of text by selecting phrases in order from a given pool.
+
 #### String input ####
 
 This is a normal input into which students may type whatever they choose.  It is always converted into a Maxima string internally.

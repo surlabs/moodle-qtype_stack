@@ -26,34 +26,34 @@ defined('MOODLE_INTERNAL') || die();
 class stack_builder_input extends stack_input {
 
     /*
-     * phrases will be a list of lists of two strings.
+     * Phrases will be a list of lists of two strings.
      * The first string is a phrase that the student can use
-     * in their answer, and the second string is a key 
+     * in their answer, and the second string is a key
      * used to identify the phrase.  The internal Maxima
      * representation of the student's answer will be a list
      * of these keys.  The keys should consist of characters
      * that do not need to be escaped.
      */
-    protected $phrases          = array();
-    protected $phrases_by_key   = array();
-    protected $phrases_by_index = array();
-    protected $correct_phrases  = array();
-    protected $correct_keys     = array();
-    protected $correct_indices  = array();
-    protected $correct_text     = array();
+    protected $phrases         = array();
+    protected $phrasesbykey    = array();
+    protected $phrasesbyindex  = array();
+    protected $correctphrases  = array();
+    protected $correctkeys     = array();
+    protected $correctindices  = array();
+    protected $correcttext     = array();
 
     public $teacheranswerraw = '';
     public $teacheranswervalue = '';
     public $teacheranswerdisplay = '';
- 
-    /* As with multiple response questions etc, the teacher 
-     * answer field is not really the teacher answer but 
+
+    /* As with multiple response questions etc, the teacher
+     * answer field is not really the teacher answer but
      * instead is a complete specification of the question.
      * It should consist of a list of triples
      * [key,text,pos] where phrase and key are strings
-     * and pos is a natural number.  The phrases are 
+     * and pos is a natural number.  The phrases are
      * given in the order in which they should be shown to
-     * the student.  The teacher's answer consists of the 
+     * the student.  The teacher's answer consists of the
      * phrases where pos > 0, in the order specified by pos.
      */
     public function adapt_to_model_answer($teacheranswer) {
@@ -67,13 +67,13 @@ class stack_builder_input extends stack_input {
             return false;
         }
 
-        $this->phrases          = array();
-        $this->phrases_by_key   = array();
-        $this->phrases_by_index = array();
-        $this->correct_phrases  = array();
-        $this->correct_keys     = array();
-        $this->correct_indices  = array();
-        $this->correct_text     = array();
+        $this->phrases         = array();
+        $this->phrasesbykey    = array();
+        $this->phrasesbyindex  = array();
+        $this->correctphrases  = array();
+        $this->correctkeys     = array();
+        $this->correctindices  = array();
+        $this->correcttext     = array();
 
         $index = 1;
 
@@ -85,39 +85,36 @@ class stack_builder_input extends stack_input {
                 $x['text']  = $value[1];
                 $x['pos']   = $value[2];
                 $x['index'] = $index++;
-                if (! preg_match('/^[-A-Za-z0-9 %^*()_+={}:;]*$/',$x['key'])) {
-                    $this->errors[] = stack_string('builder_badkey');
+                if (! preg_match('/^[-A-Za-z0-9 %^*()_+={}:;]*$/', $x['key'])) {
+                    $this->errors[] = stack_string('builder_badkey', $x['key']);
                 }
-                if (array_key_exists($x['key'],$this->phrases_by_key)) {
+                if (array_key_exists($x['key'], $this->phrasesbykey)) {
                     $this->errors[] = stack_string('builder_duplicates');
                 }
                 $this->phrases[] = $x;
-                $this->phrases_by_key[$x['key']] = $x;
-                $this->phrases_by_index[$x['index']] = $x;
-                
+                $this->phrasesbykey[$x['key']] = $x;
+                $this->phrasesbyindex[$x['index']] = $x;
+
                 if ($x['pos'] > 0) {
-                    $this->correct_phrases[] = $x;
+                    $this->correctphrases[] = $x;
                 }
             } else {
                 $this->errors[] = stack_string('builder_badanswer', $teacheranswer);
             }
         }
 
-        usort($this->correct_phrases,
-              function($a, $b) { return $a['pos'] <=> $b['pos']; });
+        // @codingStandardsIgnoreStart
+        // Code standards don't like functions on one line.
+        usort($this->correctphrases, function($a, $b) { return $a['pos'] <=> $b['pos']; });
 
-        $this->correct_keys =
-          array_map(function($x) { return($x['key']); },$this->correct_phrases);
-        
-        $this->correct_indices =
-          array_map(function($x) { return($x['index']); },$this->correct_phrases);
-        
-        $this->correct_text =
-          array_map(function($x) { return($x['text']); },$this->correct_phrases);
-        
-        $this->teacheranswerraw = json_encode($this->correct_indices);
-        $this->teacheranswervalue   = json_encode($this->correct_keys);
-        $this->teacheranswerdisplay = implode(' ',$this->correct_text);
+        $this->correctkeys    = array_map(function($x) { return($x['key']); }, $this->correctphrases);
+        $this->correctindices = array_map(function($x) { return($x['index']); }, $this->correctphrases);
+        $this->correcttext    = array_map(function($x) { return($x['text']); }, $this->correctphrases);
+        // @codingStandardsIgnoreEnd
+
+        $this->teacheranswerraw     = json_encode($this->correctindices);
+        $this->teacheranswervalue   = json_encode($this->correctkeys);
+        $this->teacheranswerdisplay = implode(' ', $this->correcttext);
     }
 
     protected function validate_contents($contents, $basesecurity, $localoptions) {
@@ -126,10 +123,10 @@ class stack_builder_input extends stack_input {
 
         $n = count($this->phrases);
         $used = array();
-        
+
         foreach ($contents as $i) {
             if (is_int($i) && 1 <= $i && $i <= $n) {
-                if (array_key_exists($i,$used)) {
+                if (array_key_exists($i, $used)) {
                     $valid = false;
                     $errors[] = stack_string('builder_gotrepeatedvalue');
                 } else {
@@ -148,25 +145,25 @@ class stack_builder_input extends stack_input {
         $answer->get_valid();
         $notes = array();
         $caslines = array();
-        
+
         return array($valid, $errors, $notes, $answer, $caslines);
     }
 
-    public function validate_student_response($response,$options,$teacheranswer,
-                                              $basesecurity,$ajaxinput=false) {
+    public function validate_student_response($response, $options, $teacheranswer,
+                                              $basesecurity, $ajaxinput = false) {
         if ($ajaxinput) {
             $response = $this->ajax_to_response_array($response);
         }
 
         $status = self::SCORE;
         $errors = array();
-        $raw_name = $this->name . '_raw';
-        
-        if (! array_key_exists($raw_name,$response)) {
+        $rawname = $this->name . '_raw';
+
+        if (!array_key_exists($rawname, $response)) {
             return new stack_input_state(self::BLANK, array(), '', '', '', '', '');
         }
 
-        $response0 = $response[$raw_name];
+        $response0 = $response[$rawname];
 
         if (! is_string($response0)) {
             $status = self::INVALID;
@@ -179,7 +176,7 @@ class stack_builder_input extends stack_input {
         if ($response0 == '') {
             return new stack_input_state(self::BLANK, array(), '', '', '', '', '');
         }
-        
+
         $indices = json_decode($response0);
 
         if (! is_array($indices)) {
@@ -192,19 +189,19 @@ class stack_builder_input extends stack_input {
             return new stack_input_state(self::BLANK, array(), '', '', '', '', '');
         }
 
-        $used_indices = array();
+        $usedindices = array();
         $contents = array();
         $text = array();
         $keys = array();
-        
+
         foreach ($indices as $i) {
-            if (array_key_exists($i,$this->phrases_by_index)) {
-                if (array_key_exists($i,$used_indices)) {
+            if (array_key_exists($i, $this->phrasesbyindex)) {
+                if (array_key_exists($i, $usedindices)) {
                     $status = self::INVALID;
                     $errors[] = stack_string('builder_gotrepeatedvalue');
                 } else {
-                    $p = $this->phrases_by_index[$i];
-                    $used_indices[$i] = true;
+                    $p = $this->phrasesbyindex[$i];
+                    $usedindices[$i] = true;
                     $contents[] = $i;
                     $keys[] = $p['key'];
                     $text[]  = $p['text'];
@@ -215,12 +212,12 @@ class stack_builder_input extends stack_input {
             }
         }
 
-        $errors = implode(' ',$errors);
-        
+        $errors = implode(' ', $errors);
+
         return new stack_input_state($status,
                                      $contents,
                                      json_encode($keys),
-                                     implode(' ',$text),
+                                     implode(' ', $text),
                                      $errors,
                                      '',
                                      '',
@@ -236,7 +233,7 @@ class stack_builder_input extends stack_input {
     public function contents_to_maxima($contents) {
         $keys = array();
         foreach ($contents as $i) {
-            $keys[] = $this->phrases_by_index[$i]['key'];
+            $keys[] = $this->phrasesbyindex[$i]['key'];
         }
         return json_encode($keys);
     }
@@ -250,68 +247,68 @@ class stack_builder_input extends stack_input {
              'console.log(builder); ' .
              'builder.init("' . $fieldname . '"); })');
         }
-        
+
         if ($this->errors) {
             return $this->render_error($this->errors);
         }
 
-        $phrase_html_by_index = array();
-                            
-        foreach($this->phrases_by_index as $i => $x) {
+        $phrasehtmlbyindex = array();
+
+        foreach ($this->phrasesbyindex as $i => $x) {
             $id = $fieldname . '_' . $i;
-            $phrase_html_by_index[$i] = 
-              html_writer::tag('li',$x['text'],array('class' => "builder_phrase",'id' => $id));
+            $phrasehtmlbyindex[$i] =
+              html_writer::tag('li', $x['text'], array('class' => "builder_phrase", 'id' => $id));
         }
-        
+
         $used = array();
         $unused = array();
-        
-        $is_used = array();
 
-        foreach($state->contents as $i) {
-            $is_used[$i] = true;
-            $used[] = $phrase_html_by_index[$i];
+        $isused = array();
+
+        foreach ($state->contents as $i) {
+            $isused[$i] = true;
+            $used[] = $phrasehtmlbyindex[$i];
         }
 
-        $contents_string = '[' . implode(',',$state->contents) . ']';
-        
-        foreach($this->phrases as $x) {
+        $contentsstring = '[' . implode(',', $state->contents) . ']';
+
+        foreach ($this->phrases as $x) {
             $i = $x['index'];
-            if (! array_key_exists($i,$is_used)) {
-                $unused[] = $phrase_html_by_index[$i];
+            if (! array_key_exists($i, $isused)) {
+                $unused[] = $phrasehtmlbyindex[$i];
             }
         }
 
-        $used_ol   = html_writer::tag('ol',implode(PHP_EOL,$used),
+        $usedol = html_writer::tag('ol', implode(PHP_EOL, $used),
                       array('class' => 'builder_used', 'id' => $fieldname . '_used_ol'));
 
-        $unused_ol = html_writer::tag('ol',implode(PHP_EOL,$unused),
-                      array('class' => 'builder_unused','id' => $fieldname . '_unused_ol'));
+        $unusedol = html_writer::tag('ol', implode(PHP_EOL, $unused),
+                      array('class' => 'builder_unused', 'id' => $fieldname . '_unused_ol'));
 
-        $used_div   = html_writer::div($used_ol,'builder_used',
+        $useddiv   = html_writer::div($usedol, 'builder_used',
                                      array('id' => $fieldname . '_used_div'));
 
-        $unused_div = html_writer::div($unused_ol,'builder_unused',
+        $unuseddiv = html_writer::div($unusedol, 'builder_unused',
                                      array('id' => $fieldname . '_unused_div'));
-        
+
         $hidden = html_writer::tag(
-          'input','',
+          'input', '',
           array('id' => $fieldname . '_raw',
                 'name' => $fieldname . '_raw',
                 'type' => 'hidden',
-                'value' => $contents_string)
+                'value' => $contentsstring)
         );
-        
-        $full_div = html_writer::div(
+
+        $fulldiv = html_writer::div(
             html_writer::div(stack_string('builder_instructions')) .
-            '<br/>' . PHP_EOL . 
-            $used_div .
             '<br/>' . PHP_EOL .
-            $unused_div . PHP_EOL .
+            $useddiv .
+            '<br/>' . PHP_EOL .
+            $unuseddiv . PHP_EOL .
             $hidden . PHP_EOL
         );
 
-        return $full_div;
+        return $fulldiv;
     }
 
     /**
@@ -350,11 +347,11 @@ class stack_builder_input extends stack_input {
         return array($this->name . '_raw' => $this->teacheranswerraw);
     }
 
-    public function get_teacher_answer_display($value,$display) {
+    public function get_teacher_answer_display($value, $display) {
         return stack_string('teacheranswershow_builder',
                             array('display' => $this->teacheranswerdisplay));
     }
- 
+
     /**
      * Transforms a Maxima expression into an array of raw inputs which are part of a response.
      * Most inputs are very simple, but textarea and matrix need more here.
@@ -362,13 +359,31 @@ class stack_builder_input extends stack_input {
      * @return array
      */
     public function maxima_to_response_array($in) {
-        if ('' === $in || '[]' === $in) {
-            return array();
+        $response[$this->name.'_raw'] = $this->maxima_to_raw_input($in);
+        if ($this->requires_validation()) {
+            $response[$this->name . '_val'] = $in;
         }
-
-        $response = array();
-        $response[$this->name] = $in;
         return $response;
+    }
+
+    /**
+     * Transforms a Maxima list into raw input.
+     *
+     * @param string $in
+     * @return string
+     */
+    protected function maxima_to_raw_input($in) {
+        $values = stack_utils::list_to_array($in, false);
+        $response = array();
+        foreach ($values as $val) {
+            $val = trim($val);
+            // All elements should be strings.
+            if (substr($val, 0, 1) == '"') {
+                $val = substr($val, 1, strlen($val) - 2);
+            }
+            $response[] = $this->phrasesbykey[$val]['index'];
+        }
+        return json_encode($response);
     }
 
     protected function ajax_to_response_array($in) {
@@ -392,7 +407,7 @@ class stack_builder_input extends stack_input {
         $keys = json_decode($response[$this->name]);
         $contents = array();
         foreach ($keys as $k) {
-            $contents[] = $this->phrases_by_key[$k]['index'];
+            $contents[] = $this->phrasesbykey[$k]['index'];
         }
         return $contents;
     }
