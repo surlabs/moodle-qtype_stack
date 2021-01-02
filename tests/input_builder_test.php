@@ -34,9 +34,10 @@ class stack_builder_input_test extends qtype_stack_testcase {
 
     public function test_render_blank() {
         $el = stack_input_factory::make('builder', 'ans1', 'x^2');
-        $expected = '<div><div>Construct your answer in the upper panel by clicking on phrases in the lower panel.  ' .
+        $expected = '<div><p class="stackinputnotice">' .
+                'Construct your answer in the upper panel by clicking on phrases in the lower panel.  ' .
                 'If you click on a phrase by mistake, just click on it again to move it back to the lower panel.  ' .
-                "You may not need to use all of the phrases. </div><br/>\n" .
+                "You may not need to use all of the phrases. </p><br/>\n" .
                 "<div class=\"builder_used\" id=\"stack1__ans1_used_div\">" .
                 "<ol class=\"builder_used\" id=\"stack1__ans1_used_ol\"></ol></div><br/>\n" .
                 "<div class=\"builder_unused\" id=\"stack1__ans1_unused_div\">" .
@@ -65,9 +66,10 @@ class stack_builder_input_test extends qtype_stack_testcase {
                 '["if any only if", "iff", -1]]';
         $el = stack_input_factory::make('builder', 'ans1', $ta);
         $el->adapt_to_model_answer($ta);
-        $expected = '<div><div>Construct your answer in the upper panel by clicking on phrases in the lower panel.  ' .
+        $expected = '<div><p class="stackinputnotice">' .
+                'Construct your answer in the upper panel by clicking on phrases in the lower panel.  ' .
                 'If you click on a phrase by mistake, just click on it again to move it back to the lower panel.  ' .
-                "You may not need to use all of the phrases. </div><br/>\n" .
+                "You may not need to use all of the phrases. </p><br/>\n" .
                 "<div class=\"builder_used\" id=\"stack1__ans1_used_div\">" .
                 "<ol class=\"builder_used\" id=\"stack1__ans1_used_ol\"></ol></div><br/>\n" .
                 "<div class=\"builder_unused\" id=\"stack1__ans1_unused_div\">" .
