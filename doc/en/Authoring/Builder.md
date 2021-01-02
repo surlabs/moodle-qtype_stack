@@ -30,7 +30,7 @@ Then,
 
 You may include redundant options by putting `pos <= 0`.  These can easily be automatically filtered out using sublist.  In the example below `ta2` is a correctly formatted (and mixed up) teacher answer.  `ta1` can be used in a potential response tree for the purposes of comparison.
 
-    ta0:[["\(n\) even", "n even", 1], ["implies", "\\(\\Rightarrow\\)", 2], ["2n even", "\\(2n\\) is even", 3],  ["if any only if", "\\(\\Leftrightarrow\\)", -1] ];
+    ta0:[["n even", "\\(n\\) even", 1], ["implies", "\\(\\Rightarrow\\)", 2], ["2n even", "\\(2n\\) is even", 3],  ["if any only if", "\\(\\Leftrightarrow\\)", -1] ];
     ta1:sublist(ta0, lambda([ex], third(ex)>0));
     ta1:maplist(first,ta1);
     ta2:sort(ta0);

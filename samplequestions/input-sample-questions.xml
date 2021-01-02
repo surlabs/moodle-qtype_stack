@@ -11,7 +11,7 @@
     <idnumber></idnumber>
   </question>
 
-<!-- question: 4872  -->
+<!-- question: 739  -->
   <question type="description">
     <name>
       <text>Style check: HELM</text>
@@ -63,7 +63,7 @@
     <idnumber></idnumber>
   </question>
 
-<!-- question: 4873  -->
+<!-- question: 740  -->
   <question type="description">
     <name>
       <text>Style check: proof.</text>
@@ -343,7 +343,7 @@ Consider the following proof by induction. \(P(n)\)
     <idnumber></idnumber>
   </question>
 
-<!-- question: 4874  -->
+<!-- question: 741  -->
   <question type="stack">
     <name>
       <text>Algebraic input</text>
@@ -469,7 +469,7 @@ Consider the following proof by induction. \(P(n)\)
     </qtest>
   </question>
 
-<!-- question: 4875  -->
+<!-- question: 742  -->
   <question type="stack">
     <name>
       <text>Algebraic input (align to the right)</text>
@@ -608,7 +608,7 @@ Consider the following proof by induction. \(P(n)\)
     </qtest>
   </question>
 
-<!-- question: 4876  -->
+<!-- question: 743  -->
   <question type="stack">
     <name>
       <text>Algebraic input (answer box sizes test)</text>
@@ -905,7 +905,7 @@ Consider the following proof by induction. \(P(n)\)
     </qtest>
   </question>
 
-<!-- question: 4877  -->
+<!-- question: 744  -->
   <question type="stack">
     <name>
       <text>Algebraic input (compact)</text>
@@ -1031,7 +1031,7 @@ Consider the following proof by induction. \(P(n)\)
     </qtest>
   </question>
 
-<!-- question: 4878  -->
+<!-- question: 745  -->
   <question type="stack">
     <name>
       <text>Algebraic input (empty answer permitted)</text>
@@ -1232,7 +1232,7 @@ Consider the following proof by induction. \(P(n)\)
     </qtest>
   </question>
 
-<!-- question: 4879  -->
+<!-- question: 746  -->
   <question type="stack">
     <name>
       <text>Algebraic input (with simplification)</text>
@@ -1372,7 +1372,137 @@ Consider the following proof by induction. \(P(n)\)
     </qtest>
   </question>
 
-<!-- question: 4880  -->
+<!-- question: 737  -->
+  <question type="stack">
+    <name>
+      <text>Builder</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text><![CDATA[<p>Write the definition of convergence of a sequence of terms \(a_n\) to a limit \(a\).</p>
+[[input:ans1]] [[validation:ans1]]]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.1000000</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2020123000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[ta0:[["forall", "\\(\\forall\\)", 1], ["epsilon greater than zero", "\\(\\epsilon > 0\\)", 2], ["exists", "\\(\\exists\\)", 3], ["N a natural number", "\\(N \\in \\mathbb{N}\\)", 4], ["n greater than N", "\\(n > N\\)", 5], ["implies", "\\(\\Rightarrow\\)", 6], ["terms are within epsilon of the limit", "\\(|a_n-a|<\\epsilon\\)", 7]];
+
+ta1:maplist(first,ta0);
+ta2:random_permutation(ta0);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote>
+      <text>{@maplist(first,ta2)@}</text>
+    </questionnote>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>arccos</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans1</name>
+      <type>builder</type>
+      <tans>ta2</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>1</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta1</tans>
+        <testoptions></testoptions>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1.0000000</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0.0000000</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>759067831</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <testinput>
+        <name>ans1</name>
+        <value>ta1</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>2</testcase>
+      <testinput>
+        <name>ans1</name>
+        <value>maplist(first,ta2)</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt1-1-F</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+
+<!-- question: 747  -->
   <question type="stack">
     <name>
       <text>Checkbox</text>
@@ -1504,7 +1634,7 @@ ta:append(ta,[tao]);]]></text>
     </qtest>
   </question>
 
-<!-- question: 4881  -->
+<!-- question: 748  -->
   <question type="stack">
     <name>
       <text>Checkbox (no body LaTeX)</text>
@@ -1636,7 +1766,7 @@ ta:append(ta,[tao]);]]></text>
     </qtest>
   </question>
 
-<!-- question: 4882  -->
+<!-- question: 749  -->
   <question type="stack">
     <name>
       <text>Checkbox (plots in options)</text>
@@ -1858,7 +1988,7 @@ incorr1:mcq_incorrect(ta1);]]></text>
     </tags>
   </question>
 
-<!-- question: 4883  -->
+<!-- question: 750  -->
   <question type="stack">
     <name>
       <text>Checkbox (Show teacher's answer)</text>
@@ -1990,7 +2120,7 @@ ta:[ta1,ta2,ta3,ta4,ta0];]]></text>
     </qtest>
   </question>
 
-<!-- question: 4884  -->
+<!-- question: 751  -->
   <question type="stack">
     <name>
       <text>Dropdown (shuffle)</text>
@@ -2139,7 +2269,7 @@ ta:append(ta,[tao]);]]></text>
     </qtest>
   </question>
 
-<!-- question: 4885  -->
+<!-- question: 752  -->
   <question type="stack">
     <name>
       <text>Equiv input test (compact)</text>
@@ -2253,7 +2383,7 @@ ta:[p,x=(4-7)/3,x=-1]</text>
     </qtest>
   </question>
 
-<!-- question: 4886  -->
+<!-- question: 753  -->
   <question type="stack">
     <name>
       <text>Equiv input test (let, or +-)</text>
@@ -2392,7 +2522,7 @@ p:first(tal);</text>
     </qtest>
   </question>
 
-<!-- question: 4887  -->
+<!-- question: 754  -->
   <question type="stack">
     <name>
       <text>Matrix</text>
@@ -2517,7 +2647,7 @@ p:first(tal);</text>
     </qtest>
   </question>
 
-<!-- question: 4888  -->
+<!-- question: 755  -->
   <question type="stack">
     <name>
       <text>Matrix (varmatrix)</text>
@@ -2745,7 +2875,7 @@ sz2:matrix_size(ans2);</text>
     </qtest>
   </question>
 
-<!-- question: 4889  -->
+<!-- question: 756  -->
   <question type="stack">
     <name>
       <text>Matrix-multi</text>
@@ -2899,7 +3029,7 @@ M2:matrix([a,b],[c,d]);</text>
     </qtest>
   </question>
 
-<!-- question: 4890  -->
+<!-- question: 757  -->
   <question type="stack">
     <name>
       <text>Notes</text>
@@ -3011,7 +3141,7 @@ M2:matrix([a,b],[c,d]);</text>
     </qtest>
   </question>
 
-<!-- question: 4891  -->
+<!-- question: 758  -->
   <question type="stack">
     <name>
       <text>Numerical input (min sf)</text>
@@ -3136,7 +3266,7 @@ M2:matrix([a,b],[c,d]);</text>
     </qtest>
   </question>
 
-<!-- question: 4892  -->
+<!-- question: 759  -->
   <question type="stack">
     <name>
       <text>Radio</text>
@@ -3255,7 +3385,7 @@ ta:append(ta,[tao]);]]></text>
     </qtest>
   </question>
 
-<!-- question: 4893  -->
+<!-- question: 760  -->
   <question type="stack">
     <name>
       <text>Radio (compact)</text>
@@ -3374,7 +3504,7 @@ ta:append(ta,[tao]);]]></text>
     </qtest>
   </question>
 
-<!-- question: 4894  -->
+<!-- question: 761  -->
   <question type="stack">
     <name>
       <text>Single char</text>
@@ -3499,7 +3629,7 @@ ta:append(ta,[tao]);]]></text>
     </qtest>
   </question>
 
-<!-- question: 4895  -->
+<!-- question: 762  -->
   <question type="stack">
     <name>
       <text>String input</text>
@@ -3636,7 +3766,7 @@ This input is not, perhaps it is used to store JSXGraph state?
     </qtest>
   </question>
 
-<!-- question: 4896  -->
+<!-- question: 763  -->
   <question type="stack">
     <name>
       <text>Textarea test</text>
@@ -3748,7 +3878,7 @@ This input is not, perhaps it is used to store JSXGraph state?
     </qtest>
   </question>
 
-<!-- question: 4897  -->
+<!-- question: 764  -->
   <question type="stack">
     <name>
       <text>Textarea test (compact)</text>
@@ -3860,7 +3990,7 @@ This input is not, perhaps it is used to store JSXGraph state?
     </qtest>
   </question>
 
-<!-- question: 4898  -->
+<!-- question: 765  -->
   <question type="stack">
     <name>
       <text>True/false</text>
@@ -3985,7 +4115,7 @@ This input is not, perhaps it is used to store JSXGraph state?
     </qtest>
   </question>
 
-<!-- question: 4899  -->
+<!-- question: 766  -->
   <question type="stack">
     <name>
       <text>Units</text>

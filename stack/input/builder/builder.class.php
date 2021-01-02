@@ -300,7 +300,8 @@ class stack_builder_input extends stack_input {
         );
 
         $fulldiv = html_writer::div(
-            html_writer::div(stack_string('builder_instructions')) .
+            // Style the instruction to clearly differentiate them from the question itself.
+            html_writer::tag('p', stack_string('builder_instructions'), array('class' => 'stackinputnotice')) .
             '<br/>' . PHP_EOL .
             $useddiv .
             '<br/>' . PHP_EOL .
