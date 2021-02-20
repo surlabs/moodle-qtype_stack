@@ -415,7 +415,7 @@ abstract class stack_connection_helper {
                 if (trim($lisprun) == '') {
                     $success = false;
                     $message = stack_string('healthautomaxopt_nolisprun');
-                    return array($message, '', $success, '');
+                    return array($message, '', $success, '', '');
                 }
                 $lisprun = explode("\n", $lisprun);
                 $rawcommand = $lisprun[0].' -q -M '.stack_utils::convert_slash_paths($imagename);
@@ -424,7 +424,7 @@ abstract class stack_connection_helper {
             default:
                 $success = false;
                 $message = stack_string('healthautomaxopt_nolisp');
-                return array($message, '', $success, '');
+                return array($message, '', $success, '', '');
         }
 
         // Really make sure there is no cache.

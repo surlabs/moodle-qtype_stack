@@ -53,6 +53,8 @@ jobs:
           make
           sudo make install
 
+      - name: Display Maxima version
+        run: |
           maxima --list-avail
 
       - name: Check out repository code
