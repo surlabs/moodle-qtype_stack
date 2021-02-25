@@ -42,7 +42,7 @@ abstract class qtype_stack_testcase extends advanced_testcase {
     /* Different underlying versions of LISP (behind Maxima) have different results,
      * especially with the floating point routines upon which Maxima relies.
      *
-     * This must only be CLISP or SBCL.
+     * This must only be CLISP, SBCL or GCL.
      */
     protected $lisp = 'SBCL';
 

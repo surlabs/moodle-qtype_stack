@@ -458,3 +458,4 @@
 (defprop $true  "\\mathbf{!BOOLTRUE!}"  texword)
 (defprop $false "\\mathbf{!BOOLFALSE!}" texword)
 
+(defvar $lispimplementationtype (lisp-implementation-type))

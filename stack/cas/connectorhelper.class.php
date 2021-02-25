@@ -313,7 +313,8 @@ abstract class stack_connection_helper {
                 'cte("STACKversion",errcatch(stackmaximaversion)), print("2=[ error= ["), ' .
                 'cte("MAXIMAversion",errcatch(MAXIMA_VERSION_STR)), print("3=[ error= ["), ' .
                 'cte("MAXIMAversionnum",errcatch(MAXIMA_VERSION_NUM)), print("4=[ error= ["), ' .
-                'cte("externalformat",errcatch(adjust_external_format())), print("5=[ error= ["), ' .
+                'cte("MAXIMAlisp",errcatch(lispimplementationtype)), print("5=[ error= ["), ' .
+                'cte("externalformat",errcatch(adjust_external_format())), print("6=[ error= ["), ' .
                 'cte("CAStime",errcatch(CAStime:"'.$date.'")), print("] ]"), return(true));' .
                 "\n";
 
@@ -377,12 +378,7 @@ abstract class stack_connection_helper {
      * This function is in this class, rather than installhelper.class.php, to
      * ensure the lowest level connection to the CAS, without caching.
      */
-    public static function stackmaxima_auto_maxima_optimise($genuinedebug) {
-        global $CFG;
-        self::ensure_config_loaded();
-
-        $imagename = stack_utils::convert_slash_paths($CFG->dataroot . '/stack/maxima_opt_auto');
-
+    public static function stackmaxima_auto_lisp_version($genuinedebug) {
         $lisp = '1';
         // Try to guess the lisp version.
         if (!(false === strpos($genuinedebug, 'GNU Common Lisp (GCL)'))) {
@@ -394,6 +390,21 @@ abstract class stack_connection_helper {
         if (!(false === strpos($genuinedebug, 'Lisp CLISP'))) {
             $lisp = 'CLISP';
         }
+        return $lisp;
+    }
+
+    /*
+     * This function is in this class, rather than installhelper.class.php, to
+     * ensure the lowest level connection to the CAS, without caching.
+     */
+    public static function stackmaxima_auto_maxima_optimise($genuinedebug) {
+        global $CFG;
+        self::ensure_config_loaded();
+
+        $imagename = stack_utils::convert_slash_paths($CFG->dataroot . '/stack/maxima_opt_auto');
+
+        $lisp = self::stackmaxima_auto_lisp_version($genuinedebug);
+        // Try to guess the lisp version.
 
         switch ($lisp) {
             case 'GCL':
