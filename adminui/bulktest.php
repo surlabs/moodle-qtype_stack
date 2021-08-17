@@ -23,14 +23,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+if (defined('MINIMAL_API')) {
+    die("This functionality is not available through the API.");
+}
+
 define('NO_OUTPUT_BUFFERING', true);
 
-require_once(__DIR__ . '/../../../config.php');
-
+require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->libdir . '/questionlib.php');
-require_once(__DIR__ . '/moodlelib.php');
-require_once(__DIR__ . '/stack/utils.class.php');
-require_once(__DIR__ . '/stack/bulktester.class.php');
+require_once(__DIR__ . '/../moodlelib.php');
+require_once(__DIR__ . '/../stack/utils.class.php');
+require_once(__DIR__ . '/../stack/bulktester.class.php');
 
 // Increase memory limit: some users with very large numbers of questions/variants have needed this.
 raise_memory_limit(MEMORY_HUGE);

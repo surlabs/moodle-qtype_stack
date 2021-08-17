@@ -21,13 +21,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+if (defined('MINIMAL_API')) {
+    die("This functionality is not available through the API.");
+}
+
 define('NO_OUTPUT_BUFFERING', true);
 
-require_once(__DIR__.'/../../../config.php');
+require_once(__DIR__ . '/../../../../config.php');
 
 require_once($CFG->libdir . '/questionlib.php');
-require_once(__DIR__ . '/moodlelib.php');
-require_once(__DIR__ . '/stack/utils.class.php');
+require_once(__DIR__ . '/../moodlelib.php');
+require_once(__DIR__ . '/../stack/utils.class.php');
 
 $preview = optional_param('preview', true, PARAM_BOOL);
 
@@ -35,7 +39,7 @@ $preview = optional_param('preview', true, PARAM_BOOL);
 $context = context_system::instance();
 require_login();
 require_capability('moodle/site:config', $context);
-$PAGE->set_url('/question/type/stack/replacedollarsindex.php');
+$PAGE->set_url('/question/type/stack/adminui/replacedollarsindex.php');
 $PAGE->set_context($context);
 $PAGE->set_title(stack_string('replacedollarsindextitle'));
 
@@ -62,7 +66,7 @@ foreach ($counts as $contextid => $numstackquestions) {
         $params['preview'] = 0;
     }
     echo html_writer::tag('li', html_writer::link(
-            new moodle_url('/question/type/stack/replacedollars.php', $params),
+            new moodle_url('/question/type/stack/adminui/replacedollars.php', $params),
             context::instance_by_id($contextid)->get_context_name(true, true) . ' (' . $numstackquestions . ')'));
 }
 echo html_writer::end_tag('ul');

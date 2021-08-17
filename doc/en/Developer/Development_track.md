@@ -11,21 +11,9 @@ How to report bugs and make suggestions is described on the [community](../About
 
 ## Version 4.4
 
-## Version 4.3.8
-
-Done:
-
-* Autoload `trigtools` to provide better simplification options for trig expressions and fix long-standing bug with `trigrat`.
-* Make it much easier for colleagues to construct a test case using the "teacher's answer" input values as test case inputs.
-* Allow users to modify the `notanswered` message in dropdown and radio inputs.
-* Move all answer tests to Maxima.
-* Separate out Maxima commands in the install process.
-
-## Version 4.4
-
 1. Caching validation.
 2. Compiled PRTs.
-3. 4. CASText2.
+3. CASText2.
 
 ## Maxima side PRTs.
 

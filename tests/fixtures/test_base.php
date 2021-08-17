@@ -48,7 +48,7 @@ abstract class qtype_stack_testcase extends advanced_testcase {
      */
     protected $lisp = 'SBCL';
 
-    public function setUp() {
+    public function setUp() :void {
         parent::setUp();
 
         stack_utils::clear_config_cache();
@@ -139,7 +139,7 @@ abstract class qtype_stack_testcase extends advanced_testcase {
      * @param string $actual the actual output, as processed by the default Maths filter that STACK uses.
      */
     protected function assert_content_with_maths_contains($expected, $actual) {
-        $this->assertContains($expected, self::prepare_actual_maths($actual));
+        $this->assertStringContainsString($expected, self::prepare_actual_maths($actual));
     }
 
     /**
@@ -161,12 +161,25 @@ abstract class qtype_stack_testcase extends advanced_testcase {
                     '$1', $content);
         }
 
-        // Different versions of Maxima output floats in slighly different ways.
-        // Revert some of those irrelevant differences.
-        // We always expect the e in 3.0e8 to be lower case.
-        $content = preg_replace('~(-?\b\d+(?:\.\d*)?)E([-+]?\d+\b)~', '$1e$2', $content);
-        // Add .0 in 3e8 or 3.e8, to give 3.0e8.
-        $content = preg_replace('~((?<!\.)\b-?\d+)\.?(e[-+]?\d+\b)~', '$1.0$2', $content);
+        $content = self::prepare_actual_maths_floats($content);
+
+        // Add .0 in 3E8 or 3.E8, to give 3.0E8.
+        $content = preg_replace('~((?<!\.)\b-?\d+)\.?(E[-+]?\d+\b)~', '$1.0$2', $content);
+
+        return $content;
+
+    }
+
+    /**
+     * Different versions of Maxima output floats in slighly different ways.
+     * Revert some of those irrelevant differences.
+     * We always expect the E in 3.0E8 to be upper case.
+     * Upper case is used to avoid a conflict with the base of the natural logarithms.
+     */
+    public static function prepare_actual_maths_floats($content) {
+
+        // We don't add in a trailing zero at this point as that would break a decimal places display function test.
+        $content = preg_replace('~(-?\b\d+(?:\.\d*)?)e([-+]?\d+\b)~', '$1E$2', $content);
 
         return $content;
     }
@@ -177,10 +190,20 @@ abstract class qtype_stack_testcase extends advanced_testcase {
      * assumed to be a float an thus case insensitive.
      */
     public function assert_equals_ignore_spaces_and_e(string $expected, string $actual) {
+
+        // Data gathered on 26/06/2021.
+        // Maxima 5.38.0 SBCL 1.2.4.debian.                1.0e-5
+        // Maxima 5.43.2 SBCL 1.4.14 (x86_64-w64-mingw32). 1.0e-5
+        // Maxima 5.42.1 GCL 2.6.12.                       1.0E-5
+        // Maxima 5.44.0 CLISP 2.49 (2010-07-07).          1.0E-5
+
         $e = trim(preg_replace('/[\t\n\r\s]+/', ' ', $expected));
         $a = trim(preg_replace('/[\t\n\r\s]+/', ' ', $actual));
         $e = preg_replace('/([\d.])e([+\-\d])/', '$1E$2', $e);
         $a = preg_replace('/([\d.])e([+\-\d])/', '$1E$2', $a);
+        // Make sure we have a trailing zero as well.  E.g. 1.0E2, not 1.E2.
+        $e = preg_replace('~((?<!\.)\b-?\d+)\.?(E[-+]?\d+\b)~', '$1.0$2', $e);
+        $a = preg_replace('~((?<!\.)\b-?\d+)\.?(E[-+]?\d+\b)~', '$1.0$2', $a);
 
         $this->assertEquals($e, $a);
     }
@@ -198,7 +221,7 @@ abstract class qtype_stack_testcase extends advanced_testcase {
 abstract class qtype_stack_walkthrough_test_base extends qbehaviour_walkthrough_test_base {
     protected $currentoutput = null;
 
-    public function setUp() {
+    public function setUp() :void {
         parent::setUp();
         qtype_stack_testcase::setup_test_maxima_connection($this);
         $this->resetAfterTest();
@@ -364,13 +387,13 @@ abstract class qtype_stack_walkthrough_test_base extends qbehaviour_walkthrough_
 
     protected function check_output_contains_lang_string($identifier, $component = '', $a = null) {
         $string = get_string($identifier, $component, $a);
-        $this->assertContains($string, $this->currentoutput,
+        $this->assertStringContainsString($string, $this->currentoutput,
                 'Expected string ' . $string . ' not found in ' . $this->currentoutput);
     }
 
     protected function check_output_does_not_contain_lang_string($identifier, $component = '', $a = null) {
         $string = get_string($identifier, $component, $a);
-        $this->assertNotContains($string, $this->currentoutput,
+        $this->assertStringNotContainsString($string, $this->currentoutput,
                 'The string ' . $string . ' should not be present in ' . $this->currentoutput);
     }
 
@@ -395,7 +418,7 @@ abstract class qtype_stack_walkthrough_test_base extends qbehaviour_walkthrough_
      * @param string $actual the actual output, as processed by the default Maths filter that STACK uses.
      */
     protected function assert_content_with_maths_contains($expected, $actual) {
-        $this->assertContains($expected, qtype_stack_testcase::prepare_actual_maths($actual));
+        $this->assertStringContainsString($expected, qtype_stack_testcase::prepare_actual_maths($actual));
     }
 
     /**

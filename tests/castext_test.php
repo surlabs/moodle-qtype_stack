@@ -297,8 +297,8 @@ class stack_cas_text_test extends qtype_stack_testcase {
         $at1 = new stack_cas_text("[[facts:calc_diff_linearity_rule]]", $cs2, 0);
         $output = stack_maths::process_display_castext($at1->get_display_castext());
 
-        $this->assertContains(stack_string('calc_diff_linearity_rule_name'), $output);
-        $this->assertContains(stack_string('calc_diff_linearity_rule_fact'), $output);
+        $this->assertStringContainsString(stack_string('calc_diff_linearity_rule_name'), $output);
+        $this->assertStringContainsString(stack_string('calc_diff_linearity_rule_fact'), $output);
     }
 
     public function test_assignmatrixelements() {
@@ -752,7 +752,7 @@ class stack_cas_text_test extends qtype_stack_testcase {
         $at2->get_display_castext();
 
         $this->assert_content_with_maths_equals(
-            'Decimal numbers \({0.1}\), \({0.01}\), \({0.001}\), \({1.0e-4}\), \({1.0e-5}\).',
+            'Decimal numbers \({0.1}\), \({0.01}\), \({0.001}\), \({1.0E-4}\), \({1.0E-5}\).',
             $at2->get_display_castext());
     }
 
@@ -791,7 +791,7 @@ class stack_cas_text_test extends qtype_stack_testcase {
         $at2->get_display_castext();
 
         $this->assert_content_with_maths_equals(
-                'Decimal numbers \({1.0e-1}\), \({1.0e-2}\), \({1.0e-3}\), \({1.0e-4}\), \({1.0e-5}\).',
+                'Decimal numbers \({1.0E-1}\), \({1.0E-2}\), \({1.0E-3}\), \({1.0E-4}\), \({1.0E-5}\).',
                 $at2->get_display_castext());
     }
 
@@ -813,7 +813,7 @@ class stack_cas_text_test extends qtype_stack_testcase {
         $at2->get_display_castext();
 
         $this->assert_content_with_maths_equals(
-                'Decimal number \({1.0e-6}\).',
+                'Decimal number \({1.0E-6}\).',
                 $at2->get_display_castext());
     }
 
@@ -828,7 +828,7 @@ class stack_cas_text_test extends qtype_stack_testcase {
 
         $this->assert_content_with_maths_equals(
                 'The decimal number \({73}\) is written in base \(2\) as \({1001001}\), in base \(7\) as \({133}\), ' .
-                'in scientific notation as \({7.3e+1}\) and in rhetoric as \({\mbox{seventy-three}}\).',
+                'in scientific notation as \({7.3E+1}\) and in rhetoric as \({\mbox{seventy-three}}\).',
                 $at2->get_display_castext());
     }
 
@@ -975,6 +975,25 @@ class stack_cas_text_test extends qtype_stack_testcase {
 
         $this->assert_equals_ignore_spaces_and_e('\({\lambda\left(\left[ x , n \right]  , ' .
                 '{\it significantfigures}\left(x , n\right)\right)}\), \({3}\)',
+            $at1->get_display_castext());
+    }
+
+    public function test_apply() {
+        $a2 = array('p1:apply("+",[x,y,z]);');
+        $s2 = array();
+        foreach ($a2 as $s) {
+            $cs = stack_ast_container::make_from_teacher_source($s, '', new stack_cas_security(), array());
+            $this->assertTrue($cs->get_valid());
+            $s2[] = $cs;
+        }
+        $cs2 = new stack_cas_session2($s2, null, 0);
+
+        $at1 = new stack_cas_text('{@p1@}, {@apply("*",[a,b,c])@}', $cs2, 0);
+        $this->assertTrue($at1->get_valid());
+        $this->assertEquals('', $at1->get_errors(false));
+        $at1->get_display_castext();
+
+        $this->assert_equals_ignore_spaces_and_e('\({z+y+x}\), \({a\cdot b\cdot c}\)',
             $at1->get_display_castext());
     }
 

@@ -23,14 +23,21 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__.'/../../../config.php');
+if (defined('MINIMAL_API')) {
+    die("This functionality is not available through the API.");
+}
+
+define('NO_OUTPUT_BUFFERING', true);
+
+require_once(__DIR__ . '/../../../../config.php');
 
 require_once($CFG->libdir . '/questionlib.php');
-require_once(__DIR__ . '/moodlelib.php');
-require_once(__DIR__ . '/stack/utils.class.php');
-require_once(__DIR__ . '/stack/options.class.php');
-require_once(__DIR__ . '/stack/cas/castext.class.php');
-require_once(__DIR__ . '/stack/cas/keyval.class.php');
+require_once(__DIR__ . '/../moodlelib.php');
+require_once(__DIR__ . '/../stack/utils.class.php');
+require_once(__DIR__ . '/../stack/options.class.php');
+require_once(__DIR__ . '/../stack/cas/castext.class.php');
+require_once(__DIR__ . '/../stack/cas/keyval.class.php');
+
 
 require_login();
 
@@ -55,7 +62,7 @@ if (!$questionid) {
 
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_url('/question/type/stack/caschat.php', $urlparams);
+$PAGE->set_url('/question/type/stack/adminui/caschat.php', $urlparams);
 $title = stack_string('chattitle');
 $PAGE->set_title($title);
 

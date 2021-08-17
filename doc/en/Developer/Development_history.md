@@ -2,6 +2,34 @@
 
 For current and future plans, see [Development track](Development_track.md) and [Future plans](Future_plans.md).
 
+## Version 4.3.9
+
+Released July 2021.
+
+Mostly minor bug fixes.
+
+* Add in additional cache `compiledcache` to reduce validation overheads by compiling questions.
+* Improve checking of teacher's code for better security, this requires a new admin setting `caspreparse` for back compatibility.
+* Add in local.mac for site specific code.
+* Move STACK admin UI scripts to `adminui`.
+* Add in ATEqualComAssRules
+* Filter student's input so groups are turned into `ntuple` inert functions.  At last students can type in coordinates as `(x,y)` as input!
+* Add in warnings of language mismatch in parts of a question.
+* Add in warnings where the answer test needs a raw input but appears to get a calculated value.
+* Expand `rand` to accept sets and make a random selection from sets.  Add `rand_selection_with_replacement`.
+
+## Version 4.3.8
+
+Released December 2020.
+
+* Introduce "context variables" which propagate throughout a question, enabling `texput` to operate in inputs as well as general castext.
+* Autoload `trigtools` to provide better simplification options for trig expressions and fix long-standing bug with `trigrat`.
+* Make it much easier for colleagues to construct a test case using the "teacher's answer" input values as test case inputs.
+* Allow users to modify the `notanswered` message in dropdown and radio inputs.
+* Move all answer tests to Maxima.
+* Separate out Maxima commands in the install process.
+
+
 ## Version 4.3.7
 
 Released October 2020.

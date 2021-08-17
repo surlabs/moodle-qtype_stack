@@ -22,16 +22,23 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__.'/../../../config.php');
+if (defined('MINIMAL_API')) {
+    die("This functionality is not available through the API.");
+}
+
+define('NO_OUTPUT_BUFFERING', true);
+
+require_once(__DIR__ . '/../../../../config.php');
 
 require_once($CFG->libdir . '/questionlib.php');
-require_once(__DIR__ . '/moodlelib.php');
-require_once(__DIR__ . '/stack/utils.class.php');
-require_once(__DIR__ . '/stack/options.class.php');
-require_once(__DIR__ . '/stack/maximaparser/utils.php');
+require_once(__DIR__ . '/../moodlelib.php');
+require_once(__DIR__ . '/../stack/utils.class.php');
+require_once(__DIR__ . '/../stack/options.class.php');
+require_once(__DIR__ . '/../stack/maximaparser/utils.php');
 
 
 require_login();
+
 $context = context_system::instance();
 require_capability('qtype/stack:usediagnostictools', $context);
 
@@ -39,7 +46,7 @@ $urlparams = array();
 
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_url('/question/type/stack/caschat.php', $urlparams);
+$PAGE->set_url('/question/type/stack/adminui/cascacheview.php', $urlparams);
 $title = 'Cache debug';
 $PAGE->set_title($title);
 

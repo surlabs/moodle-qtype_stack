@@ -209,6 +209,7 @@
 
 ;; Change the display of integrals to be consistent with derivatives.
 ;; Chris Sangwin, 8/6/2015.
+(defprop %int tex-int tex)
 (defprop %integrate tex-int tex)
 (defun tex-int (x l r)
   (let ((s1 (tex (cadr x) nil nil 'mparen 'mparen)) ;;integran, at the request of the OU delims / & d
@@ -274,7 +275,7 @@
                      (setq l (tex `((mexpt) ,f ,expon) l nil 'mparen 'mparen))
                      (if (and (null (cdr bascdr))
                               (eq (get f 'tex) 'tex-prefix))
-                         (setq r (tex (car bascdr) nil r f 'mparen))
+                         (setq r (tex (cons '(mprogn) bascdr) nil r f 'mparen))
                          (setq r (tex (cons '(mprogn) bascdr) nil r 'mparen 'mparen))))
                     (t nil))))) ; won't doit. fall through
       (t (setq l (cond ((or ($bfloatp (cadr x))
@@ -456,3 +457,4 @@
 
 (defprop $true  "\\mathbf{!BOOLTRUE!}"  texword)
 (defprop $false "\\mathbf{!BOOLFALSE!}" texword)
+

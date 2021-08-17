@@ -26,14 +26,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+if (defined('MINIMAL_API')) {
+    die("This functionality is not available through the API.");
+}
+
 define('NO_OUTPUT_BUFFERING', true);
 
-require_once(__DIR__.'/../../../config.php');
+require_once(__DIR__ . '/../../../../config.php');
 
 require_once($CFG->libdir . '/questionlib.php');
-require_once(__DIR__ . '/moodlelib.php');
-require_once(__DIR__ . '/stack/utils.class.php');
-
+require_once(__DIR__ . '/../moodlelib.php');
+require_once(__DIR__ . '/../stack/utils.class.php');
 
 // Get the parameters from the URL.
 $contextid = required_param('contextid', PARAM_INT);
@@ -44,7 +47,7 @@ $preview = optional_param('preview', true, PARAM_BOOL);
 $context = context::instance_by_id($contextid);
 require_login();
 require_capability('moodle/site:config', $context);
-$PAGE->set_url('/question/type/stack/replacedollars.php', array('contextid' => $context->id));
+$PAGE->set_url('/question/type/stack/adminui/replacedollars.php', array('contextid' => $context->id));
 $PAGE->set_context($context);
 $title = stack_string('replacedollarstitle', $context->get_context_name());
 $PAGE->set_title($title);
@@ -158,10 +161,10 @@ if (!$anychanges) {
     echo html_writer::tag('p', get_string('changessaved'));
 
 } else {
-    echo $OUTPUT->single_button(new moodle_url('/question/type/stack/replacedollars.php',
+    echo $OUTPUT->single_button(new moodle_url('/question/type/stack/adminui/replacedollars.php',
             array('contextid' => $context->id, 'confirm' => 1, 'preview' => $preview)), get_string('savechanges'));
 }
-echo html_writer::tag('p', html_writer::link(new moodle_url('/question/type/stack/replacedollarsindex.php'),
+echo html_writer::tag('p', html_writer::link(new moodle_url('/question/type/stack/adminui/replacedollarsindex.php'),
         get_string('back')));
 
 echo $OUTPUT->footer();
