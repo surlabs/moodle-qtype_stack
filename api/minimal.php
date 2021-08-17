@@ -65,7 +65,8 @@ $fields['prefix'] = $prefix;
  * The "answer" array contains the raw responses from a student's previous attempt.
  */
 $answers = array(
-        $prefix . 'ans1' => '(x-6)^4/4'
+        $prefix . 'ans1' => '(x-6)^4/4',
+        $prefix . 'ans1_val' => '(x-6)^4/4'
         );
 $fields['answer'] = $answers;
 

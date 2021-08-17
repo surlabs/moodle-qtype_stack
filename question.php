@@ -1417,8 +1417,6 @@ class qtype_stack_question extends question_graded_automatically_with_countback
      * has been cleared.
      */
     private function get_cached(string $key) {
-        // TODO: The API does not have a DB, so breaks at this point where we try to make use of the cache.
-        global $DB;
         // Do we have that particular thing in the cache?
         if ($this->compiledcache === null || !array_key_exists($key, $this->compiledcache)) {
             // If not do the compilation.
@@ -1426,17 +1424,21 @@ class qtype_stack_question extends question_graded_automatically_with_countback
                 $this->compiledcache = qtype_stack_question::compile($this->questionvariables, $this->inputs, $this->prts, $this->options);
 
                 // Invalidate Moodle question-cache and add there.
-                if (is_integer($this->id) || is_numeric($this->id)) {
-                    // Save to DB. If the question is there.
-                    // Could not be in some API situations.
-                    $sql = 'UPDATE {qtype_stack_options} SET compiledcache = ? WHERE questionid = ?';
-                    $params[] = json_encode($this->compiledcache);
-                    $params[] = $this->id;
-                    $DB->execute($sql, $params);
+                if (!defined('MINIMAL_API')) {
+                        if (is_integer($this->id) || is_numeric($this->id)) {
+                        global $DB;
 
-                    // Invalidate the question definition cache.
-                    // First from the next sessions.
-                    cache::make('core', 'questiondata')->delete($this->id);
+                        // Save to DB. If the question is there.
+                        // Could not be in some API situations.
+                        $sql = 'UPDATE {qtype_stack_options} SET compiledcache = ? WHERE questionid = ?';
+                        $params[] = json_encode($this->compiledcache);
+                        $params[] = $this->id;
+                        $DB->execute($sql, $params);
+
+                        // Invalidate the question definition cache.
+                        // First from the next sessions.
+                        cache::make('core', 'questiondata')->delete($this->id);
+                    }
                 }
             } catch (exception $e) {
                 // TODO: what exactly do we use here as the key

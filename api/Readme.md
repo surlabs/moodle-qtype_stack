@@ -1,6 +1,6 @@
 # Minimal STACK API
 
-The purpose of the files in this directory are to provide a minimal and direct API to STACK questions.
+The purpose of the files in this directory are to provide a minimal and direct API to STACK questions, without any database support.
 
 This is to prove the functionality of including STACK questions in other interactive websites.
 
