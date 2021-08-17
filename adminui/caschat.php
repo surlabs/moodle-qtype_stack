@@ -22,10 +22,11 @@
  * @copyright  2012 University of Birmingham
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+// @codingStandardsIgnoreStart
 if (defined('MINIMAL_API')) {
     die("This functionality is not available through the API.");
 }
+// @codingStandardsIgnoreEnd
 
 define('NO_OUTPUT_BUFFERING', true);
 

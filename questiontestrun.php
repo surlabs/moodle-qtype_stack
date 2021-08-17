@@ -484,7 +484,7 @@ if ($canedit) {
     }
     echo html_writer::tag('p',
             stack_string('exportthisquestion') . ' ' .
-            implode($links, ' ') . ' ' . $OUTPUT->help_icon('exportthisquestion', 'qtype_stack'));
+            implode(' ', $links) . ' ' . $OUTPUT->help_icon('exportthisquestion', 'qtype_stack'));
 }
 
 echo html_writer::tag('p',

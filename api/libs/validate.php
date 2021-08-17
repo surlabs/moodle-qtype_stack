@@ -38,7 +38,7 @@ function validatedata(array $data) {
     $data['plots_protocol'] = (array_key_exists('plots_protocol', $data)) ? $data['plots_protocol'] : 'https';
     $data['verifyvar'] = (array_key_exists('verifyvar', $data)) ? trim($data['verifyvar']) : '';
     // Use -1 to indicate "not set", other values means is set.
-    $data['debug'] = (array_key_exists('debug', $data)) ? trim($data['debug']) : -1; 
+    $data['debug'] = (array_key_exists('debug', $data)) ? trim($data['debug']) : -1;
 
     $GLOBALS['DOMAIN'] = $data['plots_protocol'] . '://' . $_SERVER['HTTP_HOST'];
     $data['ploturl'] = (array_key_exists('ploturl', $data)) ? trim($data['ploturl']) : $GLOBALS['DOMAIN'] . '/plots/';

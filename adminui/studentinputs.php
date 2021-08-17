@@ -21,9 +21,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// @codingStandardsIgnoreStart
 if (defined('MINIMAL_API')) {
     die("This functionality is not available through the API.");
 }
+// @codingStandardsIgnoreEnd
 
 require_once(__DIR__ . '/../moodlelib.php');
 require_once(__DIR__ . '/../stack/cas/cassession2.class.php');
