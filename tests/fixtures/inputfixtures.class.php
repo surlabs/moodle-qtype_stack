@@ -54,7 +54,7 @@ class stack_inputvalidation_test_data {
         array('12.5 3', 'php_false', '', '', '', 'spaces', ""),
 
         array('1x', 'php_true', '1*x', 'cas_true', '1\cdot x', 'missing_stars', ""),
-        array('x1', 'php_true', 'x*1', 'cas_true', 'x\cdot 1', 'missing_stars', ""),
+        array('x1', 'php_true', 'x1', 'cas_true', 'x_{1}', '', ""),
         array('1', 'php_true', '1', 'cas_true', '1', '', "Numbers"),
         array('.1', 'php_true', '.1', 'cas_true', '0.1', '', ""),
         array('1/2', 'php_true', '1/2', 'cas_true', '\frac{1}{2}', '', ""),
@@ -77,7 +77,8 @@ class stack_inputvalidation_test_data {
         array('3E2', 'php_true', '3E2', 'cas_true', '3.0E+2', '', ""),
         array('3e2', 'php_true', '3e2', 'cas_true', '3.0E+2', '', ""),
         array('3e-2', 'php_true', '3e-2', 'cas_true', '3.0E-2', '', ""),
-        array('3.67x10^2', 'php_true', '3.67*x*10^2', 'cas_true', '3.67\cdot x\cdot 10^2', 'missing_stars', ""),
+        // In the example below, the 403 filter only picks up 7x and not x1 numbers/letters.
+        array('3.67x10^2', 'php_true', '3.67*x10^2', 'cas_true', '3.67\cdot x_{10}^2', 'missing_stars', ""),
         array('1+i', 'php_true', '1+i', 'cas_true', '1+\mathrm{i}', '', ""),
         array('3-i', 'php_true', '3-i', 'cas_true', '3-\mathrm{i}', '', ""),
         array('-3+i', 'php_true', '-3+i', 'cas_true', '-3+\mathrm{i}', '', ""),
@@ -91,15 +92,15 @@ class stack_inputvalidation_test_data {
         array('"Hello world"', 'php_true', '"Hello world"', 'cas_true', '\mbox{Hello world}', '', ''),
         array('x', 'php_true', 'x', 'cas_true', 'x', '', "Names for variables etc."),
 
-        array('a1', 'php_true', 'a*1', 'cas_true', 'a\cdot 1', 'missing_stars', ""),
-        array('a12', 'php_true', 'a*12', 'cas_true', 'a\cdot 12', 'missing_stars', ""),
-        array('ab123', 'php_true', 'ab*123', 'cas_true', '{\it ab}\cdot 123', 'missing_stars', ""),
-        array('a9b', 'php_true', 'a*9*b', 'cas_true', 'a\cdot 9\cdot b',
+        array('a1', 'php_true', 'a1', 'cas_true', 'a_{1}', '', ""),
+        array('a12', 'php_true', 'a12', 'cas_true', 'a_{12}', '', ""),
+        array('ab123', 'php_true', 'ab123', 'cas_true', '{\it ab}_{123}', '', ""),
+        array('a9b', 'php_true', 'a9*b', 'cas_true', 'a_{9}\cdot b',
                 'missing_stars', "Note the subscripting and the implied multiplication."),
-        array('ab98cd', 'php_true', 'ab*98*cd', 'cas_true', '{\it ab}\cdot 98\cdot {\it cd}', 'missing_stars', ''),
+        array('ab98cd', 'php_true', 'ab98*cd', 'cas_true', '{\it ab}_{98}\cdot {\it cd}', 'missing_stars', ''),
         array("a'", 'php_false', '', '', '', 'apostrophe', ""),
         array('X', 'php_true', 'X', 'cas_true', 'X', '', ""),
-        array('aXy1', 'php_false', 'aXy*1', 'cas_true', '', 'missing_stars | forbiddenVariable', ""),
+        array('aXy1', 'php_true', 'aXy1', 'cas_true', '{\it aXy}_{1}', '', ""),
         // In STACK 4.3, the parser accepts these as functions.
         array('f(x)', 'php_true', 'f(x)', 'cas_true', 'f\left(x\right)', '', "Functions"),
         array('f(x)^2', 'php_true', 'f(x)^2', 'cas_true', 'f^2\left(x\right)', '', ""),
@@ -180,6 +181,10 @@ class stack_inputvalidation_test_data {
         array('x_1', 'php_true', 'x_1', 'cas_true', '{x}_{1}', '', ""),
         array('ab_12', 'php_true', 'ab_12', 'cas_true', '{{\it ab}}_{12}', '', ""),
         array('x_y', 'php_true', 'x_y', 'cas_true', '{x}_{y}', '', ""),
+        array('x_y_z', 'php_true', 'x_y_z', 'cas_true', '{{x}_{y}}_{z}', '', ""),
+        array('x_1_z', 'php_true', 'x_1_z', 'cas_true', '{{x}_{1}}_{z}', '', ""),
+        array('F_1x', 'php_true', 'F_1*x', 'cas_true', '{F}_{1}\cdot x', 'missing_stars', ""),
+        array('F_x1', 'php_true', 'F_x1', 'cas_true', '{F}_{x_{1}}', '', ""),
         array('x <= y', 'php_true', 'x <= y', 'cas_true', 'x\leq y', '',
         "Inequalities in various forms."),
         array('x >= y', 'php_true', 'x >= y', 'cas_true', 'x\geq y', '', ""),
@@ -576,7 +581,7 @@ class stack_inputvalidation_test_data {
     }
 
     public static function get_all() {
-        return array();
+//        return array();
         $tests = array();
         foreach (self::$rawdata as $data) {
             $tests[] = self::test_from_raw($data, 'typeless');
@@ -605,7 +610,8 @@ class stack_inputvalidation_test_data {
         // The common insert stars rules, that will be forced
         // and if you do not allow inserttion of stars then it is invalid.
         $filterstoapply[] = '402_split_prefix_from_common_function_name';
-        $filterstoapply[] = '404_split_at_number_letter_number_boundary';
+        // This is the rule found in input base class, so use this here rather than 404.
+        $filterstoapply[] = '403_split_at_number_letter_boundary';
         $filterstoapply[] = '406_split_implied_variable_names';
 
         $filterstoapply[] = '502_replace_pm';

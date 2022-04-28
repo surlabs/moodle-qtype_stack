@@ -99,6 +99,8 @@ class stack_subscripts_test_data {
         // Changes in v4.3.
         array('a_1x', 'a_1x', '!', '{a}_{\mbox{1x}}', '!'),
         array('F_1x', 'F_1x', '!', '{F}_{\mbox{1x}}', '!'),
+        array('F_1_x', 'F_1_x', '!', '{{F}_{1}}_{x}', '!'),
+        array('M_x1', 'M_x1', '!', '{M}_{x_{1}}', '!'),
     );
 
     protected static $rawdatalegacy = array(
