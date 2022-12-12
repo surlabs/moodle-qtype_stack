@@ -208,8 +208,34 @@ Internally, it applies `string` to the list of values (not TeX!).  However, you 
 
 You can use this with mathematical input: `{@stack_disp_comma_separate([a,b,sin(pi)])@}` and you will get the result `a, b, sin(%pi/7)` (without the string quotes) because when a Maxima variable is a string we strip off the outside quotes and don't typeset this in maths mode.
 
-
 ## Discrete mathematics and graph theory.
 
-
 A graph can be displayed with JSXGraph, see [discrete mathematics](../CAS/Discrete_mathematics.md) for examples.
+
+## 3D graphics and JSXGraph
+
+Recently JSXGraph has added 3D graphics.  For example, this is a static example of plotting a Klein bottle.
+
+```
+[[jsxgraph]]
+  (function () {
+    var board = JXG.JSXGraph.initBoard(divid, {boundingbox: [-8, 8, 8, -8], keepaspectratio: false,axis: false});
+
+    var view = board.create('view3d', [[-6, -3], [8, 8], [[-5, 5], [-5, 5], [-5, 5]]], {});
+    var b = board.create('slider', [[-7, -6], [5, -6], [-3, 2, 4]], { name: 'b' });
+
+    // Klein bottle.
+    var c = view.create('parametricsurface3d', [
+        (u, v) => b.Value() * (1 - Math.sin(u)) * Math.cos(u) + (2 - Math.cos(u)) * Math.cos(v) 
+            * (2 * Math.exp(-Math.pow(u / 2 - Math.PI, 2)) - 1),
+        (u, v) => (2 - Math.cos(u)) * Math.sin(v),
+        (u, v) => 4 * Math.sin(u) + 0.5 * (2 - Math.cos(u)) * Math.sin(u) * Math.cos(v) * 
+            Math.exp(-Math.pow(u - 3 * Math.PI / 2, 2)),
+                [0, 2 * Math.PI],
+                [0, 2 * Math.PI],
+            ], {strokeColor: 'green', stepsU: 60, stepsV: 60});
+})();
+[[/jsxgraph]]
+```
+
+More example are in [the JSXGraph documentation](https://jsxgraph.uni-bayreuth.de/~alfred/jsxdev/3D/demo3d.html).  Remember the need to change the explicit name of the target div to `divid` in STACK.  E.g. `'jxgbox4'` in the JSXGraph examples need to be changed to `divid`.

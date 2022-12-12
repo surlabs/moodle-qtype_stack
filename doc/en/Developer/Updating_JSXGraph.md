@@ -46,3 +46,7 @@ Copy the file to `amd/src`.
 Use `grunt amd` in the `amd` folder to create the minified versions in `amd/build`.
 
 See [https://docs.moodle.org/dev/Javascript_Modules](https://docs.moodle.org/dev/Javascript_Modules) on how to properly setup nodejs and grunt.
+
+## 5. Copy CSS
+
+JSXGraph defines some styles in `jsxgraph.css`.  These need to copied and replace those in STACK's `styles.css`.
