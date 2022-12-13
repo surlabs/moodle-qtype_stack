@@ -236,7 +236,7 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
 
 
             custom_bind: function(input, serializer, deserializer, objects) {
-                // Allows one to define a custom binding using whatever 
+                // Allows one to define a custom binding using whatever
                 // serialization one wishes.
                 _commonsetup(input);
 
@@ -252,7 +252,7 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
                 // Register this as a normal deserialiser for this input.
                 deserializers[input].push(deserializer);
 
-                // For each of these objects make the erialsier from them to 
+                // For each of these objects make the erialsier from them to
                 // the input as the one defined.
                 // Also build the map of objects to inputs and register for update tracking.
                 for (var i = 0; i < objects.length; i++) {
@@ -261,7 +261,7 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
             },
 
             register_object: function(input, object, serializer) {
-                // For when you need to declare a new object that was not there during 
+                // For when you need to declare a new object that was not there during
                 // the initial binding.
                 if (object.id in objectinput) {
                     if (!(input in objectinput[object.id])) {
