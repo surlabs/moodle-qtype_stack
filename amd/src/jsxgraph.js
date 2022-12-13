@@ -29,6 +29,9 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
     // Flag to stop propagation.
     var active = false;
 
+    /**
+     * Setup function for linking JSXGraph to STACK questions.
+     */
     function _commonsetup(inputname) {
         if (!(inputname in serializers)) {
             serializers[inputname] = {};
@@ -43,6 +46,10 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
         }
     }
 
+    /**
+     * Add an object to the register of those we keep track of the state.
+     * @param {Object} object
+     */
     function registerobject(object) {
         if (!(object.id in registeredobjects)) {
             object.board.on('update', () => generalobjectupdatehandlerid(object.id));
@@ -50,10 +57,20 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
         }
     }
 
+    /**
+     * Serialise a point.
+     * @param {JXG.Point} point
+     * @returns {String}
+     */
     function pointserializer(point) {
         return JSON.stringify([point.X(), point.Y()]);
     }
 
+    /**
+     * De-serialise a point.
+     * @param {JXG.Point} point
+     * @param {String} data
+     */
     function pointdeserializer(point, data) {
         try {
             var tmp = JSON.parse(data);
@@ -66,7 +83,12 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
             // We do not care about this. What could we even do?
         }
     }
-    // And for cases where we have already parsed that.
+
+    /**
+     * De-serialise a point for cases where we have already parsed that.
+     * @param {JXG.Point} point
+     * @param {Array} data
+     */
     function pointdeserializerparsed(point, data) {
         try {
             if (typeof data[0] == 'number' && typeof data[1] == 'number') {
@@ -79,11 +101,20 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
         }
     }
 
-
+    /**
+     * Serialise a slider.
+     * @param {JXG.Slider} slider
+     * @returns {String}
+     */
     function sliderserializer(slider) {
         return JSON.stringify(slider.Value());
     }
 
+    /**
+     * De-serialise a slider.
+     * @param {JXG.Slider} slider
+     * @param {String} data
+     */
     function sliderdeserializer(slider, data) {
         try {
             slider.setValue(JSON.parse(data));
@@ -94,10 +125,18 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
         }
     }
 
+    /**
+     * Wrapper function for general object handler.
+     * @param {Object} object
+     */
     function generalobjectupdatehandler(object) {
         generalobjectupdatehandlerid(object.id);
     }
 
+    /**
+     * General object handler.
+     * @param {String} id
+     */
     function generalobjectupdatehandlerid(id) {
         if (!active) {
             active = true;
@@ -161,7 +200,10 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
         }
     }
 
-    // Updates to inputs coming from outside are handled like this.
+    /**
+     * Handles updates to inputs coming from outside.
+     * @param {String} inputname
+     */
     function generalinputupdatehandler(inputname) {
         if (inputname in deserializers) {
             // Only trigger everything if the value has truly changed.
@@ -188,8 +230,6 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
             }
         }
     }
-
-
 
     return {
             find_input_id: function(divid, name) {
