@@ -31,6 +31,7 @@ define(["qtype_stack/jsxgraphcore-lazy"], function(JXG) {
 
     /**
      * Setup function for linking JSXGraph to STACK questions.
+     * @param {String} inputname
      */
     function _commonsetup(inputname) {
         if (!(inputname in serializers)) {
