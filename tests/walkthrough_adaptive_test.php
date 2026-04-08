@@ -2964,8 +2964,8 @@ final class walkthrough_adaptive_test extends qtype_stack_walkthrough_test_base 
         $this->render();
 
         $rte = implode(' ', array_keys($q->runtimeerrors));
-        $err = 'Division by zero. The field ""Question text"" generated the following error: Division by zero. ' .
-            'The field ""Question variables"" generated the following error: Division by zero.';
+        $err = 'Division by zero. The field "Question text" generated the following error: Division by zero. ' .
+            'The field "Question variables" generated the following error: Division by zero.';
         $this->assertEquals($err, $rte);
     }
 
