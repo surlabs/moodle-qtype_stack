@@ -39,8 +39,10 @@ require_once(__DIR__ . '/../stack/maximaparser/parser.options.class.php');
  * @covers \qtype_stack_question
  */
 final class parser_tests extends qtype_stack_testcase {
-
-    // phpcs:ignore moodle.Commenting.MissingDocblock.MissingTestcaseMethodDescription
+    /**
+     * Add description here.
+     * @covers \qtype_stack\stack_parser_options
+     */
     public function test_empty_values(): void {
         // Use parsing settings as close to keyval usage as possible.
         $po = stack_parser_options::get_cas_config();
@@ -96,7 +98,10 @@ final class parser_tests extends qtype_stack_testcase {
         $this->assertTrue($parsed6->items[1] instanceof MP_Comment);
     }
 
-    // phpcs:ignore moodle.Commenting.MissingDocblock.MissingTestcaseMethodDescription
+    /**
+     * Add description here.
+     * @covers \qtype_stack\stack_parser_options
+     */
     public function test_comment_collection(): void {
         // Use parsing settings as close to keyval usage as possible.
         $po = stack_parser_options::get_cas_config();

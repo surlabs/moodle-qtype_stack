@@ -307,7 +307,7 @@ final class input_dropdown_test extends qtype_stack_walkthrough_test_base {
                             '',
                             '',
                             ''
-                            ), 'stack1__ans1', false, null));
+                        ), 'stack1__ans1', false, null));
     }
 
     public function test_render_latex(): void {
