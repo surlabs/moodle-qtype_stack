@@ -3305,4 +3305,29 @@ final class castext_test extends qtype_stack_testcase {
         $cs2->instantiate();
         $this->assertEquals($exp, $at1->get_rendered());
     }
+
+    /**
+     * Allow "if" statements in the castext nody, issue #1721.
+     * @covers \qtype_stack\stack_cas_castext2_latex
+     * @covers \qtype_stack\stack_cas_keyval
+     */
+    public function test_stack_simple_cas_if(): void {
+        $a2 = ['ta1:2'];
+        $s2 = [];
+        foreach ($a2 as $s) {
+            $cs = stack_ast_container::make_from_teacher_source($s, '', new stack_cas_security(), []);
+            $this->assertTrue($cs->get_valid());
+            $s2[] = $cs;
+        }
+        $options = new stack_options();
+        $options->set_option('simplify', true);
+        $cs2 = new stack_cas_session2($s2, $options, 0);
+        $raw = '{@if ta1>3 then a else b@}';
+        $exp = '\({b}\)';
+        $at1 = castext2_evaluatable::make_from_source($raw, 'test-case');
+        $this->assertTrue($at1->get_valid());
+        $cs2->add_statement($at1);
+        $cs2->instantiate();
+        $this->assertEquals($exp, $at1->get_rendered());
+    }
 }
