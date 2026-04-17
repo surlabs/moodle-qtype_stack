@@ -102,7 +102,7 @@
 }}
       <!-- Continuation of Test pane after running tests -->
       {{#tests.hasheadlineerror}}
-        <div class="stack-library-import-failure">
+        <div class="stack-library-import-failure test-pane-fail">
           <h3>{{#str}} errors, qtype_stack {{/str}}</h3>
           {{#tests.runtimeerrors}}
             <p>{{{tests.runtimeerrors}}}</p>
@@ -120,7 +120,7 @@
           <p>{{#str}} questionnote, qtype_stack {{/str}}: {{{question.questionnote}}}</p>
         {{/tests.hasrandomvariants}}
         {{#tests.demotest}}
-          <p>
+          <p class="test-pane-fail">
             {{#pix}}req, core{{/pix}}{{#str}} runquestiontests_alert, qtype_stack {{/str}} {{#str}} notestcasesyet, qtype_stack {{/str}}
           </p>
         {{/tests.demotest}}
@@ -144,7 +144,7 @@
           </p>
         {{/tests.allpassed}}
         {{^tests.allpassed}}
-          <p class="overallresult fail">
+          <p class="overallresult fail test-pane-fail">
             {{#tests.hasrandomvariants}}
               {{#str}} questiontestsfor, qtype_stack, {{question.seed}} {{/str}}:
             {{/tests.hasrandomvariants}}

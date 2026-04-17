@@ -139,6 +139,18 @@ define([], function () {
                 });
             });
         }
+
+        const warningTab = document.getElementById('warning-tab');
+        if (document.querySelectorAll('.var-pane-fail').length) {
+            const varTab = document.getElementById('variants-tab');
+            varTab.textContent = '\u26A0' + varTab.textContent;
+            warningTab.style.display = 'inline';
+        }
+        if (document.querySelectorAll('.test-pane-fail').length) {
+            const testTab = document.getElementById('test-tab');
+            testTab.textContent = '\u26A0' + testTab.textContent;
+            warningTab.style.display = 'inline';
+        }
     }
 
     /** Export our entry point. */

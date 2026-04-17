@@ -127,6 +127,7 @@
     <li class="nav-item stack-dash-tab-load" role="presentation">
       <a class="nav-link stack-dash-tab-load disabled" href="#variants-pane" id="variants-tab" data-bs-toggle="tab" data-toggle="tab" role="tab" aria-controls="variants-pane" aria-selected="false">{{#str}} variants, qtype_stack {{/str}}</a>
     </li>
+    <li id="warning-tab" class="nav-link stack-dash-tab-load disabled" style="border: none; border-radius: 0; display:none;">{{#str}} dashboardissues, qtype_stack {{/str}}</li>
   </ul>
 
   <!-- Tab panes -->
@@ -177,7 +178,7 @@
     <div class="tab-pane active mt-3" id="test-pane" role="tabpanel" aria-labelledby="test-tab">
       <!-- Test pane -->
       {{#question.upgradeerrors}}
-        <div class="stack-library-import-failure">
+        <div class="stack-library-import-failure test-pane-fail">
           <h3>{{#str}} upgradeerrors, qtype_stack {{/str}}</h3>
           <p>{{{question.upgradeerrors}}}</p>
         </div>

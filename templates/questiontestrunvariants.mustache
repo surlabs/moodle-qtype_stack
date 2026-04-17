@@ -84,7 +84,7 @@
         <p class="overallresult pass">{{deployfeedback}}</p>
       {{/deployfeedback}}
       {{#deployfeedbackerr}}
-        <p class="overallresult fail">{{deployfeedbackerr}}</p>
+        <p class="overallresult fail var-pane-fail">{{deployfeedbackerr}}</p>
       {{/deployfeedbackerr}}
       <h3>
         {{#notes.0}}
@@ -101,14 +101,14 @@
       {{^notes.0}}
         {{#hasrandomvariants}}
           <!-- No variants -->
-          <p>{{#pix}}req, core{{/pix}}{{#str}} runquestiontests_alert, qtype_stack {{/str}} {{#str}} questionnotdeployedyet, qtype_stack {{/str}}
+          <p class="var-pane-fail">{{#pix}}req, core{{/pix}}{{#str}} runquestiontests_alert, qtype_stack {{/str}} {{#str}} questionnotdeployedyet, qtype_stack {{/str}}
             <a href="{{{previewurl}}}">{{#pix}}t/preview, core, {{#str}} preview, core {{/str}}{{/pix}}</a>
           </p>
         {{/hasrandomvariants}}
       {{/notes.0}}
       {{#duplicateerror}}
         <!-- Duplicate question notes -->
-        <p>{{#pix}}req, core{{/pix}}</i>{{#str}} deployduplicateerror, qtype_stack {{/str}}</p>
+        <p class="var-pane-fail">{{#pix}}req, core{{/pix}}</i>{{#str}} deployduplicateerror, qtype_stack {{/str}}</p>
       {{/duplicateerror}}
       {{#notes.0}}
         <form method="get" action="{{{deploylink}}}">
