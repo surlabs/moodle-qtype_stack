@@ -56,6 +56,7 @@ require_login();
 
 /**
  * Run tests on a given seed and stop deployment if a test fails.
+ * Stop deployment if we have a question runtime error.
  * @param mixed $question
  * @param mixed $seed
  * @param mixed $context
@@ -234,6 +235,8 @@ if (!is_null($deploy) && $manybtn) {
     $maxfailedattempts = 10;
     $failedattempts = 0;
     $numberdeployed = 0;
+    $errmessage = [];
+    $allok = true;
 
     // Output something if we need a progress bar.
     if ($deploy >= $numforprogressbar) {
@@ -256,6 +259,13 @@ if (!is_null($deploy) && $manybtn) {
         $quba->set_preferred_behaviour('adaptive');
         $slot = $quba->add_question($question, $question->defaultmark);
         $quba->start_question($slot);
+
+        // Do not deploy questions with runtime errors (could be from s_assert).
+        if (!empty($question->runtimeerrors)) {
+            $errmessage['deployruntimeerr'] = stack_string('deployruntimeerr', ['no' => $seed]);
+            $allok = false;
+            continue;
+        }
 
         foreach ($question->deployedseeds as $key => $deployedseed) {
             $qn = question_bank::load_question($questionid);
@@ -304,19 +314,18 @@ if (!is_null($deploy) && $manybtn) {
     $nexturl->param('deployfeedback', $message);
     $nexturl->param('seed', $seed);
 
-    $allok = true;
     if ($failedattempts >= $maxfailedattempts) {
         $allok = false;
-        $errmessage = stack_string('deploymanynonew');
-        $nexturl->param('deployfeedbackerr', $errmessage);
+        $errmessage[] = stack_string('deploymanynonew');
+        $nexturl->param('deployfeedbackerr', implode(' ', $errmessage));
         if ($deploy < $numforprogressbar) {
             redirect($nexturl);
         }
     }
     if (time() - $starttime >= $maxtime) {
         $allok = false;
-        $errmessage = stack_string('deployoutoftime', ['time' => time() - $starttime]);
-        $nexturl->param('deployfeedbackerr', $errmessage);
+        $errmessage[] = stack_string('deployoutoftime', ['time' => time() - $starttime]);
+        $nexturl->param('deployfeedbackerr', implode(' ', $errmessage));
         if ($deploy < $numforprogressbar) {
             redirect($nexturl);
         }
@@ -325,7 +334,7 @@ if (!is_null($deploy) && $manybtn) {
     if ($deploy >= $numforprogressbar) {
         \core\notification::success(stack_string('deploymanysuccess', ['no' => $numberdeployed]));
         if (!$allok) {
-            echo html_writer::tag('p', $errmessage, ['class' => 'overallresult fail']);
+            echo html_writer::tag('p', implode(' ', $errmessage), ['class' => 'overallresult fail']);
         }
         echo $OUTPUT->continue_button($nexturl);
         echo $OUTPUT->footer();
