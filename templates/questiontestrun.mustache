@@ -119,15 +119,15 @@
   in questiontestrunvariants.mustache removes disabled class on page load -->
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <a class="nav-link active" href="#test-pane" id="test-tab" data-bs-toggle="tab" data-toggle="tab" role="tab" aria-controls="test-pane" aria-selected="true">{{#str}} tests, qtype_stack {{/str}}</a>
+      <a class="nav-link active" href="#test-pane" id="test-tab" data-bs-toggle="tab" data-toggle="tab" role="tab" aria-controls="test-pane" aria-selected="true"><span id="test-pane-warning" style="display:none;">{{#pix}}req, core{{/pix}}</span>{{#str}}tests, qtype_stack{{/str}}</a>
     </li>
     <li class="nav-item stack-dash-tab-load" role="presentation">
       <a class="nav-link stack-dash-tab-load disabled" href="#question-pane" id="question-tab" data-bs-toggle="tab" data-toggle="tab" role="tab" aria-controls="question-pane" aria-selected="false">{{#str}} question, core {{/str}}</a>
     </li>
     <li class="nav-item stack-dash-tab-load" role="presentation">
-      <a class="nav-link stack-dash-tab-load disabled" href="#variants-pane" id="variants-tab" data-bs-toggle="tab" data-toggle="tab" role="tab" aria-controls="variants-pane" aria-selected="false">{{#str}} variants, qtype_stack {{/str}}</a>
+      <a class="nav-link stack-dash-tab-load disabled" href="#variants-pane" id="variants-tab" data-bs-toggle="tab" data-toggle="tab" role="tab" aria-controls="variants-pane" aria-selected="false"><span id="variants-pane-warning" style="display:none;">{{#pix}}req, core{{/pix}}</span>{{#str}} variants, qtype_stack {{/str}}</a>
     </li>
-    <li id="warning-tab" class="nav-link stack-dash-tab-load disabled" style="border: none; border-radius: 0; display:none;">{{#str}} dashboardissues, qtype_stack {{/str}}</li>
+    <li id="warning-tab" class="nav-link stack-dash-tab-load disabled" style="border: none; border-radius: 0; display:none;">{{#pix}}req, core{{/pix}}{{#str}}dashboardissues, qtype_stack{{/str}}</li>
   </ul>
 
   <!-- Tab panes -->

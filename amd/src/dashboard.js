@@ -142,13 +142,13 @@ define([], function () {
 
         const warningTab = document.getElementById('warning-tab');
         if (document.querySelectorAll('.var-pane-fail').length) {
-            const varTab = document.getElementById('variants-tab');
-            varTab.textContent = '\u26A0' + varTab.textContent;
+            const varTab = document.getElementById('variants-pane-warning');
+            varTab.style.display = 'inline';
             warningTab.style.display = 'inline';
         }
         if (document.querySelectorAll('.test-pane-fail').length) {
-            const testTab = document.getElementById('test-tab');
-            testTab.textContent = '\u26A0' + testTab.textContent;
+            const testTab = document.getElementById('test-pane-warning');
+            testTab.style.display = 'inline';
             warningTab.style.display = 'inline';
         }
     }
