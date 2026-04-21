@@ -159,7 +159,7 @@ jobs:
           MOODLE_APP: 'true'
 
       - name: Install moodle-plugin-ci (light unit tests & moodle app)
-        if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app == 'true'}}
+        if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app == true}}
         run: |
           moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfexplicitvaildate
           moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfcbmexplicitvaildate
@@ -193,7 +193,7 @@ jobs:
           MOODLE_APP: 'true'
 
       - name: Install moodle-plugin-ci (light unit tests & no moodle app)
-        if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app != 'true'}}
+        if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app != true}}
         run: |
           moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfexplicitvaildate
           moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfcbmexplicitvaildate
