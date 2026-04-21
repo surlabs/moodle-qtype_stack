@@ -10,6 +10,7 @@ We use the [github issue tracker](https://github.com/maths/moodle-qtype_stack/is
 Issues with [github milestone 4.13.0](https://github.com/maths/moodle-qtype_stack/issues?q=is%3Aissue+milestone%3A4.13.0) include
 
 1. Remove all "cte" code from Maxima - mostly install.
+2. Support for Maxima 5.47.0, 5.48.0, and 5.49.0.  This includes a fix for issue #1281 from 5.48.0.
 
 ## Future Adapt block development ideas
 
