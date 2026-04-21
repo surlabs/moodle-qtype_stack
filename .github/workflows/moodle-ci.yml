@@ -156,10 +156,10 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
-          MOODLE_APP: ${{ matrix.moodle-app }}
+          MOODLE_APP: 'true'
 
-      - name: Install moodle-plugin-ci (light unit tests)
-        if: ${{ matrix.moodle-branch != 'main' }}
+      - name: Install moodle-plugin-ci (light unit tests & moodle app)
+        if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app == 'true'}}
         run: |
           moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfexplicitvaildate
           moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfcbmexplicitvaildate
@@ -190,7 +190,40 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
-          MOODLE_APP: ${{ matrix.moodle-app }}
+          MOODLE_APP: 'true'
+
+      - name: Install moodle-plugin-ci (light unit tests & no moodle app)
+        if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app != 'true'}}
+        run: |
+          moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfexplicitvaildate
+          moodle-plugin-ci add-plugin maths/moodle-qbehaviour_dfcbmexplicitvaildate
+          moodle-plugin-ci add-plugin maths/moodle-qbehaviour_adaptivemultipart
+          moodle-plugin-ci add-plugin maths/moodle-qbank_importasversion
+
+          moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
+
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_MAXIMAVERSION",       "5.42.2");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_MAXIMACOMMAND",       "maxima");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_MAXIMACOMMANDOPT",    "timeout --kill-after=10s 10s ${{ github.workspace }}/maxima_opt_auto -eval '\''(cl-user::run)'\''");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_MAXIMACOMMANDSERVER", "http://pool.home:8080/MaximaPool/MaximaPool");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_CASTIMEOUT",          "100");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_MAXIMALIBRARIES",     "stats, distrib, descriptive, simplex");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_CASPREPARSE", "true");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_PLATFORM",            "linux-optimised");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_CASRESULTSCACHE",     "db");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_PLOTCOMMAND",         "");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_CASDEBUGGING",        "0");'
+          moodle-plugin-ci add-config 'define("QTYPE_STACK_TEST_CONFIG_CI_LIGHT",            "1");'
+
+          #cat ${{ github.workspace }}/moodle/config.php
+
+          cp ${{ github.workspace }}/moodledata/phpu_moodledata/stack/maxima_opt_auto ${{ github.workspace }}/maxima_opt_auto
+          # Try a command on the command line.
+          # echo "1+1; quit();" | timeout --kill-after=100s 100s ${{ github.workspace }}/maxima_opt_auto -eval '(cl-user::run)' 
+
+        env:
+          DB: ${{ matrix.database }}
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: PHP Lint
         if: ${{ matrix.moodle-branch == 'main' }}
