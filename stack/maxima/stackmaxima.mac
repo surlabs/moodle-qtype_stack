@@ -1139,7 +1139,7 @@ set output ", afn),
     if plotgrid2d and MAXIMA_VERSION_NUM>34 then
         ral: append(ral, [grid2d]),
     /* Add in the command for the nobox. */
-    if not(plotbox) then if MAXIMA_VERSION_NUM>37 then 
+    if not(plotbox) then if MAXIMA_VERSION_NUM>47 then 
         ral:append(ral, [nobox]) else ral:append(ral, [[box,false]]),
     if plotdebug then print(preamble),
     if PLOT_TERMINAL="svg" then set_plot_option([svg_file, afn]),
