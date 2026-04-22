@@ -33,11 +33,6 @@ jobs:
         # We use a mix of SBCL and GCL.
         include:
           - php: '8.4'
-            moodle-branch: 'main'
-            database: 'pgsql'
-            maxima: 'GCL'
-            moodle-app: false
-          - php: '8.4'
             moodle-branch: 'MOODLE_502_STABLE'
             database: 'pgsql'
             maxima: 'GCL'

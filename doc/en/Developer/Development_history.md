@@ -2,7 +2,7 @@
 
 For current and future plans, see [Development track](Development_track.md) and [Future plans](Future_plans.md).
 
-## Version 4.12.0
+## Version 4.12.0 (2026042200)
 
 Released April 2026.
 
@@ -39,7 +39,7 @@ __Changes and new features.__
 8. STACK library now imports whole quizzes - look for a `.json` file in the library.
 9. Add in support for [local stack libraries](../STACK_question_admin/Library/index.md) of questions in the `stack/sitelibrary` directory within the Moodle data directory.
 10. Change the *Generic feedback* defaults to use the common language strings.  __Users upgrading their site in place will need to change the settings in the plugin setting page to the new default.__
-11.The Generic feedback and decimals options have been removed from questions in the question library.  When importing library questions, the current site defaults will be used.
+11. The Generic feedback and decimals options have been removed from questions in the question library.  When importing library questions, the current site defaults will be used.
 12. Remove the German language packs locally (#1710).  Note, the API now includes language packs as a config option when you build the docker container.
 
 ## Version 4.11.1 (2026010500)
