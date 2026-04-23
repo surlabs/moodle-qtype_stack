@@ -151,8 +151,6 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
-	  # MOODLE_APP: 'true'
-
 
       - name: Install moodle-plugin-ci (light unit tests & moodle app)
         if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app == true}}
