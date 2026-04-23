@@ -77,6 +77,7 @@ Notes:
 * Some answer tests generate notes which depend on the specific input.  For this reason, when automatically creating test case expectations from particular inputs the notes from the answer test are not included. You can choose to include these notes in the test case expectation manually.
 * We __anchor__ these notes to specify an expected start/end note.   Use the range notations: `[...]` to expect both ends fixed; `(...]` specifies only the final note; `[...)` specifies the start note; `(...)` does not expect a particular start/end note.
 * `(...]`is the default if no anchor wrapping is defined (this retains back compatibility).
+* Expected test cases are limited to 1000 characters.  (Since tags are typically each like `prt1-1-F |` (10 chars), that's a lot of checkable nodes.)
 
 Hence, with the anchored expectation  `[ prt1-1-F | prt1-3-F | prt1-4-F ]` the following will pass as tests.
 

@@ -1031,7 +1031,8 @@ class qtype_stack extends question_type {
                     (float) $expectedresults->penalty
                 );
             }
-            $expected->expectedanswernote = $expectedresults->answernotes[0];
+            // We coerce the score and penalty to be numeric (correct DB type), so we should make sure the note isn't too long.
+            $expected->expectedanswernote = substr($expectedresults->answernotes[0], 0, 1000);
             $DB->insert_record('qtype_stack_qtest_expected', $expected);
         }
 
