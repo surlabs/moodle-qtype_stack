@@ -36,7 +36,6 @@ require_once(__DIR__ . '/../stack/maximaparser/parser.options.class.php');
 /**
  * Defines behaviour for parsing of certain special cases.
  * @group qtype_stack
- * @covers \qtype_stack_question
  */
 final class parser_tests extends qtype_stack_testcase {
     /**
