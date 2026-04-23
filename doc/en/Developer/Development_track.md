@@ -5,12 +5,11 @@ past development history is documented on [Development history](Development_hist
 
 We use the [github issue tracker](https://github.com/maths/moodle-qtype_stack/issues) to track "milestones".
 
-## Version 4.12.0
+## Version 4.13.0
 
-Issues with [github milestone 4.12.0](https://github.com/maths/moodle-qtype_stack/issues?q=is%3Aissue+milestone%3A4.12.0) include
+Issues with [github milestone 4.13.0](https://github.com/maths/moodle-qtype_stack/issues?q=is%3Aissue+milestone%3A4.13.0) include
 
-1. Fix [issue #406](https://github.com/maths/moodle-qtype_stack/issues/406)
-2. Remove all "cte" code from Maxima - mostly install.
+1. Remove all "cte" code from Maxima - mostly install.
 
 ## Future Adapt block development ideas
 

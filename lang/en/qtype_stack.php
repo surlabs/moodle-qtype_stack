@@ -42,7 +42,8 @@ $string['debuginfo']         = 'Debug info';
 $string['exceptionmessage']  = '{$a}';
 $string['seekhelp']          = 'Please ask your teacher about this.';
 $string['runtimeerror']      = 'This question generated an unexpected internal error.';
-$string['questionbroken']    = 'The question has been marked as broken during editing.';
+$string['questionbroken']    = 'The question has been marked as broken during editing or import.';
+$string['questionbrokenshort']    = 'Marked as broken';
 $string['runtimefielderr']   = 'The field ""{$a->field}"" generated the following error: {$a->err}';
 $string['version']           = 'Version';
 $string['checkcasconnection_check'] = 'Maxima connection for STACK';
@@ -94,7 +95,7 @@ $string['boxsize'] = 'Input box size';
 $string['boxsize_help'] = 'Width of the html formfield.';
 $string['boxsize_link'] = '%%WWWROOT%%/question/type/stack/doc/doc.php/Authoring/Inputs.md#Box_Size';
 $string['bulktestindexintro_desc'] = 'The <a href="{$a->link}">bulk test script</a> lets you easily run all the STACK question tests in a given context. Not only does this test the questions. It is also a good way to re-populate the CAS cache after it has been cleared.';
-$string['todo_desc'] = 'The <a href="{$a->link}">"to do"</a> page finds questions with <tt>[[todo]]</tt> blocks.';
+$string['todo_desc'] = 'The <a href="{$a->link}">"to do"</a> page finds questions with <tt>[[todo]]</tt> blocks and questions marked as broken.';
 $string['dependenciesintro_desc'] = 'The <a href="{$a->link}">dependencies</a>, checker finds questions with dependencies such as JSXGraph or inclusion of external maxima code.';
 $string['checkanswertype'] = 'Check the type of the response';
 $string['checkanswertype_help'] = 'If yes, answers which are of a different "type" (e.g. expression, equation, matrix, list, set) are rejected as invalid.';
@@ -416,6 +417,7 @@ $string['notsaved'] = '** QUESTION WAS NOT SAVED **';
 $string['mustconfirm'] = 'You have changes to confirm.';
 $string['moodleerrors'] = 'You have errors related to Moodle\'s basic question setup.';
 $string['stackerrors'] = 'You have errors in your question.';
+$string['markedasbroken'] = 'The question has been marked as broken and will not be accessible to students.';
 
 // Strings used by input elements.
 $string['studentinputtoolong'] = 'Your input is longer than permitted by STACK.';
@@ -470,7 +472,7 @@ $string['settingcaspreparse_true'] = 'Always preparse';
 $string['settingcaspreparse_false'] = 'Do not preparse (not recommended)';
 $string['settingdefaultinputoptions'] = 'Default input options';
 $string['settingdefaultinputoptions_desc'] = 'Used when creating a new question, or adding a new input to an existing question.';
-$string['settingdefaultquestionoptions'] = 'Default input options';
+$string['settingdefaultquestionoptions'] = 'Default question options';
 $string['settingdefaultquestionoptions_desc'] = 'Used when creating a new question.';
 $string['settingmathsdisplay'] = 'Maths filter';
 $string['settingmathsdisplay_mathjax'] = 'MathJax';
@@ -620,10 +622,16 @@ $string['seethisquestioninthequestionbank'] = '<i class="fa fa-list-alt"></i> Sh
 $string['exportthisquestion'] = '<i class="fa fa-download"></i> Export as Moodle XML';
 $string['exportthisquestion_help'] = 'This will create a Moodle XML export file containing just this one question. One example of when this is useful if you think this question demonstrates a bug in STACK that you would like to report to the developers.';
 $string['tidyquestion'] = '<i class="fa fa-sort-amount-asc"></i> Tidy inputs and PRTs';
+$string['tidyquestion_txt'] = 'Tidy inputs and PRTs';
 $string['sendgeneralfeedback'] = '<i class="fa fa-file-text"></i> Send general feedback to the CAS';
+$string['editxml'] = '<i class="fa fa-align-left"></i> Edit question XML';
+$string['reloadsavedXML'] = '<i class="fa fa-rotate-left"></i> Reload saved version of question';
 $string['seetodolist'] = '<i class="fa fa-exclamation-triangle"></i> Find <tt>[[todo]]</tt> blocks';
-$string['seetodolist_desc'] = 'The purpose of this page is to find all questions containing <tt>[[todo]]</tt> blocks and to group them by any tags.';
+$string['seetodolist_desc'] = 'The purpose of this page is to find all questions containing <tt>[[todo]]</tt> blocks and to group them by any tags. Questions that have been marked as broken will also be found and displayed.';
 $string['seetodolist_help'] = 'Clicking on the question name takes you to the dashboard.  You can also preview the question.';
+$string['bulktestquiz'] = '<i class="fa fa-certificate"></i> Bulk test quiz';
+$string['bulktestquiznotes'] = 'Bulk test the latest version of all the questions in a quiz containing this question.';
+$string['bulktestquizselect'] = 'Select a quiz';
 
 $string['basicquestionreport'] = '<i class="fa fa-bar-chart"></i> Analyze responses';
 $string['basicquestionreport_help'] = 'Generates a very basic report on attempts at this question on the server. Useful for deciding which PRT test can be added to improve feedback in the light of what the student actually does.  (Most questions are only used in one place)';
@@ -638,6 +646,14 @@ $string['selectquiz'] = 'Select quiz to analyze results';
 $string['analyzeresponsesnotes'] = "Note, (1) all the students' answers for each quiz attempt are included here, (2) all versions of the question are included.";
 $string['splitsummary'] = 'Split summary';
 $string['variants'] = 'Variants';
+
+$string['importwillfail'] = 'This question cannot be saved or imported in its current state.';
+$string['noroots'] = 'The graph of this PRT has no roots. Does it have nodes?';
+$string['structuralproblem'] = 'The PRT structure is malformed.';
+$string['missingnextnode'] = 'The PRT structure is malformed. {$a->type} next node for PRT {$a->prt} node {$a->node} is invalid. It has been set to stop.';
+$string['multipleinputs'] = 'Multiple inputs have the same name: {$a}.';
+$string['multipleprts'] = 'Multiple prts have the same name: {$a}.';
+$string['multiplenodes'] = 'Multiple nodes have the name: {$a->node} in PRT: {$a->prt}.';
 
 // Equiv input specific string.
 $string['equivnocomments'] = 'You are not permitted to use comments in this input type.  Please just work line by line.';
@@ -660,6 +676,11 @@ $string['chattitle'] = 'Test the connection to the CAS';
 $string['clearedthecache'] = 'CAS cached has been cleared.';
 $string['clearingcachefiles'] = 'Clearing cached STACK plot files {$a->done}/{$a->total}';
 $string['clearthecache'] = 'Clear the cache';
+$string['editxmlintro'] = 'You can edit the XML of the question here and then save it as a new version of the question. Validation failures will result in a a warning being displayed and the saved question will be marked as broken (i.e. the <code>&lt;isbroken&gt;</code> tag will be set to 1). Serious issues with node layout may prevent the question from being saved. Missing question parts or invalid values are likely to cause an error. In most cases, you should see an error message and receive a warning that the question has not been saved. You can then edit your changes and try again. With great power comes great responsibility, however. If you are not careful with your XML, you will encounter issues and obscure error messages that you are protected from when using the normal question edit form. Please save frequently and/ or edit your question in another application to avoid losing work.';
+$string['editxmltitle'] = 'Edit question XML';
+$string['editxmlquestion'] = 'Question XML';
+$string['editxmlbutton'] = 'Save as new version and continue editing';
+$string['xmldisplayerror'] = ' There was a problem displaying the XML.';
 $string['healthcheck'] = 'STACK healthcheck';
 $string['healthcheck_desc'] = 'The <a href="{$a->link}">healthcheck script</a> helps you verify that all aspects of STACK are working properly.';
 $string['healthcheckcache_db'] = 'CAS results are being cached in the database.';
@@ -685,7 +706,8 @@ $string['healthchecksampleinlinetex'] = '\(\sum_{n=1}^\infty \frac{1}{n^2} = \fr
 $string['healthcheckmaximalocal'] = 'Contents of the maximalocal file';
 $string['healthcheckplots'] = 'Graph plotting';
 $string['healthcheckplotsintro'] = 'Sample plots.';
-$string['healthchecksampleplots'] = 'Two example plots below.  {@plot([x^4/(1+x^4),diff(x^4/(1+x^4),x)],[x,-3,3])@} {@plot([sin(x),x,x^2,x^3],[x,-3,3],[y,-3,3],grid2d)@}  A third, smaller, plot should be displayed below with traditional axes. {@plot([x,2*x^2-1,x*(4*x^2-3),8*x^4-8*x^2+1,x*(16*x^4-20*x^2+5),(2*x^2-1)*(16*x^4-16*x^2+1)],[x,-1,1],[y,-1.2,1.2],[box, false],[yx_ratio, 1],[axes, solid],[xtics, -3, 1, 3],[ytics, -3, 1, 3],[size,250,250])@} Fourth is an implicit plot {@plot(2^2*x*y*(x^2-y^2)-x^2-y^2=0, [x,-4,4], [y,-4,4])@}';
+$string['healthchecksampleplots'] = 'Two example plots below.  {@plot([x^4/(1+x^4),diff(x^4/(1+x^4),x)],[x,-3,3])@} {@plot([sin(x),x,x^2,x^3],[x,-3,3],[y,-3,3],grid2d)@}  A third, smaller, plot should be displayed below with traditional axes. {@plot([x,2*x^2-1,x*(4*x^2-3),8*x^4-8*x^2+1,x*(16*x^4-20*x^2+5),(2*x^2-1)*(16*x^4-16*x^2+1)],[x,-1,1],[y,-1.2,1.2],[box, false],[yx_ratio, 1],[axes, solid],[xtics, -3, 1, 3],[ytics, -3, 1, 3],[size,250,250])@}';
+$string['healthchecksampleplots5.46'] = 'From Maxima 5.46 we have support for implicit plots.  (If "default" Maxima is an earlier version of Maxima the plot below might fail.) {@plot(2^2*x*y*(x^2-y^2)-x^2-y^2=0, [x,-4,4], [y,-4,4])@}';
 $string['healthcheckjsxgraph'] = 'JSXGraph binding and MathJax';
 $string['healthcheckjsxgraphintro'] = 'There should be a graph and an input below. Interacting with the graph should affect the input and vice versa. If not, then there are issues with JavaScript libraries or execution. The graph should also have a MathJax-rendered LaTeX formula visible. If not, then you might be blocking access to certain things and may need to tune firewalls, proxys, etc.; if you are running a closed install, try adjusting the remote addresses in <code>vle_specific.php</code>. The graph (if functioning) is based on <a href="https://jsxgraph.org/share/example/differential-equations">this example</a>.';
 $string['healthcheckjsxgraphsample'] = '<div class="formulation" style="width:36vw;margin:auto;">
@@ -800,6 +822,7 @@ $string['stackInstall_testsuite_pass'] = 'All tests passed!';
 $string['stackInstall_testsuite_fail'] = 'Not all tests passed!';
 $string['stackInstall_testsuite_failingtests'] = 'Tests that failed';
 $string['stackInstall_testsuite_failingupgrades'] = 'Questions which failed on upgrade.';
+$string['stackInstall_testsuite_failingvalidation'] = 'Questions which triggered validation warnings.';
 $string['stackInstall_testsuite_notests'] = 'Questions with no tests: please add some!';
 $string['stackInstall_testsuite_nogeneralfeedback'] = 'Questions with no general feedback: students really appreciate worked solutions!';
 $string['stackInstall_testsuite_nodeployedseeds'] = 'Questions with random variants, but no deployed seeds';
@@ -847,12 +870,15 @@ $string['stackCas_underscores']             = 'The following use of underscore c
 $string['stackCas_percent']                 = '&#037; found in expression {$a->expr}.';
 $string['stackCas_missingLeftBracket']      = 'You have a missing left bracket <span class="stacksyntaxexample">{$a->bracket}</span> in the expression: {$a->cmd}.';
 $string['stackCas_missingRightBracket']     = 'You have a missing right bracket <span class="stacksyntaxexample">{$a->bracket}</span> in the expression: {$a->cmd}.';
+$string['stackCas_prematureRightBracket']   = 'You are closing <span class="stacksyntaxexample">{$a->bracket}</span> before its contents are complete, in the expression: {$a->cmd}.';
+$string['stackCas_missmatchedRightBracket']   = 'You are closing <span class="stacksyntaxexample">{$a->bracket}</span> but <span class="stacksyntaxexample">{$a->expected}</span> needs to be closed first, in the expression: {$a->cmd}.';
 $string['stackCas_qmarkoperators']          = 'Question marks are not permitted in responses.';
 $string['stackCas_apostrophe']              = 'Apostrophes are not permitted in responses.';
 $string['stackCas_newline']                 = 'Newline characters are not permitted in responses.';
 $string['stackCas_forbiddenChar']           = 'CAS commands may not contain the following characters: {$a->char}.';
 $string['stackCas_useinsteadChar']          = 'Please replace <span class="stacksyntaxexample">{$a->bad}</span> with \'<span class="stacksyntaxexample">{$a->char}</span>\'.';
 $string['stackCas_finalChar']               = '\'{$a->char}\' is an invalid final character in {$a->cmd}';
+$string['stackCas_finalToken']               = '\'{$a->token}\' is an invalid final term in {$a->cmd}';
 $string['stackCas_MissingStars']            = 'You seem to be missing * characters. Perhaps you meant to type {$a->cmd}.';
 $string['stackCas_unknownFunction']         = 'Unknown function: {$a->forbid} in the term {$a->term}.';
 $string['stackCas_noFunction']              = 'The use of the function {$a->forbid} in the term {$a->term} is not permitted in this context.';
@@ -897,6 +923,8 @@ $string['stackCas_redefine_built_in']       = 'Redefining a built in function "{
 $string['stackCas_nested_function_declaration'] = 'Definition of a function inside another function is now forbidden, use renaming of the function if you need to switch function definitions from within another function.';
 $string['stackCas_decimal_usedthreesep']        = 'You have used the full stop <code>.</code>, the comma <code>,</code> and semicolon <code>;</code> in your expression.  Please be consistent with decimal position (<code>.</code> or <code>,</code>) and list item separators (<code>,</code> or <code>;</code>).  Your answer is ambiguous!';
 $string['stackCas_decimal_usedcomma']           = 'You have used the full stop <code>.</code>, but you must use the comma <code>,</code> as a decimal separator!';
+$string['stackCas_OpenComment'] = 'There is a comment <code>/*</code> that has not been closed.';
+$string['stackCas_OpenString'] = 'There is a string <code>"</code> that has not been closed.';
 
 // Used in cassession.class.php.
 $string['stackCas_CASError']                = 'The CAS returned the following error(s):';
@@ -1003,6 +1031,7 @@ $string['stackBlock_unknown_sortable_option'] = 'Unknown Sortable options found,
 $string['stackBlock_overwritten_sortable_option'] = 'Unchangeable Sortable options found, the following are being ignored: ';
 $string['stackBlock_parsons_unknown_transpose_value'] = 'Transpose must be one of \'true\' or \'false\'.';
 $string['stackBlock_parsons_underdefined_grid'] = 'When defining \'rows\' for a Parson\'s block one must also define \'columns\'.';
+$string['stackBlock_parsons_unknown_style'] = 'Unknown Parson\'s block style: <code>{$a->style}</code>.';
 $string['stackBlock_proof_mode_index'] = 'The use of \'index\' is not supported when using the Parson\'s block for proof assessment.';
 $string['stackBlock_proof_incorrect_header_length'] = 'Headers should be an array containing a single header; use \'available_header\' to update the header for the available list.';
 
@@ -1834,6 +1863,7 @@ $string['stack_library_quiz'] = 'This is a quiz:';
 $string['stack_library_quiz_course'] = 'The quiz will be imported into course: ';
 $string['stack_library_quiz_prefix'] = 'Quiz:';
 $string['stack_library_selected'] = 'Displayed question:';
+$string['stack_library_select'] = 'Select library:';
 $string['stack_library_success'] = 'Successful import of:';
 $string['stack_library_not_stack'] = 'This is not a STACK question and so cannot be fully rendered here but you can still import it.';
 $string['stack_library_quiz_return'] = 'Return to quiz';
@@ -1866,3 +1896,18 @@ $string['api_seed_not_in_variants'] = 'The specified seed belongs to no deployed
 $string['api_submit'] = 'Submit Answers';
 $string['api_valid_all_parts'] = 'Please enter valid answers for all parts of the question.';
 $string['api_which_typed'] = 'which can be typed as follows';
+
+
+
+
+$string['parsertester'] = 'Parsertester';
+$string['parsertester_settings'] = 'Parser settings';
+$string['parsertester_settings_rule'] = 'Parser variant';
+$string['parsertester_settings_separators'] = 'Decimal and other separators';
+$string['parsertester_settings_insert'] = 'Attempted correction logic';
+$string['parsertester_input'] = 'Test input';
+$string['parsertester_output'] = 'Output';
+
+$string['sbasen_validate_not_basen'] = 'Expected a raw base-N number.';
+$string['sbasen_validate_base_too_big'] = 'The base-N system currently does not support base-{$a->base}, only bases 2-36 are supported.';
+$string['sbasen_validate_invalid_digits'] = 'Some of the digits in base-N number {$a->num} are not suitable for the base ({$a->base}) in use.';

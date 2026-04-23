@@ -76,9 +76,14 @@ class external extends \external_api {
         require_once($CFG->dirroot . '/question/type/stack/stack/input/inputbase.class.php');
 
         $params = self::validate_parameters(
-                self::validate_input_parameters(),
-                ['qaid' => $qaid, 'name' => $name, 'input' => $input, 'lang' => $lang]);
+            self::validate_input_parameters(),
+            ['qaid' => $qaid, 'name' => $name, 'input' => $input, 'lang' => $lang]
+        );
         self::validate_context(\context_system::instance());
+
+        if ($lang !== null && $lang !== '') {
+            $prevlang = force_current_language($lang);
+        }
 
         $dm = new \question_engine_data_mapper();
         $qa = $dm->load_question_attempt($params['qaid']);
@@ -87,6 +92,10 @@ class external extends \external_api {
 
         $input = $question->inputs[$name];
         $state = $question->get_input_state($params['name'], $params['input'], true);
+
+        if ($lang !== null && $lang !== '') {
+            force_current_language($prevlang);
+        }
 
         return [
             'input'   => $params['input'],

@@ -169,6 +169,9 @@ load("stackstrings.mac");
 load("fboundp.mac");
 load("functs");
 
+/* Combined and processed maximasrc/ content. */
+load("maximasrccompiled.mac");
+
 /* Are we printing normal Maxima or plain atoms? */
 tex_plain_atoms:false$
 
@@ -227,7 +230,7 @@ make_complexJ(OPT_COMPLEXJ) := block(
 
 /* Choose the symbol for the multiplication sign. */
 make_multsgn(OPT_MULTSGN) := block(
-    if ev(not(elementp(OPT_MULTSGN, {"cross", "dot", "onum", "none", "space"})), simp) 
+    if ev(not(elementp(OPT_MULTSGN, {"cross", "dot", "onum", "none", "space"})), simp)
         then error("make_multsgn received un-supported option: ", OPT_MULTSGN),
     if OPT_MULTSGN = "cross" then (texput("*", "\\times ", nary),
                                    texput("nounmul", "\\times ", nary)),
@@ -728,7 +731,7 @@ _CS2out() := (
 stack_disp(expr, exprm) := block([str:"", expru],
     /* LaTeX display */
     if OPT_OUTPUT = "LaTeX" then
-        if not(ev(elementp(exprm, {"", "i", "d", "id", "i{", "{"}), simp)) then print(concat("ERROR: illegal delimiter option found: ", exprm)),
+        if not(ev(elementp(exprm, {"", "i", "d", "id", "i{", "{"}), simp)) then error(concat("ERROR: stack_disp illegal delimiter option found: ", exprm)),
     /* Fine tune display, e.g. sort out display of atoms like theta0. */
     expru: %_ce_rem(expr),
     if not(stack_disp_control_structurep(expr)) then block(
@@ -980,8 +983,8 @@ unary_minus_initial_sum(ex) := block([_ex1,_exr],
 unary_minus_initial_sum_helper(ex) := block(
   if atom(ex) then return(ex),
   if not(is(safe_op(ex) = "-")) then return(unary_minus_initial_sum(ex)),
-  if numberp(first(ex)) then return(ev(ex,simp)),  /* Turns "-"8 back into -8. */  
-  if not(is(safe_op(first(ex)) = "*")) then return(unary_minus_initial_sum(ex)),  
+  if numberp(first(ex)) then return(ev(ex,simp)),  /* Turns "-"8 back into -8. */
+  if not(is(safe_op(first(ex)) = "*")) then return(unary_minus_initial_sum(ex)),
   if numberp(first(first(ex))) then return(apply("*", append([-first(first(ex))], rest(args(first(unary_minus_initial_sum(ex))))))),
   unary_minus_initial_sum(ex)
 )$
@@ -1045,7 +1048,7 @@ plot(ex, [ra]) :=  /*stack_web_plot*/
     if not(freeof(lg, ex)) then
         ex:ev(ex, lg=logbasesimp),
     lvs: listofvars(%_ce_rem(ex)),
-    lvs: sublist(lvs, lambda([ex], not(ex = discrete or ex = parametric or ex = minus or ex = plus))),
+    lvs: sublist(lvs, lambda([ex], not(ex = discrete or ex = parametric or ex = contour or ex = minus or ex = plus))),
     if length(lvs)>2 then
        error("Plot error: Can't create a plot with more than two variables, whereas you have: \\(",string(lvs),"\\)"),
     /*********************/
@@ -1075,7 +1078,8 @@ plot(ex, [ra]) :=  /*stack_web_plot*/
     /**********************************************************/
     /* Remove from option list ral any non-permitted options. */
     kill(y),
-    permitted_options: [y, xlabel, ylabel, label, legend, color, style, point_type, nticks, logx, logy, axes, box, plot_realpart, yx_ratio, xtics, ytics, ztics, adapt_depth, margin],
+    kill(t),
+    permitted_options: [x, y, t, xlabel, ylabel, label, legend, contour, levels, color, style, point_type, nticks, logx, logy, axes, box, plot_realpart, yx_ratio, xtics, ytics, ztics, adapt_depth, plotepsilon, xy_scale, same_xy, yx_ratio, sample, margin],
     /* In the case the list of variables is empty we need to add in "x" so the constant functions can be plotted. */
     if not(emptyp(lvs)) then permitted_options:append([first(lvs)], permitted_options)
     else  permitted_options:append([x], permitted_options),
@@ -1251,7 +1255,7 @@ ATAlgEquivfun(SA, SB) :=  block([SApoly, SBpoly, keepfloat, RawMark, FeedBack, A
     /* Are we dealing with lists? */
     if listp(SB) then
       if listp(SA)#true then
-          if is(stackfltsep=".") then 
+          if is(stackfltsep=".") then
             return(StackBasicReturn(false, false, "ATAlgEquiv_SA_not_list"))
           else
             return([false, false, StackAddNote("", "ATAlgEquiv_SA_not_list"), StackAddFeedback("", "ATAlgEquiv_SA_not_list_semi")])
@@ -1260,7 +1264,7 @@ ATAlgEquivfun(SA, SB) :=  block([SApoly, SBpoly, keepfloat, RawMark, FeedBack, A
     /* Are we dealing with sets? */
     if safe_setp(SB) then
       if safe_setp(SA)=false then
-          if is(stackfltsep=".") then 
+          if is(stackfltsep=".") then
             return(StackBasicReturn(false, false, "ATAlgEquiv_SA_not_set"))
           else
             return([false, false, StackAddNote("", "ATAlgEquiv_SA_not_set"), StackAddFeedback("", "ATAlgEquiv_SA_not_set_semi")])
@@ -1679,7 +1683,7 @@ ATSets(SA, SB) := block([RawMark, FeedBack, AnswerNote, SAsimp, SBsimp],
     if not(safe_setp(SB)) then
         return(StackBasicReturn(false, false, "ATSets_SB_not_set")),
     if not(safe_setp(SA)) then
-          if is(stackfltsep=".") then 
+          if is(stackfltsep=".") then
             return(StackBasicReturn(false, false, "ATSets_SA_not_set"))
           else
             return([false, false, StackAddNote("", "ATSets_SA_not_set"), StackAddFeedback("", "ATSets_SA_not_set_semi")]),
@@ -3056,7 +3060,7 @@ Intfun(SA, SB, SBdisp, constint, acceptformal, var) := block([val,rawmk,ansnote,
     SB:strip_int_const(SB, var),
     /* This strips off any trailing constant of integration from the student's answer */
     SAa:strip_int_const(ev(SA, logexpand:super, simp), var),
-    if debug then print(["Striped off  constants of integration: ", SA, SB]),
+    if debug then print(["Striped off  constants of integration: ", SAa, SB]),
     /* If the teacher has not used logabs, then strip out any logabs from the student's answer. */
     /* Student consistency is a different issue. */
     SAConsistentLogs:ATInt_consistent_logabs_p(SA, var),
@@ -3067,7 +3071,7 @@ Intfun(SA, SB, SBdisp, constint, acceptformal, var) := block([val,rawmk,ansnote,
     /* Calculate derivatives */
     SAd:ev(diff(SA, var), simp),
     SBd:ev(diff(SB, var), simp),
-    if debug then print([SAa, SBd]),
+    if debug then print(["Expressions for comparison :", SAa, SBd]),
     if debug then print(["Derivatives : ", SAd, SBd]),
     if ev(algebraic_equivalence(SAd, SBd), simp) then block(
     /* Check for constant of integration - code copied from algebraic_equivalence. */
@@ -3544,4 +3548,4 @@ is_lang(code):=ev(is(%_STACK_LANG=code),simp=true)$
 
 /* Stack expects some output with the version number the output happens at */
 /* maximalocal.mac after additional library loading */
-stackmaximaversion:2026010500$
+stackmaximaversion:2026042200$
