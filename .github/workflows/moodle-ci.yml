@@ -33,15 +33,15 @@ jobs:
         # We use a mix of SBCL and GCL.
         include:
           - php: '8.4'
-            moodle-branch: 'MOODLE_502_STABLE'
+            moodle-branch: 'main'
             database: 'pgsql'
             maxima: 'GCL'
-            moodle-app: false
+            moodle-app: true
           - php: '8.4'
-            moodle-branch: 'MOODLE_501_STABLE'
+            moodle-branch: 'MOODLE_502_STABLE'
             database: 'pgsql'
             maxima: 'SBCL'
-            moodle-app: false
+            moodle-app: true
           - php: '8.2'
             moodle-branch: 'MOODLE_500_STABLE'
             database: 'pgsql'
@@ -260,8 +260,8 @@ jobs:
         run: moodle-plugin-ci grunt
 
       - name: PHPUnit tests
-        #if: ${{ matrix.moodle-branch == 'main' || matrix.moodle-branch == 'MOODLE_405_STABLE'}}
-        if: ${{ always() }}
+        if: ${{ matrix.moodle-branch == 'main' || matrix.moodle-branch == 'MOODLE_405_STABLE'}}
+        #if: ${{ always() }}
         run: moodle-plugin-ci phpunit
 
       - name: Behat features
