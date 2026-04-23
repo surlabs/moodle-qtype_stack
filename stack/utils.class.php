@@ -873,7 +873,7 @@ class stack_utils {
      * @param float $n
      * @param int $accuracy Stop when we get within this many decimal places of $n
      */
-    public static function rational_approximation($n, $accuracy) {
+    public static function rational_approximation(float $n, int $accuracy) {
         $accuracy = pow(10, -$accuracy);
 
         // Handle sign.
@@ -894,7 +894,8 @@ class stack_utils {
         $x1 = $n;
         $steps = 0;
 
-        while ($steps < 1000) {
+        // The algorithm converges quickly, so no need for more than 100 here.
+        while ($steps < 100) {
             $steps++;
 
             // Current approximation.
