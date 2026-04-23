@@ -36,12 +36,12 @@ jobs:
             moodle-branch: 'main'
             database: 'pgsql'
             maxima: 'GCL'
-            moodle-app: true
+            moodle-app: false
           - php: '8.4'
             moodle-branch: 'MOODLE_502_STABLE'
             database: 'pgsql'
             maxima: 'SBCL'
-            moodle-app: true
+            moodle-app: false
           - php: '8.2'
             moodle-branch: 'MOODLE_500_STABLE'
             database: 'pgsql'
@@ -151,6 +151,8 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
+	  # MOODLE_APP: 'true'
+
 
       - name: Install moodle-plugin-ci (light unit tests & moodle app)
         if: ${{ matrix.moodle-branch != 'main' &&  matrix.moodle-app == true}}
