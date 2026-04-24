@@ -884,6 +884,7 @@ $string['stackCas_unknownFunction']         = 'Unknown function: {$a->forbid} in
 $string['stackCas_noFunction']              = 'The use of the function {$a->forbid} in the term {$a->term} is not permitted in this context.';
 $string['stackCas_forbiddenFunction']       = 'Forbidden function: {$a->forbid}.';
 $string['stackCas_spuriousop']              = 'Unknown operator: {$a->cmd}.';
+$string['stackCas_badhtmlelement']          = 'Maxima received <code>{$a->val}</code> instead of {$a->key} which is a sign your text editor might be quietly changing your content.  We recommend CASText source is edited as a plain text document.';
 $string['stackCas_forbiddenOperator']       = 'Forbidden operator: {$a->forbid}.';
 $string['stackCas_forbiddenVariable']       = 'Forbidden variable or constant: {$a->forbid}.';
 $string['stackCas_operatorAsVariable']      = 'Operator {$a->op} interpreted as variable, check syntax.';
