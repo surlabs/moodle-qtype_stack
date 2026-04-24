@@ -300,9 +300,13 @@ function get_latest_question_version($questionid) {
     $query = 'SELECT qv.questionid, qv.version, qv.questionbankentryid FROM {question_versions} qv
                     WHERE qv.questionbankentryid = (SELECT questionbankentryid FROM {question_versions}
                                     WHERE questionid = :questionid)
-                    ORDER BY qv.version ASC';
+                    ORDER BY qv.version DESC';
     global $DB;
     $result = $DB->get_records_sql($query, $params);
-    $result = end($result);
-    return [$result->version, $result->questionid, $result->questionbankentryid];
+    $versions = [];
+    foreach ($result as $current) {
+        $versions[$current->version] = $current->questionid;
+    }
+    $result = reset($result);
+    return [$result->version, $result->questionid, $result->questionbankentryid, $versions];
 }

@@ -261,7 +261,7 @@ class stack_question_dashboard {
             $output->previewurl = $previewurl->out();
         }
 
-        usort($output->notes, [stack_question_dashboard::class, 'sort_by_note']);
+        usort($output->notes, [self::class, 'sort_by_note']);
 
         if (count($questionnotes) != count(array_flip($questionnotes))) {
             $output->duplicateerror = true;
@@ -339,7 +339,7 @@ class stack_question_dashboard {
      * @param mixed $b1
      * @return int
      */
-    static function sort_by_note($a1, $b1) {
+    public static function sort_by_note($a1, $b1) {
         $a = $a1->questionnoterendered;
         $b = $b1->questionnoterendered;
         return strcoll($a, $b);

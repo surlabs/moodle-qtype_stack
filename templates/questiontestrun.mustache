@@ -76,7 +76,15 @@
 <div class="qtype_stack_question_report">
     <!-- Dashboard links -->
   <h2>{{question.name}}</h2>
-  <p>{{#str}} version, qtype_stack {{/str}} {{question.version}}<p>
+  <p>{{#str}} version, qtype_stack {{/str}}
+    <select onChange="window.location.href=this.value;">
+      {{#question.versions}}
+        <option value="{{{url}}}" {{#active}} selected="selected" {{/active}}>
+          {{version}}
+        </option>
+      {{/question.versions}}
+    </select>
+  <p>
   <ul class="nav">
     {{#general.canedit}}
       <li class="nav-item" role="presentation">
@@ -96,10 +104,12 @@
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{{{general.tidylink}}}">{{#str}} tidyquestion, qtype_stack {{/str}}</a>
       </li>
+    {{/general.canedit}}
+    {{#general.caneditpermission}}
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{{{general.exportquestionlink}}}">{{#str}} exportthisquestion, qtype_stack {{/str}}</a>
       </li>
-    {{/general.canedit}}
+    {{/general.caneditpermission}}
     <li class="nav-item" role="presentation">
       <a class="nav-link" href="{{{general.reportlink}}}">{{#str}} basicquestionreport, qtype_stack {{/str}}</a>
     </li>

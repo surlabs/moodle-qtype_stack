@@ -647,6 +647,7 @@ $string['penaltyfail'] = 'Penalty check failed';
 $string['notefail'] = 'Question note check failed';
 $string['history'] = 'Question history';
 $string['dashboardissues'] = 'There are issues with your question';
+$string['latest'] = 'Reload latest';
 
 $string['editquestioninthequestionbank'] = '<i class="fa fa-pencil"></i> Edit question';
 $string['seethisquestioninthequestionbank'] = '<i class="fa fa-list-alt"></i> Show in question bank';

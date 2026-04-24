@@ -112,7 +112,7 @@ $mform = new qtype_stack_question_test_form(
     'questionrender' => $questionrender,
     'questionvariables' => $questionvariables,
     'questionvariablevalues' => $questionvariablevalues,
-    'questiontext' => $questiontext
+    'questiontext' => $questiontext,
     ]
 );
 

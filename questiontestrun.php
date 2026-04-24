@@ -49,8 +49,13 @@ use stack_question_dashboard;
 $questionid = required_param('questionid', PARAM_INT);
 $courseid = optional_param('courseid', null, PARAM_INT);
 $cmid = optional_param('cmid', null, PARAM_INT);
+$historic = optional_param('historic', false, PARAM_BOOL);
 
-[$qversion, $questionid, $qbeid] = get_latest_question_version($questionid);
+[$latestqversion, $latestquestionid, $qbeid, $versions] = get_latest_question_version($questionid);
+
+if (!$historic) {
+    $questionid = $latestquestionid;
+}
 
 // Load the necessary data.
 $questiondata = question_bank::load_question_data($questionid);
@@ -61,17 +66,11 @@ $question = question_bank::load_question($questionid);
 
 // Process any other URL parameters, and do require_login.
 [$context, $seed, $urlparams] = qtype_stack_setup_question_test_page($question);
-unset($urlparams['sesskey']);
-unset($urlparams['defaulttestcase']);
-unset($urlparams['deploy']);
-unset($urlparams['undeploy']);
-unset($urlparams['undeployall']);
-unset($urlparams['testall']);
-unset($urlparams['nocache']);
 
 // Check permissions.
 question_require_capability_on($questiondata, 'view');
-$canedit = question_has_capability_on($questiondata, 'edit');
+$caneditpermission = question_has_capability_on($questiondata, 'edit');
+$canedit = $caneditpermission && !$historic;
 
 // Initialise $PAGE.
 $PAGE->set_url('/question/type/stack/questiontestrun.php', $urlparams);
@@ -114,7 +113,7 @@ $pagelink = new moodle_url('/question/type/stack/questiontestrun.php', $urlparam
 $historyparams = $urlparams;
 unset($historyparams['questionid']);
 $historyparams['entryid'] = $qbeid;
-$historyparams['returnurl'] =  $pagelink->out(false);
+$historyparams['returnurl'] = $pagelink->out(false);
 $historylink = new moodle_url('/question/bank/history/history.php', $historyparams);
 
 // We've chosen not to send a specific seed since it is helpful to test the general feedback in a random context.
@@ -138,7 +137,25 @@ if (optional_param('defaulttestcase', null, PARAM_INT) && $canedit && $question-
 }
 
 // Add all the display information that's based on this page's paramaters.
-$initialdata->question->version = $qversion;
+$initialdata->question->versions = [];
+$versionparams = $urlparams;
+$versionparams['questionid'] = $latestquestionid;
+$versionlink = new moodle_url('/question/type/stack/questiontestrun.php', $versionparams);
+$latestoption = new StdClass();
+$latestoption->version = stack_string('latest');
+$latestoption->url = $versionlink;
+$latestoption->active = false;
+$initialdata->question->versions[] = $latestoption;
+$versionparams['historic'] = true;
+foreach ($versions as $v => $id) {
+    $option = new StdClass();
+    $option->version = $v;
+    $versionparams['questionid'] = $id;
+    $versionlink = new moodle_url('/question/type/stack/questiontestrun.php', $versionparams);
+    $option->url = $versionlink;
+    $option->active = ($id == $questionid) ? true : false;
+    $initialdata->question->versions[] = $option;
+};
 $initialdata->general->editquestionlink = $questionbanklinkedit->out();
 $initialdata->general->editxmllink = $questionxmllink->out();
 $initialdata->general->questionbanklink = $questionbanklink->out();
@@ -149,6 +166,7 @@ $initialdata->general->reportlink = $reportlink->out();
 $initialdata->general->todolink = $todolink->out();
 $initialdata->general->bulktestlink = $bulktestlink->out();
 $initialdata->general->historylink = $historylink->out();
+$initialdata->general->caneditpermission = $caneditpermission;
 $initialdata->general->canedit = $canedit;
 $initialdata->general->courseid = $courseid;
 $initialdata->general->cmid = $cmid;
@@ -235,20 +253,19 @@ $undeployalllink = new moodle_url(
     'variants-pane'
 );
 $variantdata->undeployalllink = $undeployalllink->out();
-$pageparams = $urlparams;
-unset($pageparams['seed']);
 $pagelink = new moodle_url('/question/type/stack/questiontestrun.php', []);
 $variantdata->pagelink = $pagelink->out();
 $variantdata->courseid = $courseid;
 $variantdata->cmid = $cmid;
 $variantdata->questionid = $questionid;
 $variantdata->sesskey = $sesskey;
+$variantdata->historic = $historic;
 $variantdata->newseed = mt_rand();
 $variantdata->deployedseeds = $question->deployedseeds;
 $variantdata->hastests = optional_param('testall', null, PARAM_INT);
 $testalllink = new moodle_url(
     '/question/type/stack/questiontestrun.php',
-    $urlparams + ['testall' => '1', 'sesskey' => $sesskey, 'nocache' => time()],
+    $urlparams + ['testall' => '1', 'sesskey' => $sesskey, 'nocache' => time(), 'historic' => $historic],
     'variants-pane'
 );
 $variantdata->testalllink = $testalllink->out();
