@@ -1489,7 +1489,8 @@ ATEquation(SA, SB) := block([keepfloat, RawMark, SA1, SB1, SB2, Rationalex1, Rat
              return([true, true, "ATEquation_zero", ""])
         else return([true, false, "ATEquation_zero_fail", ""]),
     if numberp(float(abs(Rationalex1/Rationalex2))) then
-        return([true, true, "", ""]),    Rationalex1:num(ratsimp(Rationalex1)),
+        return([true, true, "ATEquation_num", ""]),
+    Rationalex1:num(ratsimp(Rationalex1)),
     Rationalex2:num(ratsimp(Rationalex2)),
     if algebraic_equivalence(abs(Rationalex1/Rationalex2), 1) then
         return([true, true, "ATEquation_ratio", ""]),
