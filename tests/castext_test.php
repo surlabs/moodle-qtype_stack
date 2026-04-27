@@ -3330,4 +3330,20 @@ final class castext_test extends qtype_stack_testcase {
         $cs2->instantiate();
         $this->assertEquals($exp, $at1->get_rendered());
     }
+
+    /**
+     * Add error message for &gt; and other editor-generated problems: issue #1721.
+     * @covers \qtype_stack\stack_cas_castext2_latex
+     * @covers \qtype_stack\stack_cas_keyval
+     */
+    public function test_stack_cas_if_editor_err(): void {
+        $raw = '{@if ta1&gt;3 then a else b@}';
+        $at1 = castext2_evaluatable::make_from_source($raw, 'test-case');
+        $this->assertFalse($at1->get_valid());
+        $errmsg = 'Maxima received <code>&amp;gt;</code> instead of <span class="stacksyntaxexample">></span> ' .
+                  'which is a sign your text editor might be quietly changing your content.  We recommend ' .
+                  'CASText source is edited as a plain text document., Unknown operator: ' .
+                  '<span class="stacksyntaxexample">&</span>.';
+        $this->assertEquals($errmsg, $at1->get_errors());
+    }
 }
