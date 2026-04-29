@@ -38,7 +38,7 @@ Now it will be a lot faster to fill out the rest of the question. Add the follow
 	<p>Find \(\int{@ex1@} \mathrm{d}x\)</p>
 	<p>[[input:ans1]] [[validation:ans1]]</p>
 
-Notice that we have defined a local variable `exp`, and used the value of this in the Question text. There is a difference between mathematics enclosed between `\(..\)` symbols and `{@..@}` symbols. All the text-based fields in the question, including feedback, are [CAS text](../Authoring/CASText.md).  This is HTML into which mathematics can be inserted.  LaTeX is placed between `\(..\)`s, and CAS expressions (including your variables) between matching `{@..@}` symbols.  The CAS expressions are evaluated in the context of the question variables and displayed as LaTeX.
+Notice that we have defined a local variable `ex1`, and used the value of this in the Question text. There is a difference between mathematics enclosed between `\(..\)` symbols and `{@..@}` symbols. All the text-based fields in the question, including feedback, are [CAS text](../Authoring/CASText.md).  This is HTML into which mathematics can be inserted.  LaTeX is placed between `\(..\)`s, and CAS expressions (including your variables) between matching `{@..@}` symbols.  The CAS expressions are evaluated in the context of the question variables and displayed as LaTeX.
 
 Since we have used `{@ex1@}` here, the user will not see a \(ex1\) on the screen when the question is instantiated, but the _displayed value_ of `ex1`: \(\frac{3}{(x-1)^{-4}}\)
 
