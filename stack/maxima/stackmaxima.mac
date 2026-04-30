@@ -2313,7 +2313,7 @@ ATCasEqual(SA,SB) :=
 /* SA>SB? */
 ATGT(SA,SB) :=
     block([keepfloat, Validity, RawMark, FeedBack, AnswerNote, str, ex],
-    Validity:true, RawMark:false, FeedBack:"", AnswerNote:"Not number",
+    Validity:true, RawMark:false, FeedBack:"", AnswerNote:"ATGT_NotNumber",
     keepfloat:true,               /* See pg 23 */
 
     SAA:errcatch(ev(SA, simp, nouns)),
@@ -2335,7 +2335,7 @@ ATGT(SA,SB) :=
 /* SA>=SB? */
 ATGTE(SA,SB) :=
     block([keepfloat, Validity, RawMark, FeedBack, AnswerNote, str, ex, SAA, SBB],
-    Validity:true, RawMark:false, FeedBack:"", AnswerNote:"Not number",
+    Validity:true, RawMark:false, FeedBack:"", AnswerNote:"ATGT_NotNumber",
     keepfloat:true,
 
     SAA:errcatch(ev(SA, simp, nouns)),
@@ -3549,4 +3549,4 @@ is_lang(code):=ev(is(%_STACK_LANG=code),simp=true)$
 
 /* Stack expects some output with the version number the output happens at */
 /* maximalocal.mac after additional library loading */
-stackmaximaversion:2026042300$
+stackmaximaversion:2026042402$

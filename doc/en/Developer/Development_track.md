@@ -11,6 +11,39 @@ Issues with [github milestone 4.13.0](https://github.com/maths/moodle-qtype_stac
 
 1. Remove all "cte" code from Maxima - mostly install.
 
+--------------------------------------
+## Testing a node, not a whole tree
+
+This section is a detailed design proposal to improve question testing to test a node, not a whole tree, and address issue #1703.
+
+### Change of `expectedanswernote`
+
+Make DB changes to considerably lengthen `expectedanswernote` from 255 chars:  https://github.com/maths/moodle-qtype_stack/blob/master/db/install.xml#L178
+
+### Add in a new keyvals field "test variables".
+
+Add in a new keyvals field "test variables". The test execution would then take three CAS sessions.
+
+   1.  Loading up the seed, question variables, test variables and all input definitions, generating input "strings".
+   2. Those "strings" would then go through PHP side input validation and CAS side validation in the second CAS session.
+   3. Finally, the valid strings would be fed to the PRT functions in the last session, and logic to check if the PRT output matches would be included in that session, so that we do not need to output the full PRT function output for potentially a large number of tests, instead just booleans.
+
+### Other ideas (later)
+
+1. It would be a fun (student project?!) to graphically illustrate the expected and actual route through the tree by expanding the current PRT graph library, or writing something else. (I get ahead of myself of course....)
+
+2. Introduce new keyword `any` in score/penalty effectiveley ignoring that field for the purposes of this test case.
+
+Currently, the DB fields for score and penalty are numbers, specifically
+
+        <FIELD NAME="expectedscore" TYPE="number" LENGTH="12" NOTNULL="false" SEQUENCE="false" DECIMALS="7" COMMENT="The expected score."/>
+        <FIELD NAME="expectedpenalty" TYPE="number" LENGTH="12" NOTNULL="false" SEQUENCE="false" DECIMALS="7" COMMENT="The expected penalty."/>
+
+So this requires a DB change as well.
+
+
+--------------------------------------
+
 ## Future Adapt block development ideas
 
 1. Add in a "counter" option to the button.  If set to true, then the value of the counter changes from true/false to the number of times the button has been pressed.
