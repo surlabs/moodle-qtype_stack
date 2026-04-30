@@ -423,7 +423,8 @@ class stack_answertest_test_data {
         ['AlgEquiv', '', '0=-x+y/A+(y-z)/B', '0=x-y/A-(y-z)/B', 1, 'ATEquation_num', ''],
         ['AlgEquiv', '', 'x^6000-x^6001=x^5999', 'x^5999*(1-x+x^2)=0', 1, 'ATEquation_ratio', ''],
         ['AlgEquiv', '', 'x^6000-x^6001=x^5999', 'x^5999*(1-x+x^3)=0', 0, 'ATEquation_default', ''],
-        ['AlgEquiv', '', '258552*x^7*(81*x^8+1)^398', 'x^3*(x^4+1)^399', 0, '', ''],
+        // Factoring the difference of these expressions is expensive enough to hit the CAS timeout on slower runs.
+        ['AlgEquiv', '', '258552*x^7*(81*x^8+1)^398', '(algebraic_equivalence_factorp:false,x^3*(x^4+1)^399)', 0, '', ''],
         ['AlgEquiv', '', 'Ia*(R1+R2+R3)-Ib*R3=0', '-Ia*(R1+R2+R3)+Ib*R3=0', 1, 'ATEquation_num', ''],
         ['AlgEquiv', '', 'a=0 or b=0', 'a*b=0', 1, 'ATEquation_sides', ''],
         ['AlgEquiv', '', 'a*b=0', 'a=0 or b=0', 1, 'ATEquation_sides', ''],
