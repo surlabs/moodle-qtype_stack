@@ -5,48 +5,39 @@ past development history is documented on [Development history](Development_hist
 
 We use the [github issue tracker](https://github.com/maths/moodle-qtype_stack/issues) to track "milestones".
 
-## Version 4.12.0
+## Version 4.13.0
 
-Important release notes:
+Issues with [github milestone 4.13.0](https://github.com/maths/moodle-qtype_stack/issues?q=is%3Aissue+milestone%3A4.13.0) include
 
-* STACK 4.12.0 requires PHP 8.1 or newer.  PHP 7.4 will not work.
-* We no longer support Moodle 4.1.
-* We now require the plugin [import as new version](https://github.com/maths/moodle-qbank_importasversion/).
-* We suggest you change the STACK options as follows to match the new default settings.
+1. Remove all "cte" code from Maxima - mostly install.
+2. Support for Maxima 5.47.0, 5.48.0, and 5.49.0.  This includes a fix for issue #1281 from 5.48.0.
+3. Question tests can now test the whole route through a PRT, rather than just the final node.  This is a significant improvement on the ability to test questions.  This is back-compatible with older questions.
 
-1. Option `qtype_stack | prtcorrect` should now be
+--------------------------------------
 
-    [[commonstring key="symbolicprtcorrectfeedback"/]] [[commonstring key="defaultprtcorrectfeedback"/]]
+## Better testing
 
-2. Option `qtype_stack | prtpartiallycorrect` should now be
+### Add in a new keyvals field "test variables".
 
-    [[commonstring key="symbolicprtpartiallycorrectfeedback"/]] [[commonstring key="defaultprtpartiallycorrectfeedback"/]]
+Add in a new keyvals field "test variables". The test execution would then take three CAS sessions.
 
-3. Option `qtype_stack | prtincorrect` should now be 
+   1. Loading up the seed, question variables, test variables and all input definitions, generating input "strings".
+   2. Those "strings" would then go through PHP side input validation and CAS side validation in the second CAS session.
+   3. Finally, the valid strings would be fed to the PRT functions in the last session, and logic to check if the PRT output matches would be included in that session, so that we do not need to output the full PRT function output for potentially a large number of tests, instead just booleans.
 
-    [[commonstring key="symbolicprtincorrectfeedback"/]] [[commonstring key="defaultprtincorrectfeedback"/]]
+Other ideas
 
-These options can be changed on the STACK plugin page (before or after upgrade).
+1. It would be a fun (student project?!) to graphically illustrate the expected and actual route through the tree by expanding the current PRT graph library, or writing something else. (I get ahead of myself of course....)
+2. Introduce new keyword `any` in score/penalty effectiveley ignoring that field for the purposes of this test case.
 
-Changes and new features.
+Currently, the DB fields for score and penalty are numbers, specifically
 
-1. Add in new parser (parser2): major re-engineering of the Maxima code.
-2. Add in support for number bases.
-3. Validation of XML imports. XML files that fail validation will be marked as broken but still imported where possible.
-4. Editing of question XML within STACK from link in STACK dashboard. STACK now requires the importasversion plugin to make this possible.
-5. Much code tidying to comply with updated to Moodle Code Checker.
-6. Add in suppport for `style` in Parsons blocks.  E.g. you can now use `style="compact"` to get smaller, tighter items.
-7. Facilitate bulk test for questions in a particular quiz.  (Issue #1521)  Follow the link from the question dashboard to see quizzes in which that question is used.
-8. STACK library now imports whole quizzes - look for a `.json` file in the library.
-9. Add in support for [local stack libraries](../STACK_question_admin/Library/index.md) of questions in the `stack/sitelibrary` directory within the Moodle data directory.
-10. Change the *Generic feedback* defaults to use the common language strings.  __Users upgrading their site in place will need to change the settings in the plugin setting page to the new default.__
-11.The Generic feedback and decimals options have been removed from questions in the question library.  When importing library questions, the current site defaults will be used.
-12. Remove the German language packs locally (#1710).  Note, the API now includes language packs as a config option when you build the docker container.
+        <FIELD NAME="expectedscore" TYPE="number" LENGTH="12" NOTNULL="false" SEQUENCE="false" DECIMALS="7" COMMENT="The expected score."/>
+        <FIELD NAME="expectedpenalty" TYPE="number" LENGTH="12" NOTNULL="false" SEQUENCE="false" DECIMALS="7" COMMENT="The expected penalty."/>
 
-Issues with [github milestone 4.12.0](https://github.com/maths/moodle-qtype_stack/issues?q=is%3Aissue+milestone%3A4.12.0) include
+So this requires a DB change as well.
 
-1. Fix [issue #406](https://github.com/maths/moodle-qtype_stack/issues/406)
-2. Remove all "cte" code from Maxima - mostly install.
+--------------------------------------
 
 ## Future Adapt block development ideas
 
