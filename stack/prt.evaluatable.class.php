@@ -272,8 +272,14 @@ class prt_evaluatable implements cas_raw_value_extractor {
         }
         $i = 0;
         foreach ($path as $atresult) {
-            if ($atnotes && ($atresult[2] !== '""')) {
-                $notes[] = trim($atresult[2]);
+            if ($atnotes) {
+                // Some answer test notes are non-empty whitespace string, e.g. "    ";
+                $note = trim($atresult[2]);
+                // Strip off "" and trim.
+                $note = trim(substr($note, 1, strlen($note) - 2));
+                if ($note !== '') {
+                    $notes[] = trim($atresult[2]);
+                }
             }
             // We need to check the array_key_exists because in the case of a guard clause it will not.
             // Do we actually want to ignore the missing note here or indicate the note is missing with a note?
