@@ -1453,9 +1453,6 @@ final class castext_test extends qtype_stack_testcase {
      */
     public function test_numerical_display_float_scientific_small(): void {
 
-        // On old Maxima, you get back \(9.999999999999999e-7\).
-        $this->skip_if_old_maxima('5.32.1');
-
         // For some reason 5.41.0 returns \(9.999999999999999e-7\) too.
         $this->skip_if_new_maxima('5.40.0');
 
@@ -3139,7 +3136,7 @@ final class castext_test extends qtype_stack_testcase {
 
         $options = new stack_options();
 
-        $vars = 'stack_include("contribl://chemistry.mac");';
+        $vars = "stack_include_contrib(\"chemistry.mac\");";
         $at1 = new stack_cas_keyval($vars, $options, 123);
         $this->assertTrue($at1->get_valid());
 
