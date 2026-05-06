@@ -2989,6 +2989,9 @@ class stack_answertest_test_data {
         ['Units', '3', '-9.81*m/s^2', 'stackunits(-9.815,m/s^2)', 0, 'ATNumSigFigs_Inaccurate. ATUnits_units_match.', ''],
         ['Units', '3', '-9.82*m/s^2', 'stackunits(displaydp(-9.815,3),m/s^2)', 1, 'ATUnits_units_match.', ''],
         ['Units', '3', '-9.82*m/s^2', 'stackunits(displaysf(-9.815,4),m/s^2)', 1, 'ATUnits_units_match.', ''],
+        ['Units', '3', '0.330*kohm', '330*ohm', 1, 'ATUnits_compatible_units (kg*m^2)/(A^2*s^3).', ''],
+        ['Units', '2', '330*Omega', '330*ohm', 1, 'ATUnits_compatible_units (kg*m^2)/(A^2*s^3).', ''],
+        ['Units', '2', "330*\u{03A9}", '330*ohm', 1, 'ATUnits_compatible_units (kg*m^2)/(A^2*s^3).', ''],
 
         ['UnitsStrict', '2', '25*g', '0.025*kg', 0, 'ATUnits_compatible_units kg.', 'Differences from the Units test only'],
         ['UnitsStrict', '1', '1*Mg/10^6', '1*N*s^2/(km)', 0, 'ATUnits_compatible_units kg.', ''],
