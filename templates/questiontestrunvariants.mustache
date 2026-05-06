@@ -98,6 +98,10 @@
       {{^hasrandomvariants}}
         <!-- No randomisation -->
         <p>{{#str}} questiondoesnotuserandomisation, qtype_stack {{/str}} <a href="{{{previewurl}}}">{{#pix}}t/preview, core, {{#str}} preview, core {{/str}}{{/pix}}</a></p>
+        <span id="variant-count" hidden>(-)</span>
+      {{/hasrandomvariants}}
+      {{#hasrandomvariants}}
+        <span id="variant-count" hidden>({{deployedcount}})</span>
       {{/hasrandomvariants}}
       {{^notes.0}}
         {{#hasrandomvariants}}
