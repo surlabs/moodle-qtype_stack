@@ -29,8 +29,8 @@ define([], function () {
     function init() {
         const warningTab = document.getElementById('warning-tab');
         if (document.querySelectorAll('.var-pane-fail').length) {
-            const varTab = document.getElementById('variants-pane-warning');
-            varTab.style.display = 'inline';
+            const varTabWarning = document.getElementById('variants-pane-warning');
+            varTabWarning.style.display = 'inline';
             warningTab.style.display = 'inline';
         }
         if (document.querySelectorAll('.test-pane-fail').length) {
@@ -39,8 +39,8 @@ define([], function () {
             warningTab.style.display = 'inline';
         }
         const variantCount = document.getElementById('variant-count').textContent;
-        const variantTab = document.getElementById('variants-tab-label');
-        variantTab.textContent = variantTab.textContent + ' ' + variantCount;
+        const variantTabLabel = document.getElementById('variants-tab-label');
+        variantTabLabel.textContent = variantTabLabel.textContent + ' ' + variantCount;
         document.getElementById('dashboard-tab-content').style.display = 'block';
 
         // Prevent page refresh loading old version.
