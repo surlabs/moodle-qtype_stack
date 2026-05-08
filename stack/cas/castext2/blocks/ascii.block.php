@@ -1,0 +1,249 @@
+<?php
+// This file is part of STACK
+//
+// STACK is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// STACK is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with STACK.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Add description here!
+ * @package    qtype_stack
+ * @copyright  2024 University of Edinburgh.
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../block.interface.php');
+require_once(__DIR__ . '/../block.factory.php');
+
+require_once(__DIR__ . '/root.specialblock.php');
+require_once(__DIR__ . '/stack_translate.specialblock.php');
+require_once(__DIR__ . '/../../../../vle_specific.php');
+
+require_once(__DIR__ . '/iframe.block.php');
+stack_cas_castext2_iframe::register_counter('///ASCII_COUNT///');
+
+// phpcs:ignore moodle.Commenting.MissingDocblock.Class
+class stack_cas_castext2_ascii extends stack_cas_castext2_block {
+    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
+    public function compile($format, $options): ?MP_Node {
+        $r = new MP_List([new MP_String('iframe')]);
+
+        // Define iframe params.
+        $xpars = [];
+
+        foreach ($this->params as $key => $value) {
+            if ($key === 'input') {
+                $input = $value;
+            }
+        }
+
+        // Set default width and height here.
+        // We want to push forward to overwrite the iframe defaults if they are not provided in the block parameters.
+        $existsuserwidth = array_key_exists('width', $xpars);
+        $existsuserheight = array_key_exists('height', $xpars);
+        $width = $existsuserwidth ? $xpars['width'] : "100%";
+        $height = $existsuserheight ? $xpars['height'] : "400px";
+        $xpars['width'] = $width;
+        $xpars['height'] = $height;
+
+        // Set a title.
+        $xpars['title'] = 'STACK ASCII ///ASCII_COUNT///';
+
+        $r->items[] = new MP_String(json_encode($xpars));
+
+        // Plug in some style and scripts.
+        $mathjax = stack_get_mathjax_url();
+        $r->items[] = new MP_List([
+            new MP_String('script'),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => $mathjax])),
+        ]);
+        $r->items[] = new MP_List([
+            new MP_String('script'),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/ASCIIMathTeXImg.js'])),
+        ]);
+        $r->items[] = new MP_List([
+            new MP_String('script'),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownit.js'])),
+        ]);
+        $r->items[] = new MP_List([
+            new MP_String('script'),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitrules.js'])),
+        ]);
+        $r->items[] = new MP_List([
+            new MP_String('script'),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/sub.js'])),
+        ]);
+
+        // We need to define a size for the inner content.
+        $aspectratio = false;
+        $astyle = "width:calc(100% - 3px);height:calc(100% - 3px);";
+        if (array_key_exists('aspect-ratio', $xpars)) {
+            $aspectratio = $xpars['aspect-ratio'];
+            // Unset the undefined dimension, if both are defined then we have a problem.
+            if ($existsuserheight) {
+                $astyle = "height:calc(100% - 3px);aspect-ratio:$aspectratio;";
+            } else if ($existsuserwidth) {
+                $astyle = "width:calc(100% - 3px);aspect-ratio:$aspectratio;";
+            }
+        }
+        $r->items[] = new MP_String('<script type="module">');
+        $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
+        $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.js') . "';\n");
+
+        $linkcode = 'stack_js.request_access_to_input("' . $input . '",true)';
+        $linkcode .= ".then((markdownContentId) => {init(markdownContentId)});";
+        $r->items[] = new MP_String($linkcode);
+        $r->items[] = new MP_String("\n</script>");
+
+        $r->items[] = new MP_String('<div class="container row" id="asciiContainerRow" style="' . $astyle . '"></div>');
+
+        return $r;
+    }
+
+    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
+    public function is_flat(): bool {
+        // Even when the content were flat we need to evaluate this during postprocessing.
+        return false;
+    }
+
+    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
+    public function postprocess(
+        array $params,
+        castext2_processor $processor,
+        castext2_placeholder_holder $holder
+    ): string {
+        return 'This is never happening! The logic goes to [[iframe]].';
+    }
+
+    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
+    public function validate_extract_attributes(): array {
+        return [];
+    }
+
+    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
+    public function validate(
+        &$errors = [],
+        $options = []
+    ): bool {
+        global $CFG;
+        // Basically, check that the dimensions have units we know.
+        // Also that the references make sense.
+        $valid  = true;
+        $width  = array_key_exists('width', $this->params) ? $this->params['width'] : '100%';
+        $height = array_key_exists('height', $this->params) ? $this->params['height'] : '400px';
+
+        // NOTE! List ordered by length. For the trimming logic.
+        $validunits = [
+            'vmin', 'vmax', 'rem', 'em', 'ex', 'px', 'cm', 'mm',
+            'in', 'pt', 'pc', 'ch', 'vh', 'vw', '%',
+        ];
+
+        $widthend   = false;
+        $heightend  = false;
+        $widthtrim  = $width;
+        $heighttrim = $height;
+
+        foreach ($validunits as $suffix) {
+            if (
+                !$widthend && strlen($width) >= strlen($suffix) &&
+                substr($width, -strlen($suffix)) === $suffix
+            ) {
+                $widthend  = true;
+                $widthtrim = substr($width, 0, -strlen($suffix));
+            }
+            if (
+                !$heightend && strlen($height) >= strlen($suffix) &&
+                substr($height, -strlen($suffix)) === $suffix
+            ) {
+                $heightend  = true;
+                $heighttrim = substr($height, 0, -strlen($suffix));
+            }
+            if ($widthend && $heightend) {
+                break;
+            }
+        }
+        $err = [];
+
+        if (!$widthend) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_parsons_width');
+        } else if (!preg_match('/^[0-9]*[\.]?[0-9]+$/', $widthtrim)) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_parsons_width_num');
+        }
+        if (!$heightend) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_parsons_height');
+        } else if (!preg_match('/^[0-9]*[\.]?[0-9]+$/', $heighttrim)) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_parsons_height_num');
+        }
+
+        if (
+            array_key_exists('width', $this->params) &&
+            array_key_exists('height', $this->params) &&
+            array_key_exists('aspect-ratio', $this->params)
+        ) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_parsons_overdefined_dimension');
+        }
+        if (
+            !(array_key_exists('width', $this->params) ||
+            array_key_exists('height', $this->params)) &&
+            array_key_exists('aspect-ratio', $this->params)
+        ) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_parsons_underdefined_dimension');
+        }
+
+        // Check that only valid parameters are passed to block header.
+        $valids = null;
+        foreach ($this->params as $key => $value) {
+            if (
+                $key !== 'width' &&
+                $key !== 'height' &&
+                $key !== 'aspect-ratio' &&
+                $key !== 'input'
+            ) {
+                $err[] = "Unknown parameter '$key' for Parson's block.";
+                $valid    = false;
+                if ($valids === null) {
+                    $valids = [
+                        'width', 'height', 'aspect-ratio', 'input',
+                    ];
+                    $err[] = stack_string('stackBlock_parsons_param', [
+                        'param' => implode(', ', $valids),
+                    ]);
+                }
+            }
+        }
+
+        // Wrap the old string errors with the context details.
+        foreach ($err as $er) {
+            $errors[] = new $options['errclass']($er, $options['context'] . '/' . $this->position['start'] . '-' .
+                $this->position['end']);
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Is this an interactive block?
+     * If true, we can't generate a static version.
+     * @return bool
+     */
+    public function is_interactive(): bool {
+        return true;
+    }
+}
