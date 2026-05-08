@@ -15,7 +15,7 @@
 // along with STACK.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Add description here!
+ * An ASCIIMaths display block - e.g. [[ascii input="ans1"]][[/ascii]]
  * @package    qtype_stack
  * @copyright  2024 University of Edinburgh.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.

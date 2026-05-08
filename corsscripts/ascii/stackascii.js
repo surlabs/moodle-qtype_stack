@@ -5,6 +5,7 @@ export default function init(markdownId) {
 		clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(renderMath(), 100); // debounce 100ms
 	});
+	renderMath();
 }
 
 var markdownContainerId = null;

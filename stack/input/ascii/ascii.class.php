@@ -29,15 +29,6 @@ require_once(__DIR__ . '/../textarea/textarea.class.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class stack_ascii_input extends stack_textarea_input {
-    // phpcs:ignore moodle.Commenting.VariableComment.Missing
-    protected $extraoptions = [
-        'hideanswer' => false,
-        'allowempty' => false,
-        'nounits' => true,
-        'simp' => false,
-        'consolidatesubscripts' => false,
-    ];
-
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function render(stack_input_state $state, $fieldname, $readonly, $tavalue) {
         // Note that at the moment, $this->boxHeight and $this->boxWidth are only
@@ -80,7 +71,7 @@ class stack_ascii_input extends stack_textarea_input {
         }
 
         // Metadata for JS users.
-        $attributes['data-stack-input-type'] = 'textarea';
+        $attributes['data-stack-input-type'] = 'ascii';
         if ($this->options->get_option('decimals') === ',') {
             $attributes['data-stack-input-decimal-separator']  = ',';
             $attributes['data-stack-input-list-separator'] = ';';
@@ -90,54 +81,6 @@ class stack_ascii_input extends stack_textarea_input {
         }
 
         return html_writer::tag('textarea', htmlspecialchars($current, ENT_COMPAT), $attributes);
-    }
-
-    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
-    public function render_api_data($tavalue) {
-        if ($this->errors) {
-            throw new stack_exception("Error rendering input: " . implode(',', $this->errors));
-        }
-
-        $data = [];
-
-        $data['type'] = 'textarea';
-        $data['boxWidth'] = $this->parameters['boxWidth'];
-        $data['syntaxHint'] = $this->maxima_to_raw_input($this->parameters['syntaxHint']);
-
-        return $data;
-    }
-
-    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
-    public function add_to_moodleform_testinput(MoodleQuickForm $mform) {
-        $mform->addElement('text', $this->name, $this->name, ['size' => $this->parameters['boxWidth']]);
-        $mform->setDefault($this->name, $this->parameters['syntaxHint']);
-        $mform->setType($this->name, PARAM_RAW);
-    }
-
-    /**
-     * Transforms the student's response input into an array.
-     * Most return the same as went in.
-     *
-     * @param array|string $in
-     * @return string
-     */
-    protected function response_to_contents($response) {
-        $contents = [];
-        if (array_key_exists($this->name, $response)) {
-            $sans = $response[$this->name];
-            if (trim($sans) == '' && $this->get_extra_option('allowempty')) {
-                return ['EMPTYANSWER'];
-            }
-            $rowsin = explode("\n", $sans);
-            $rowsout = [];
-            foreach ($rowsin as $key => $row) {
-                $cleanrow = trim($row);
-                if ($cleanrow !== '') {
-                    $contents[] = $cleanrow;
-                }
-            }
-        }
-        return $contents;
     }
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
@@ -154,6 +97,7 @@ class stack_ascii_input extends stack_textarea_input {
             'nounify' => 1,
             'nontuples' => false,
         ];
+        $caslines = [end($caslines)];
         foreach ($caslines as $line) {
             $str = $line->ast_to_string(null, $params);
             if ($line->get_valid() || $str === 'EMPTYANSWER') {
@@ -165,62 +109,6 @@ class stack_ascii_input extends stack_textarea_input {
         }
         $s = '[' . implode(',', $vals) . ']';
         return stack_ast_container::make_from_student_source($s, '', $secrules);
-    }
-
-    /**
-     * Transforms the contents array into a maxima expression.
-     *
-     * @param array|string $in
-     * @return string
-     */
-    public function contents_to_maxima($contents) {
-        return '[' . implode(',', $contents) . ']';
-    }
-
-    /**
-     * Transforms a Maxima list into raw input.
-     *
-     * @param string $in
-     * @return string
-     */
-    protected function maxima_to_raw_input($in) {
-        $delim = ',';
-        if ($this->options->get_option('decimals') === ',') {
-            $delim = ';';
-        }
-        $values = stack_utils::list_to_array($in, false, $delim);
-        foreach ($values as $key => $val) {
-            if (trim($val) != '') {
-                $cs = stack_ast_container::make_from_teacher_source($val);
-                if ($cs->get_valid()) {
-                    $val = $cs->get_inputform(false, 0);
-                }
-            }
-            $values[$key] = $val;
-        }
-        return implode("\n", $values);
-    }
-
-    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
-    protected function ajax_to_response_array($in) {
-        $in = explode('<br>', $in);
-        $in = implode("\n", $in);
-        return [$this->name => $in];
-    }
-
-    /**
-     * Transforms a Maxima expression into an array of raw inputs which are part of a response.
-     * Most inputs are very simple, but textarea and matrix need more here.
-     *
-     * @param string $in
-     * @return string
-     */
-    public function maxima_to_response_array($in) {
-        $response[$this->name] = $this->maxima_to_raw_input($in);
-        if ($this->requires_validation()) {
-            $response[$this->name . '_val'] = $in;
-        }
-        return $response;
     }
 
     /**
@@ -242,7 +130,10 @@ class stack_ascii_input extends stack_textarea_input {
         $ilines,
         $notes
     ) {
-
+        $caslines = [end($caslines)];
+        $ilines = [end($ilines)];
+        $errors = [end($errors)];
+        $valid = $caslines[0]->get_valid();
         $rows = [];
         foreach ($caslines as $index => $cs) {
             $row = [];
@@ -312,7 +203,7 @@ class stack_ascii_input extends stack_textarea_input {
         return [
             'mustVerify'         => true,
             'showValidation'     => 1,
-            'boxWidth'           => 20,
+            'boxWidth'           => 30,
             'insertStars'        => 0,
             'syntaxHint'         => '',
             'syntaxAttribute'    => 0,
@@ -325,43 +216,4 @@ class stack_ascii_input extends stack_textarea_input {
         ];
     }
 
-    /**
-     * Each actual extension of this base class must decide what parameter values are valid.
-     * @return array of parameters names.
-     */
-    public function internal_validate_parameter($parameter, $value) {
-        $valid = true;
-        switch ($parameter) {
-            case 'boxWidth':
-                $valid = is_int($value) && $value > 0;
-                break;
-
-            case 'boxHeight':
-                $valid = is_int($value) && $value > 0;
-                break;
-        }
-        return $valid;
-    }
-
-    /**
-     * Add description here.
-     * @return string the teacher's answer, displayed to the student in the general feedback.
-     */
-    public function get_teacher_answer_display($value, $display) {
-        if ($this->get_extra_option('hideanswer')) {
-            return '';
-        }
-        $values = stack_utils::list_to_array($value, false);
-        foreach ($values as $key => $val) {
-            if (trim($val) !== '') {
-                $cs = stack_ast_container::make_from_teacher_source($val);
-                $cs->get_valid();
-                $val = '<code>' . $cs->get_inputform(true, 0, true, $this->options->get_option('decimals')) . '</code>';
-            }
-            $values[$key] = $val;
-        }
-        $value = "<br/>" . implode("<br/>", $values);
-
-        return stack_string('teacheranswershow', ['value' => $value, 'display' => $display]);
-    }
 }

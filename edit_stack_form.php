@@ -760,7 +760,8 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'checkanswertype',
             $inputname . 'type',
             'in',
-            ['radio', 'checkbox', 'dropdown', 'boolean', 'textarea', 'equiv', 'string', 'json', 'notes', 'parsons']
+            ['radio', 'checkbox', 'dropdown', 'boolean', 'textarea',
+                'ascii', 'equiv', 'string', 'json', 'notes', 'parsons',]
         );
 
         $mform->addElement(

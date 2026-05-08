@@ -404,7 +404,11 @@ define([
                 response['input-readonly'] = input.hasAttribute('disabled');
             } else if (input.nodeName.toLowerCase() === 'textarea') {
                 response.value = input.value;
-                response['input-type'] = 'textarea';
+                if (input.dataset.stackInputType === 'ascii') {
+                    response['input-type'] = 'ascii';
+                } else {
+                    response['input-type'] = 'textarea';
+                }
                 response['input-readonly'] = input.hasAttribute('disabled');
             } else if (input.type === 'checkbox') {
                 response.value = input.checked;
