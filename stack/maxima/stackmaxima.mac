@@ -3385,7 +3385,7 @@ ATDiff(sa, sb, so) :=
 Difffun(SA, SB, v) := block([val, rawmk, ansnote, fb, ret, lSAv, lSBv, mSAv, mSBv],
     val:true, rawmk:false, fb:"", ansnote:"",
     ret:[val, rawmk, ansnote, fb],
-    if algebraic_equivalence(SA, SB) then
+    if ev(algebraic_equivalence(SA, SB), simp) then
         (rawmk:true, ansnote:StackAddNote("", "ATDiff_true"))
     else
         if ev(algebraic_equivalence(diff(SA,v), int(SB,v)), simp) then (
