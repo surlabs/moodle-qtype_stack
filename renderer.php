@@ -132,7 +132,9 @@ class qtype_stack_renderer extends qtype_renderer {
             $formatedinputplaceholders !== $originalinputplaceholders ||
                 $formatedfeedbackplaceholders !== $originalfeedbackplaceholders
         ) {
-            throw new coding_exception('Inconsistent placeholders. Possibly due to multi-lang filter not being active.');
+            throw new coding_exception('Inconsistent placeholders. Possibly due to multi-lang filter not being active. ' .
+                ' Original placeholders: ' . implode(', ', $originalfeedbackplaceholders) . '.' .
+                ' Formatted placeholders: ' . implode(', ', $formatedfeedbackplaceholders));
         }
 
         foreach ($question->inputs as $name => $input) {
