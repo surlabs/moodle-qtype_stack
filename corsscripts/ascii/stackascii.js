@@ -40,5 +40,4 @@ function convertMarkdown(markdown) {
 
 	html = previewMarkdownConverter.render(protectedlatex);
 	document.getElementById('asciiContainerRow').innerHTML = html;
-	console.log(html);
 }

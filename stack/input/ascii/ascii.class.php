@@ -83,35 +83,16 @@ class stack_ascii_input extends stack_textarea_input {
         return html_writer::tag('textarea', htmlspecialchars($current, ENT_COMPAT), $attributes);
     }
 
-    // phpcs:ignore moodle.Commenting.MissingDocblock.Function
-    protected function caslines_to_answer($caslines, $secrules = false) {
-        $vals = [];
-        // We don't use full "inputform" here as we need to keep stacklet and stackeq as is.
-        $params = [
-            'checkinggroup' => true,
-            'qmchar' => false,
-            'pmchar' => 1,
-            'nosemicolon' => true,
-            'keyless' => true,
-            'dealias' => false, // This is needed to stop pi->%pi etc.
-            'nounify' => 1,
-            'nontuples' => false,
-        ];
-        $caslines = [end($caslines)];
-        foreach ($caslines as $line) {
-            $str = $line->ast_to_string(null, $params);
-            if ($line->get_valid() || $str === 'EMPTYANSWER') {
-                $vals[] = $str;
-            } else {
-                // This is an empty place holder for an invalid expression.
-                $vals[] = 'EMPTYCHAR';
-            }
+    protected function validate_contents($contents, $basesecurity, $localoptions) {
+        $lastentry = array_pop($contents);
+        if (trim($lastentry, '` ') === '') {
+            $lastentry = array_pop($contents);
         }
-        $s = '[' . implode(',', $vals) . ']';
-        return stack_ast_container::make_from_student_source($s, '', $secrules);
+        $contents = [trim($lastentry, '` ')];
+        return parent::validate_contents($contents, $basesecurity, $localoptions);
     }
 
-    /**
+        /**
      * This function constructs the display variable for validation.
      *
      * @param stack_casstring $answer, the complete answer.
@@ -130,10 +111,6 @@ class stack_ascii_input extends stack_textarea_input {
         $ilines,
         $notes
     ) {
-        $caslines = [end($caslines)];
-        $ilines = [end($ilines)];
-        $errors = [end($errors)];
-        $valid = $caslines[0]->get_valid();
         $rows = [];
         foreach ($caslines as $index => $cs) {
             $row = [];
@@ -157,7 +134,12 @@ class stack_ascii_input extends stack_textarea_input {
                     $errors[] = $fb;
                 }
                 $valid = false;
-                $row[] = [0, stack_maxima_format_casstring($this->rawcontents[$index])];
+                $raw = $this->rawcontents;
+                $lastentry = array_pop($raw);
+                if (trim($lastentry, '` ') === '') {
+                    $lastentry = array_pop($raw);
+                }
+                $row[] = [0, stack_maxima_format_casstring($lastentry)];
                 $row[] = [1, trim(stack_maxima_translate($cs->get_errors()) . ' ' . $fb)];
             }
             $rows[] = $row;
@@ -211,7 +193,7 @@ class stack_ascii_input extends stack_textarea_input {
             'allowWords'         => '',
             'forbidFloats'       => true,
             'lowestTerms'        => true,
-            'sameType'           => true,
+            'sameType'           => false,
             'options'            => '',
         ];
     }

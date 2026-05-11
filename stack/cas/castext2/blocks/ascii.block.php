@@ -45,6 +45,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
                 $input = $value;
+            } else {
+                $xpars[$key] = $value;
             }
         }
 
@@ -84,17 +86,19 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             new MP_String('script'),
             new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/sub.js'])),
         ]);
+        $r->items[] = new MP_List([
+            new MP_String('style'),
+            new MP_String(json_encode(['href' => 'cors://ascii/stackascii.css'])),
+        ]);
 
-        // We need to define a size for the inner content.
-        $aspectratio = false;
-        $astyle = "width:calc(100% - 3px);height:calc(100% - 3px);";
+        $astyle = "width:calc({$xpars['width']} - 20px);height:calc({$xpars['height']} - 30px);";
         if (array_key_exists('aspect-ratio', $xpars)) {
             $aspectratio = $xpars['aspect-ratio'];
             // Unset the undefined dimension, if both are defined then we have a problem.
             if ($existsuserheight) {
-                $astyle = "height:calc(100% - 3px);aspect-ratio:$aspectratio;";
+                $astyle = "height:calc({$xpars['height']} - 30px);aspect-ratio:$aspectratio;";
             } else if ($existsuserwidth) {
-                $astyle = "width:calc(100% - 3px);aspect-ratio:$aspectratio;";
+                $astyle = "width:calc({$xpars['width']} - 20px);aspect-ratio:$aspectratio;";
             }
         }
         $r->items[] = new MP_String('<script type="module">');
@@ -103,10 +107,11 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         $linkcode = 'stack_js.request_access_to_input("' . $input . '",true)';
         $linkcode .= ".then((markdownContentId) => {init(markdownContentId)});";
+
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
 
-        $r->items[] = new MP_String('<div class="container row" id="asciiContainerRow" style="' . $astyle . '"></div>');
+        $r->items[] = new MP_String('<div class="container row asciimath" id="asciiContainerRow" style="' . $astyle . '"></div>');
 
         return $r;
     }
