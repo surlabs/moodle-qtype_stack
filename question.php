@@ -1950,7 +1950,18 @@ class qtype_stack_question extends question_graded_automatically_with_countback
             $warnings[] = stack_string_error('questionbroken');
         }
 
-        // 4. Language warning checks.
+        // 4. Warn if always maually graded.
+        $manualgraded = false;
+        if (!empty($this->inputs)) {
+            foreach ($this->inputs as $input) {
+                $manualgraded = $manualgraded || $input->get_extra_option('manualgraded');
+            }
+        }
+        if ($manualgraded) {
+            $warnings[] = stack_string_error('alwaysmanuallygrade');
+        }
+
+        // 5. Language warning checks.
         // Put language warning checks last (see guard clause below).
         // Check multi-language versions all have the same languages.
         $ml = new stack_multilang();
