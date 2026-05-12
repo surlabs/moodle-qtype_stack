@@ -7,11 +7,22 @@ Some of the dynamic question blocks, e.g. the [Parsons block](../../Specialist_t
 #### String input ####
 
 This is a normal input into which students may type whatever they choose.  It is always converted into a Maxima string internally.
+
 Notes
 
 1.  There is no way whatsoever to parse the student's string into a Maxima expression.  If you accept a string, then it will always remain a string! You can't later check for algebraic equivalence. The only tests available will be simple string matches, etc.
 2.  An empty answer will be blank unless you use the `allowempty` option in which case the answer will be interpreted as an empty string, i.e. `""` rather than `EMPTYANSWER` as would be the case with other inputs.
 3.  STACK does some sanitation on students' input within strings to stop students typing in HTML code.  For example, you may find that a string <code>"a<b"</code> actually ends up in Maxima with the less-than sign inside the string changed into an html entity <code>&amp;lt;</code>, so your string inside Maxima becomes <code>"a&amp;lt;b"</code>.  In cases where string matches unexpectedly fail, look at the testing page to see what is actually being compared within the PRT and re-build the teacher's answer to match.
+
+#### Free-text input ####
+
+This input is a text area into which students may type whatever they choose.  This input is intended to capture text input of mathematical proof.  It is always converted into a Maxima string internally.  We accept, for now, there are limitations on the ability to automatically assess free-text proofs.
+
+Notes
+
+1.  All the notes for "string" inputs above still apply.
+2.  The freetext input has a special extra option `manualgraded`, and the default option value is `manualgraded:true`.  If you specify `manualgraded:false` then the _whole STACK question_ will require manual grading!
+3.  Part of this input can be linked to an automatically graded STACK input, e.g. an algebraic input (final answer), textarea (last lines) or units input.
 
 #### JSON input ####
 

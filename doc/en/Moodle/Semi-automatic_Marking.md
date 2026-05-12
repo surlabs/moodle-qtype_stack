@@ -6,13 +6,13 @@ It is certainly possible to have students answer one of the other question types
 
 Another option is to automatically mark students' short answers using a question type such as the [pattern match](https://moodle.org/plugins/qtype_pmatch) question type in Moodle.
 
-STACK provides the "notes" [input type](../Authoring/Inputs/index.md).  There are some advantages to using the notes input, rather than an essay.
+STACK provides the "free-text" and "notes" [input type](../Authoring/Inputs/Text_input.md).  There are some advantages to using these inputs, rather than an essay.
 
 1. It is part of a STACK question, so students' answers can be between other parts of a multi-part question.
 2. When students "validate" their answer, any maths types in using LaTeX is displayed.  If the teacher shows validation then students get a preview of their answer, and LaTeX will be displayed.
 
 ## Manual grading.
 
-The notes input has a special extra option `manualgraded`, and the default option value is `manualgraded:false`.  If you specify `manualgraded:true` then the _whole STACK question_ will require manual grading!
+The free-text and notes inputs have a special extra option `manualgraded`, and the default option value is `manualgraded:false`.  If you specify `manualgraded:true` then the _whole STACK question_ will require manual grading!
 
-There really is no way to mix automatic and manually graded parts of a question. Therefore, if you want automatic and manual marking you must have separate questions. 
+There really is no way to mix automatic and manually graded parts of a question. Therefore, if you want automatic and manual marking you must have separate questions.
