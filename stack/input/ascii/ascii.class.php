@@ -92,7 +92,30 @@ class stack_ascii_input extends stack_textarea_input {
         return parent::validate_contents($contents, $basesecurity, $localoptions);
     }
 
-        /**
+    /**
+     * Transforms the student's response input into an array.
+     * Most return the same as went in.
+     *
+     * @param array|string $in
+     * @return string
+     */
+    protected function response_to_contents($response) {
+        $contents = [];
+        if (array_key_exists($this->name, $response)) {
+            $sans = $response[$this->name];
+            if (trim($sans) == '' && $this->get_extra_option('allowempty')) {
+                return ['EMPTYANSWER'];
+            }
+            $rowsin = explode("\n", $sans);
+            foreach ($rowsin as $key => $row) {
+                $cleanrow = trim($row);
+                $contents[] = $cleanrow;
+            }
+        }
+        return $contents;
+    }
+
+    /**
      * This function constructs the display variable for validation.
      *
      * @param stack_casstring $answer, the complete answer.
