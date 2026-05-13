@@ -28,16 +28,13 @@ function renderMath() {
 	}
 }
 
+// mdItPluginTex.tex must come before markdownitrules.
 const previewMarkdownConverter = window.markdownit({ html: true })
-	.use(window.markdownitrules)
-	.use(window.markdownitSub);
+	.use(window.markdownitSub)
+	.use(window.mdItPluginTex.tex, { render: (content) => content, delimiters: 'all' })
+	.use(window.markdownitrules);
 
 function convertMarkdown(markdown) {
-	var html;
-	var protectedlatex;
-	// Protect the latex backslashes before we render markdown.
-	protectedlatex = markdown.replace(/\\([()\[\]])/g, '\\\\$1');
-
-	html = previewMarkdownConverter.render(protectedlatex);
+	const html = previewMarkdownConverter.render(markdown);
 	document.getElementById('asciiContainerRow').innerHTML = html;
 }

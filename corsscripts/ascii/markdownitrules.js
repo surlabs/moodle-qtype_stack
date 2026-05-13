@@ -5,15 +5,14 @@
 window.markdownitrules = function(mdit) {
 	"use strict";
 
-	mdit.renderer.rules.code_inline = function(tokens, idx) {
+	mdit.renderer.rules.math_inline = function(tokens, idx) {
 		const code = tokens[idx].content;
 		const latexwrap = (s) => `\\(${s}\\)`;
 		return latexwrap(window.AMparseMath(code, true));
 	};
 
-
 	// This is three backticks: ```....```.
-	mdit.renderer.rules.fence = function(tokens, idx) {
+	mdit.renderer.rules.math_block = function(tokens, idx) {
 		// Interpret each line as an ASCIIMath expression, and convert to LaTeX displayed equations.
 		//const asciimathparser = window.asciimath.parseMath;
 
