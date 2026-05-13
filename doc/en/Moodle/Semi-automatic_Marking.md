@@ -13,6 +13,23 @@ STACK provides the "free-text" and "notes" [input type](../Authoring/Inputs/Text
 
 ## Manual grading.
 
-The free-text and notes inputs have a special extra option `manualgraded`, and the default option value is `manualgraded:false`.  If you specify `manualgraded:true` then the _whole STACK question_ will require manual grading!
+The free-text and notes inputs have a special extra option `manualgraded`.  When `manualgraded:true` then the _whole STACK question_ will require manual grading!
 
-There really is no way to mix automatic and manually graded parts of a question. Therefore, if you want automatic and manual marking you must have separate questions.
+There really is no way to mix automatic and manually grading within a question. Therefore, if you want automatic and manual marking you have two options.
+
+1. Use separate questions.  If you need to serparate out parts to automatic and manually graded parts then you can consider [variant matching](../Deploying_matched_varients) to ensure random parts have the same seed.
+2. Manual grade, taking into account some automatic marks when you manually grade.
+
+Once a student has completed the quiz, navigate to 
+
+    Quiz -> Results
+
+This page will show you those questions which "Requires grading".
+
+When you are manually grading you can see both the student's attempt, and the "Response history" which contains the STACK response summary.  For manually graded questions, this summary will start with something like this
+
+    Saved: Raw Score: 0.667/2; Seed: 8766544;  [...]
+
+The `Raw Score` reports the total weighted mark of those PRTs which actually evaluated (i.e. with valid inputs).  The total weighted mark is given in terms of the question default mark, set in the question itself.  In this example, the question is out of two.  The student got partical credit.  It is then up to the teacher to record a final mark taking account any automatic partial grade, and their academic judgement of the manually graded input(s).
+
+Note, questions which "Requires grading" really do need human input (manually graded).  Even though in this example some partial credit is awarded automatically, this is not automatically recorded in the gradebook.
