@@ -670,7 +670,7 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'insertstars',
             $inputname . 'type',
             'in',
-            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons']
+            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons', 'freetext']
         );
 
         $mform->addElement('text', $inputname . 'syntaxhint', stack_string('syntaxhint'), ['size' => 30]);
@@ -707,7 +707,7 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'forbidwords',
             $inputname . 'type',
             'in',
-            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons']
+            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons', 'freetext']
         );
 
         $mform->addElement('text', $inputname . 'allowwords', stack_string('allowwords'), ['size' => 20]);
@@ -718,7 +718,7 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'allowwords',
             $inputname . 'type',
             'in',
-            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons']
+            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons', 'freetext']
         );
 
         $mform->addElement(
@@ -732,7 +732,7 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'forbidfloat',
             $inputname . 'type',
             'in',
-            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons']
+            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons', 'freetext']
         );
 
         $mform->addElement(
@@ -746,7 +746,7 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'requirelowestterms',
             $inputname . 'type',
             'in',
-            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons']
+            ['radio', 'checkbox', 'dropdown', 'boolean', 'string', 'json', 'notes', 'parsons', 'freetext']
         );
 
         $mform->addElement(
@@ -761,7 +761,8 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'type',
             'in',
             ['radio', 'checkbox', 'dropdown', 'boolean', 'textarea',
-                'ascii', 'equiv', 'string', 'json', 'notes', 'parsons',]
+             'ascii', 'equiv', 'string', 'json', 'notes', 'parsons', 'freetext',
+            ]
         );
 
         $mform->addElement(

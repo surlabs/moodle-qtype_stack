@@ -130,18 +130,18 @@ class stack_freetext_input extends stack_string_input {
         $inertdisplayform,
         $ilines,
         $notes
-        ) {
-            // Always display something sensible.
-            $display = htmlentities($this->contents_to_maxima($this->rawcontents));
-            $display = substr($display, 1, strlen($display) - 2);
-            if ($answer->is_correctly_evaluated()) {
-                $display = stack_utils::maxima_string_to_php_string($answer->get_value());
-                $display = nl2br($display);
-            } else {
-                $valid = false;
-            }
-            // TODO: something better here.
-            $display = html_writer::tag('p', $display);
-            return [$valid, $errors, $display, $notes];
+    ) {
+        // Always display something sensible.
+        $display = htmlentities($this->contents_to_maxima($this->rawcontents));
+        $display = substr($display, 1, strlen($display) - 2);
+        if ($answer->is_correctly_evaluated()) {
+            $display = stack_utils::maxima_string_to_php_string($answer->get_value());
+            $display = nl2br($display);
+        } else {
+            $valid = false;
+        }
+        // TODO: something better here.
+        $display = html_writer::tag('p', $display);
+        return [$valid, $errors, $display, $notes];
     }
 }

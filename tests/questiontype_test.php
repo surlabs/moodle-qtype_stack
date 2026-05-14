@@ -213,7 +213,7 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
             -1,
             '',
             ['even-1-T']
-            ));
+        ));
         $testcases[] = $qtest;
 
         foreach ($testcases as $testcase) {
