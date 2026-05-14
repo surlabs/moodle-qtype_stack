@@ -13,11 +13,13 @@ STACK provides the "free-text" and "notes" [input type](../Authoring/Inputs/Text
 
 ## Manual grading.
 
-The free-text and notes inputs have a special extra option `manualgraded`.  When `manualgraded:true` then the _whole STACK question_ will require manual grading!
+Most input types support the extra option extra option `manualgraded`, and the default is `manualgraded:false`.  When `manualgraded:true` then the _whole STACK question_ will require manual grading!
+
+The free-text default extra option `manualgraded:true`.
 
 There really is no way to mix automatic and manually grading within a question. Therefore, if you want automatic and manual marking you have two options.
 
-1. Use separate questions.  If you need to serparate out parts to automatic and manually graded parts then you can consider [variant matching](../Deploying_matched_varients) to ensure random parts have the same seed.
+1. Use separate questions.  If you need to serparate out parts to automatic and manually graded parts then you can consider [variant matching](../STACK_question_admin/Deploying_matched_variants.md) to ensure random parts have the same seed.
 2. Manual grade, taking into account some automatic marks when you manually grade.
 
 Once a student has completed the quiz, navigate to 

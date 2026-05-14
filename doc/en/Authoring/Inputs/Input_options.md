@@ -6,34 +6,36 @@ This is reference documentation for the input options.
 
 This table lists all options, and which inputs use/respect them.  The `.` means the option is ignored.
 
-Options           | Alg | Num | Units | Matrix | Check | Radio | Drop | T/F | TextArea | Equiv | String | Notes
-------------------|-----|-----|-------|--------|-------|-------|------|-----|----------|-------|--------|------
-Box size          |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   Y    |   Y
-Strict Syn        |  Y  | (1) |  (1)  |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .
-Insert stars      |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .
-Syntax hint       |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   Y    |   Y
-Hint att          |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   Y    |   Y
-Forbidden words   |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .
-Allowed words     |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .
-Forbid float      |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .
-Lowest terms      |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .
-Check type        |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-Must verify       |  Y  |  Y  |  Y    |   Y    |   Y   |   Y   |   Y  |  Y  |    Y     |   Y   |   Y    |   .
-Show validation   |  Y  |  Y  |  Y    |   Y    |   Y   |   Y   |   Y  |  Y  |    Y     |   Y   |   Y    |   .
-**Extra options:**|     |     |       |        |       |       |      |     |          |       |        |
-`rationalize`   |  Y  |  Y  |  .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-min/max sf/dp     |  .  |  Y  |  Y    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`floatnum`      |  .  |  Y  |  .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`intnum`        |  .  |  Y  |  .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`rationalnum`   |  .  |  Y  |  .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`consolidatesubscripts` |  Y  |  .  |  Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`negpow`        |  .  |  .  |  Y    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`simp`            |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   .   |   .    |   .
-`align`        |  Y  |  Y  |  Y    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
-`nounits`      |  Y  |  Y  |  Y    |   Y    |   Y   |   Y   |   Y  |  .  |    .     |   Y   |   .    |   .
-`checkvars`    |  Y  |  .  |  .    |   Y    |   .   |   .   |   .  |  .  |    .     |   Y   |   .    |   .
-`validator`    |  Y  |  Y  |  Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   Y    |   .
-`feedback`    |  Y  |  .  |  Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .
+Options           | Alg | Num | Units | Matrix | VarMat | Check | Radio | Drop | T/F | TextArea | Equiv | String | Notes | Freetext
+------------------|-----|-----|-------|--------|--------|-------|-------|------|-----|----------|-------|--------|-------|---------
+Box size          |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |  .   |  .  |    Y     |   Y   |   Y    |   Y   |   Y
+Strict Syn        |  Y  | (1) |  (1)  |   Y    |   Y    |   .   |   .   |  .   |  .  |    Y     |   Y   |   .    |   .   |   .
+Insert stars      |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |  .   |  .  |    Y     |   Y   |   .    |   .   |   .
+Syntax hint       |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |  .   |  .  |    Y     |   Y   |   Y    |   Y   |   Y
+Hint att          |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   Y    |   Y   |   Y
+Forbidden words   |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .   |   .
+Allowed words     |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .   |   .
+Forbid float      |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .   |   .
+Lowest terms      |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .   |   .
+Check type        |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+Must verify       |  Y  |  Y  |  Y    |   Y    |   Y    |   Y   |   Y   |   Y  |  Y  |    Y     |   Y   |   Y    |   Y   |   Y
+Show validation   |  Y  |  Y  |  Y    |   Y    |   Y    |   Y   |   Y   |   Y  |  Y  |    Y     |   Y   |   Y    |   Y   |   Y
+**Extra options:**|     |     |       |        |        |       |       |      |     |          |       |        |       |
+`rationalize`   |  Y  |  Y  |  .    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+min/max sf/dp     |  .  |  Y  |  Y    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`floatnum`      |  .  |  Y  |  .    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`intnum`        |  .  |  Y  |  .    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`rationalnum`   |  .  |  Y  |  .    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`consolidatesubscripts` |  Y  |  .  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`negpow`        |  .  |  .  |  Y    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`simp`            |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   .   |   .    |   .   |   .
+`align`        |  Y  |  Y  |  Y    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`nounits`      |  Y  |  Y  |  Y    |   Y    |   Y    |   Y   |   Y   |   Y  |  .  |    .     |   Y   |   .    |   .   |   .
+`checkvars`    |  Y  |  .  |  .    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   Y   |   .    |   .   |   .
+`validator`    |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   Y    |   .   |   Y
+`feedback`     |  Y  |  .  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`monospace`    |  Y  |  Y  |  Y    |   .    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`manualgraded` |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   Y    |   Y   |   Y
 
 For documentation about the various options not documented on this page look at the pages for the specific inputs in which each option is used.
 
@@ -150,6 +152,11 @@ Writing bespoke validators is an advanced feature, but offers two significant be
 This option is available for algebraic, numerical, units and varmatrix inputs. It controls if the student's answer is displayed using monospace font. `monospace` and `monospace:true` will force the input to use monospace. `monospace:false` will force proportional font.
 
 If `monospace` is not specified, then the CURRENT system default for the given input type will be used when the question is displayed. 
+
+### Extra option: manualgraded ###
+
+Most input types support the extra option extra option `manualgraded`, and the default is `manualgraded:false`.  Only freetext inputs have default `manualgraded:true`.  When `manualgraded:true` then the _whole STACK question_ will require manual grading!  See [Semi-automatic Marking](../../Moodle/Semi-automatic_Marking.md) for more details.
+
 
 ## Future extra options ##
 

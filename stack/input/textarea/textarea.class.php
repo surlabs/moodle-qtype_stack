@@ -35,6 +35,7 @@ class stack_textarea_input extends stack_input {
         'nounits' => true,
         'simp' => false,
         'consolidatesubscripts' => false,
+        'manualgraded' => false,
     ];
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function

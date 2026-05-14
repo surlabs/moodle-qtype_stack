@@ -311,6 +311,11 @@ class qtype_stack_question extends question_graded_automatically_with_countback
             return question_engine::make_behaviour('informationitem', $qa, $preferredbehaviour);
         }
 
+        // This is an edge case to stop survey items automatically becoming manually graded.
+        if (empty($this->prts)) {
+            return question_engine::make_behaviour('manualgraded', $qa, $preferredbehaviour);
+        }
+
         if ($this->is_manually__graded()) {
             return question_engine::make_behaviour('manualgraded', $qa, $preferredbehaviour);
         }
@@ -335,9 +340,6 @@ class qtype_stack_question extends question_graded_automatically_with_countback
      * @return bool
      */
     public function is_manually__graded() {
-        if (empty($this->prts)) {
-            return true;
-        }
         if (!empty($this->inputs)) {
             foreach ($this->inputs as $input) {
                 if ($input->get_extra_option('manualgraded')) {

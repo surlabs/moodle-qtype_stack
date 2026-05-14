@@ -54,6 +54,7 @@ class stack_equiv_input extends stack_input {
         'calculus' => false,
         'consolidatesubscripts' => false,
         'checkvars' => 0,
+        'manualgraded' => false,
     ];
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
