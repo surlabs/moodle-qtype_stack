@@ -46,8 +46,8 @@ final class input_freetext_test extends qtype_stack_testcase {
 
         $el = stack_input_factory::make('freetext', 'ans1', 'x^2');
         $this->assertEquals(
-            '<textarea name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
-            'spellcheck="false" rows="3" cols="80" data-stack-input-type="freetext">' .
+            '<textarea class="freetextinput" name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
+            'spellcheck="false" rows="5" cols="80" data-stack-input-type="freetext">' .
             '</textarea><div class="clearfix"></div>',
             $el->render(
                 new stack_input_state(stack_input::VALID, [], '', '', '', '', ''),
@@ -62,8 +62,8 @@ final class input_freetext_test extends qtype_stack_testcase {
 
         $el = stack_input_factory::make('freetext', 'ans1', '"Hello world"');
         $this->assertEquals(
-            '<textarea name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
-            'spellcheck="false" rows="3" cols="80" data-stack-input-type="freetext">' .
+            '<textarea class="freetextinput" name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
+            'spellcheck="false" rows="5" cols="80" data-stack-input-type="freetext">' .
             '000</textarea><div class="clearfix"></div>',
             $el->render(
                 new stack_input_state(stack_input::VALID, ['000'], '', '', '', '', ''),
@@ -76,6 +76,22 @@ final class input_freetext_test extends qtype_stack_testcase {
             'The answer Hello world would be correct.',
             $el->get_teacher_answer_display('"Hello world"', '\\text{Hello world}')
         );
+    }
+
+    public function test_render_monospace(): void {
+        $el = stack_input_factory::make('freetext', 'ans1', '"Hello world"');
+        $el->set_parameter('options', 'monospace:true');
+        $this->assertEquals(
+            '<textarea class="freetextinput input-monospace" name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
+            'spellcheck="false" rows="5" cols="80" data-stack-input-type="freetext">' .
+            '000</textarea><div class="clearfix"></div>',
+            $el->render(
+                new stack_input_state(stack_input::VALID, ['000'], '', '', '', '', ''),
+                'stack1__ans1',
+                false,
+                null
+                )
+            );
     }
 
     public function test_validate_string_input(): void {

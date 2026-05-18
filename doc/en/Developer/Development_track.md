@@ -14,6 +14,7 @@ Issues with [github milestone 4.13.0](https://github.com/maths/moodle-qtype_stac
 3. Question tests can now test the whole route through a PRT, rather than just the final node.  This is a significant improvement on the ability to test questions.  This is back-compatible with older questions.
 4. Add in a new "free-text" input to allow student to input typed free-text proof.
 5. Allow most input types to use the extra option 'manualgraded'.
+6. Expand the use of "align" and "monospace" input options to textarea and equiv inputs.
 
 ## Better testing
 

@@ -54,6 +54,8 @@ class stack_equiv_input extends stack_input {
         'calculus' => false,
         'consolidatesubscripts' => false,
         'checkvars' => 0,
+        'align' => 'left',
+        'monospace' => false,
         'manualgraded' => false,
     ];
 
@@ -111,6 +113,13 @@ class stack_equiv_input extends stack_input {
             'autocapitalize' => 'none',
             'spellcheck'     => 'false',
         ];
+        if ($this->extraoptions['align'] === 'right') {
+            $attributes['class'] .= ' algebraic-right';
+        }
+        if ($this->extraoptions['monospace']) {
+            $attributes['class'] .= ' input-monospace';
+        }
+
         if ($placeholder) {
             $attributes['placeholder'] = $placeholder;
         }
