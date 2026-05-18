@@ -1,31 +1,46 @@
-export default function init(markdownId) {
+export default function init(inputIds) {
+	const markdownContainerId = inputIds[0];
+	const answerContainerId = inputIds[1];
+
+	function renderMath() {
+		const raw = document.getElementById(markdownContainerId).value.trim();
+		const output = document.getElementById('asciiContainerRow');
+		if (!raw) {
+			output.innerHTML = '';
+			return;
+		}
+
+		convertMarkdown(raw);
+
+		// Tell MathJax to typeset only this element
+		if (typeof MathJax.typesetPromise === 'function') {
+			MathJax.typesetPromise([output]); //MathJax 3
+		} else {
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, 'asciiContainerRow']);  //MathJax 2
+		}
+
+		let lines = raw.split('\n');
+		lines.reverse();
+		for (const line of lines) {
+			const trimmed = line.trim()
+			if (['```', '/)', ''].includes(trimmed)) {
+				continue;
+			}
+			if (/^f\s*\(\s*x\s*\)\s*=\s*/.test(trimmed)) {
+				const answerEl = document.getElementById(answerContainerId);
+				answerEl.value = trimmed.replace(/^f\s*\(\s*x\s*\)\s*=\s*/, '');
+				answerEl.dispatchEvent(new Event("change"));
+				break;
+			}
+		}
+	}
+
 	let debounceTimer;
-	markdownContainerId = markdownId;
-	document.getElementById(markdownId).addEventListener('change', () => {
+	document.getElementById(markdownContainerId).addEventListener('change', () => {
 		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(renderMath(), 100); // debounce 100ms
+		debounceTimer = setTimeout(renderMath, 100); // debounce 100ms
 	});
 	renderMath();
-}
-
-var markdownContainerId = null;
-
-function renderMath() {
-	const raw = document.getElementById(markdownContainerId).value.trim();
-	const output = document.getElementById('asciiContainerRow');
-	if (!raw) {
-		output.innerHTML = '';
-		return;
-	}
-
-	convertMarkdown(raw);
-
-	// Tell MathJax to typeset only this element
-	if (typeof MathJax.typesetPromise === 'function') {
-		MathJax.typesetPromise([output]); //MathJax 3
-	} else {
-		MathJax.Hub.Queue(["Typeset", MathJax.Hub, 'asciiContainerRow']);  //MathJax 2
-	}
 }
 
 // mdItPluginTex.tex must come before markdownitrules.

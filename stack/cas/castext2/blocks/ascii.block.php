@@ -45,6 +45,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
                 $input = $value;
+            } else if ($key === 'answer') {
+                $answer = $value;
             } else {
                 $xpars[$key] = $value;
             }
@@ -109,8 +111,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
         $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.js') . "';\n");
 
-        $linkcode = 'stack_js.request_access_to_input("' . $input . '",true)';
-        $linkcode .= ".then((markdownContentId) => {init(markdownContentId)});";
+        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),stack_js.request_access_to_input("' . $answer . '")])';
+        $linkcode .= ".then((inputIds) => {init(inputIds);});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
@@ -223,13 +225,14 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $key !== 'width' &&
                 $key !== 'height' &&
                 $key !== 'aspect-ratio' &&
-                $key !== 'input'
+                $key !== 'input' &&
+                $key !== 'answer'
             ) {
                 $err[] = "Unknown parameter '$key' for Parson's block.";
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input',
+                        'width', 'height', 'aspect-ratio', 'input', 'answer'
                     ];
                     $err[] = stack_string('stackBlock_parsons_param', [
                         'param' => implode(', ', $valids),
