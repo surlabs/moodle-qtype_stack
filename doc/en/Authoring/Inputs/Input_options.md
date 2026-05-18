@@ -29,12 +29,12 @@ min/max sf/dp     |  .  |  Y  |  Y    |   .    |   .    |   .   |   .   |   .  |
 `consolidatesubscripts` |  Y  |  .  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
 `negpow`        |  .  |  .  |  Y    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
 `simp`            |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   .   |   .    |   .   |   .
-`align`        |  Y  |  Y  |  Y    |   .    |   .    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`align`        |  Y  |  Y  |  Y    |   .    |   .    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .   |   Y
 `nounits`      |  Y  |  Y  |  Y    |   Y    |   Y    |   Y   |   Y   |   Y  |  .  |    .     |   Y   |   .    |   .   |   .
 `checkvars`    |  Y  |  .  |  .    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   Y   |   .    |   .   |   .
 `validator`    |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   Y    |   .   |   Y
 `feedback`     |  Y  |  .  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
-`monospace`    |  Y  |  Y  |  Y    |   .    |   Y    |   .   |   .   |   .  |  .  |    .     |   .   |   .    |   .   |   .
+`monospace`    |  Y  |  Y  |  Y    |   .    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   .    |   .   |   Y
 `manualgraded` |  Y  |  Y  |  Y    |   Y    |   Y    |   .   |   .   |   .  |  .  |    Y     |   Y   |   Y    |   Y   |   Y
 
 For documentation about the various options not documented on this page look at the pages for the specific inputs in which each option is used.
@@ -149,7 +149,7 @@ Writing bespoke validators is an advanced feature, but offers two significant be
 
 ### Extra option: monospace ###
 
-This option is available for algebraic, numerical, units and varmatrix inputs. It controls if the student's answer is displayed using monospace font. `monospace` and `monospace:true` will force the input to use monospace. `monospace:false` will force proportional font.
+This option is available for many inputs, including algebraic, numerical, units, varmatrix, textare, equiv and freetext. It controls if the student's answer is displayed using monospace font. `monospace` and `monospace:true` will force the input to use monospace. `monospace:false` will force proportional font.
 
 If `monospace` is not specified, then the CURRENT system default for the given input type will be used when the question is displayed. 
 

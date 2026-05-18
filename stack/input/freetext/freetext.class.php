@@ -33,6 +33,8 @@ class stack_freetext_input extends stack_string_input {
         'hideanswer' => false,
         'allowempty' => false,
         'validator' => false,
+        'align' => 'left',
+        'monospace' => false,
         'manualgraded' => true,
     ];
 
@@ -67,11 +69,18 @@ class stack_freetext_input extends stack_string_input {
         // Note that at the moment, $this->boxHeight and $this->boxWidth are only
         // used as minimums. If the current input is bigger, the box is expanded.
         $attributes = [
+            'class'          => 'freetextinput',
             'name'           => $fieldname,
             'id'             => $fieldname,
             'autocapitalize' => 'none',
             'spellcheck'     => 'false',
         ];
+        if ($this->extraoptions['align'] === 'right') {
+            $attributes['class'] .= ' algebraic-right';
+        }
+        if ($this->extraoptions['monospace']) {
+            $attributes['class'] .= ' input-monospace';
+        }
 
         $value = stack_utils::maxima_string_to_php_string($this->contents_to_maxima($state->contents));
         if ($this->is_blank_response($state->contents)) {
@@ -83,7 +92,7 @@ class stack_freetext_input extends stack_string_input {
         }
 
         // TODO: sort out size of text area.
-        $attributes['rows'] = 3;
+        $attributes['rows'] = 5;
         $attributes['cols'] = $this->parameters['boxWidth'];
 
         if ($readonly) {
