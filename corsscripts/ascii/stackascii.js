@@ -23,7 +23,7 @@ export default function init(inputIds) {
         lines.reverse();
         for (const line of lines) {
             const trimmed = line.trim()
-            if (['```', '/)', ''].includes(trimmed)) {
+            if (['```', '/]', ''].includes(trimmed)) {
                 continue;
             }
 
