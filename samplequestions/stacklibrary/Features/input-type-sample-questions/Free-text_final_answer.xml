@@ -10,6 +10,7 @@
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
+[[ascii input="ans1" answer="ans2"]][[/ascii]]
 <p>[[input:ans2]] [[validation:ans2]]</p>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
@@ -92,8 +93,8 @@ ta2:4*sqrt(2*x^2+1)+1;
       <forbidfloat>1</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
-      <mustverify>1</mustverify>
-      <showvalidation>1</showvalidation>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
       <options></options>
     </input>
     <input>

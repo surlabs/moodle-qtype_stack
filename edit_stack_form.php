@@ -761,7 +761,7 @@ class qtype_stack_edit_form extends question_edit_form {
             $inputname . 'type',
             'in',
             ['radio', 'checkbox', 'dropdown', 'boolean', 'textarea',
-             'ascii', 'equiv', 'string', 'json', 'notes', 'parsons', 'freetext',
+             'equiv', 'string', 'json', 'notes', 'parsons', 'freetext',
             ]
         );
 

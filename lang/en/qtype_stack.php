@@ -189,7 +189,6 @@ $string['inputtype'] = 'Input type';
 $string['inputtype_help'] = 'This determines the type of the input element, e.g. form field, true/false, text area.';
 $string['inputtype_link'] = '%%WWWROOT%%/question/type/stack/doc/doc.php/Authoring/Inputs.md';
 $string['inputtypealgebraic'] = 'Algebraic input';
-$string['inputtypeascii'] = 'ASCII input';
 $string['inputtypeboolean'] = 'True/False';
 $string['inputtypedropdown'] = 'Drop down list';
 $string['inputtypecheckbox'] = 'Checkbox';
