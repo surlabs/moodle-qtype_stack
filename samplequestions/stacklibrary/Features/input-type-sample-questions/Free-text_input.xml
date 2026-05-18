@@ -85,7 +85,7 @@ The teacher's answer contains newline white space, ASCIImath, LaTeX, unicode etc
       <checkanswertype>0</checkanswertype>
       <mustverify>1</mustverify>
       <showvalidation>1</showvalidation>
-      <options>manualgraded:true</options>
+      <options>monospace:true</options>
     </input>
     <prt>
       <name>prt1</name>
