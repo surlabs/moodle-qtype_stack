@@ -404,8 +404,8 @@ define([
                 response['input-readonly'] = input.hasAttribute('disabled');
             } else if (input.nodeName.toLowerCase() === 'textarea') {
                 response.value = input.value;
-                if (input.dataset.stackInputType === 'ascii') {
-                    response['input-type'] = 'ascii';
+                if (input.dataset.stackInputType === 'freetext') {
+                    response['input-type'] = 'freetext';
                 } else {
                     response['input-type'] = 'textarea';
                 }
