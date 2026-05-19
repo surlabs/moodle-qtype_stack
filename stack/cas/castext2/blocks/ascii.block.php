@@ -47,6 +47,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $input = $value;
             } else if ($key === 'answer') {
                 $answer = $value;
+            } else if ($key === 'hidden') {
+                $xpars[$key] = ($value === 'true');
             } else {
                 $xpars[$key] = $value;
             }
@@ -226,13 +228,14 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $key !== 'height' &&
                 $key !== 'aspect-ratio' &&
                 $key !== 'input' &&
-                $key !== 'answer'
+                $key !== 'answer' &&
+                $key !== 'hidden'
             ) {
                 $err[] = "Unknown parameter '$key' for Parson's block.";
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'answer'
+                        'width', 'height', 'aspect-ratio', 'input', 'answer', 'hidden'
                     ];
                     $err[] = stack_string('stackBlock_parsons_param', [
                         'param' => implode(', ', $valids),
