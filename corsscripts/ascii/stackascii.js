@@ -1,6 +1,22 @@
-export default function init(inputIds) {
+export default function init(inputIds, filters) {
     const markdownContainerId = inputIds[0];
     const answerContainerId = inputIds[1];
+    const inputFilters = (filters) ? filters : 'latexwrap,boldfilter';
+
+    // mdItPluginTex.tex must come before markdownitrules.
+    const previewMarkdownConverter = window.markdownit({ html: true })
+        .use(window.markdownitSub)
+        .use(window.mdItPluginTex.tex, { render: (content) => content, delimiters: 'brackets' })
+        .use(window.asciimathBlock)
+        .use(window.markdownitrules, {
+            filters: inputFilters
+        }
+    );
+
+    function convertMarkdown(markdown) {
+        const html = previewMarkdownConverter.render(markdown);
+        document.getElementById('asciiContainerRow').innerHTML = html;
+    }
 
     function renderMath() {
         const raw = document.getElementById(markdownContainerId).value.trim();
@@ -10,7 +26,7 @@ export default function init(inputIds) {
             return;
         }
 
-        convertMarkdown(raw);
+        convertMarkdown(raw, filters);
 
         // Tell MathJax to typeset only this element
         if (typeof MathJax.typesetPromise === 'function') {
@@ -43,16 +59,4 @@ export default function init(inputIds) {
         debounceTimer = setTimeout(renderMath, 100); // debounce 100ms
     });
     renderMath();
-}
-
-// mdItPluginTex.tex must come before markdownitrules.
-const previewMarkdownConverter = window.markdownit({ html: true })
-    .use(window.markdownitSub)
-    .use(window.mdItPluginTex.tex, { render: (content) => content, delimiters: 'brackets' })
-    .use(window.asciimathBlock)
-    .use(window.markdownitrules);
-
-function convertMarkdown(markdown) {
-    const html = previewMarkdownConverter.render(markdown);
-    document.getElementById('asciiContainerRow').innerHTML = html;
 }
