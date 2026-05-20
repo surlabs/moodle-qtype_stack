@@ -8,7 +8,17 @@
 // A backtick followed by non-whitespace characters is left untouched so that
 // code_inline still fires for `inline code`.
 
-window.asciimathBlock = function(mdit) {
+// UMD wrapper: works as a plain <script> (sets window.asciimathBlock) and as
+// an esbuild-bundled ES module import (exports the function as default).
+(function(global, factory) {
+    if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        global.asciimathBlock = factory();
+    }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function() {
+
+function asciimathBlock(mdit) {
     "use strict";
 
     function asciimathBlockRule(state, startLine, endLine, silent) {
@@ -86,4 +96,8 @@ window.asciimathBlock = function(mdit) {
 
     mdit.block.ruler.before('paragraph', 'asciimath_block', asciimathBlockRule,
         { alt: ['paragraph', 'reference', 'blockquote', 'list'] });
-};
+}
+
+return asciimathBlock;
+
+}); // end UMD factory

@@ -74,29 +74,11 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             new MP_String('script'),
             new MP_String(json_encode(['type' => 'text/javascript', 'src' => $mathjax])),
         ]);
+        // ASCIIMathTeXImg must load as a plain script (not bundled) because it uses
+        // undeclared variables that are incompatible with ESM strict mode.
         $r->items[] = new MP_List([
             new MP_String('script'),
-            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/ASCIIMathTeXImg.js'])),
-        ]);
-        $r->items[] = new MP_List([
-            new MP_String('script'),
-            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownit.js'])),
-        ]);
-        $r->items[] = new MP_List([
-            new MP_String('script'),
-            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitrules.js'])),
-        ]);
-        $r->items[] = new MP_List([
-            new MP_String('script'),
-            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/tex.js'])),
-        ]);
-        $r->items[] = new MP_List([
-            new MP_String('script'),
-            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/asciimathblock.js'])),
-        ]);
-        $r->items[] = new MP_List([
-            new MP_String('script'),
-            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/sub.js'])),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/ASCIIMathTeXImg.min.js'])),
         ]);
         $r->items[] = new MP_List([
             new MP_String('style'),
@@ -115,7 +97,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         }
         $r->items[] = new MP_String('<script type="module">');
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
-        $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.js') . "';\n");
+        $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.bundle.js') . "';\n");
 
         $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),stack_js.request_access_to_input("' . $answer . '")])';
         $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "');});";
