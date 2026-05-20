@@ -28,20 +28,20 @@
 y0:5;
 
 ta1:"Let
-```
+`
 u=x^2+1 => (du)/(dx) = 4x
-```
+`
 Hence
-```
+`
 f(x) = int (8x)/sqrt(2x^2+1) dx
      = int 2/sqrt(u) du.
      = 4sqrt(u)+c
      = 4sqrt(2x^2+1)+c
-```
+`
 Using the given values `5 = 4sqrt(1)+c => c=1`, we have
-```
+`
 f(x) = 4sqrt(2x^2+1)+1.
-```";
+`";
 ta2:4*sqrt(2*x^2+1)+1;
 
 

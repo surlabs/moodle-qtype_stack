@@ -92,6 +92,10 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         ]);
         $r->items[] = new MP_List([
             new MP_String('script'),
+            new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/asciimathblock.js'])),
+        ]);
+        $r->items[] = new MP_List([
+            new MP_String('script'),
             new MP_String(json_encode(['type' => 'text/javascript', 'src' => 'cors://ascii/markdownitextensions/sub.js'])),
         ]);
         $r->items[] = new MP_List([

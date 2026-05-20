@@ -49,6 +49,7 @@ export default function init(inputIds) {
 const previewMarkdownConverter = window.markdownit({ html: true })
     .use(window.markdownitSub)
     .use(window.mdItPluginTex.tex, { render: (content) => content, delimiters: 'brackets' })
+    .use(window.asciimathBlock)
     .use(window.markdownitrules);
 
 function convertMarkdown(markdown) {

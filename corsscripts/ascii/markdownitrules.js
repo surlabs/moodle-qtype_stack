@@ -11,6 +11,16 @@ window.markdownitrules = function(mdit) {
 		return latexwrap(window.AMparseMath(code, true));
 	};
 
+	mdit.renderer.rules.asciimath_block = function(tokens, idx) {
+		var code = tokens[idx].content;
+		// Split, trim, remove empty lines, parse, wrap, and join.
+		const processed = code.split(/\r?\n/)                 // Split by newlines.
+							.map(line => line.trim())         // Trim whitespace.
+							.filter(line => line !== "")      // Remove empty lines.
+							.map(line => latexwrap(window.AMparseMath(line, true)));   // Apply parse and wrap.
+		return `\\[\\begin{align*}\n` + processed.join('\n') + `\n\\end{align*}\\]\n`;
+	};
+
 	mdit.renderer.rules.math_inline = function(tokens, idx) {
 		const code = tokens[idx].content;
 		const latexwrap = (s) => `\\(${s}\\)`;
