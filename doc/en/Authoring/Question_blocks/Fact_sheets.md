@@ -596,4 +596,14 @@ d}x}\left\{\int g(x)\mathrm{d}x\right\}\mathrm{d}x.\]
 or alternatively: \[\int f(x)g(x)\,\mathrm{d}x=f(x)\,\int
 g(x)\mathrm{d}x -\int {\mathrm{d}f\over \mathrm{d}x}\left\{\int g(x)\mathrm{d}x\right\}\mathrm{d}x.\]
 
+### Free-text inputs
 
+<code>[[facts:free_text]]</code>
+
+This input allows you to type in free text, e.g. your complete working or mathematical proof.
+<ol>
+<li>You can type markdown text.</li>
+<li>You can type AsciiMath between backticks for mathematics: <code>`...`</code></li>
+<li>You can include LaTeX between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.</li>
+</ol>
+More specific documentation on markdown, AsciiMath and LaTeX is available online.

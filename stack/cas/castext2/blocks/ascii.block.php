@@ -62,6 +62,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $height = $existsuserheight ? $xpars['height'] : "400px";
         $xpars['width'] = $width;
         $xpars['height'] = $height;
+        $xpars['filters'] = '';
 
         // Set a title.
         $xpars['title'] = 'STACK ASCII ///ASCII_COUNT///';
@@ -218,13 +219,14 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $key !== 'hidden' &&
                 $key !== 'filters'
             ) {
-                $err[] = "Unknown parameter '$key' for Parson's block.";
+                $err[] = "Unknown parameter '$key' for ASCII block.";
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
                         'width', 'height', 'aspect-ratio', 'input', 'answer', 'hidden', 'filters'
                     ];
                     $err[] = stack_string('stackBlock_parsons_param', [
+                        'block' => 'ASCII',
                         'param' => implode(', ', $valids),
                     ]);
                 }

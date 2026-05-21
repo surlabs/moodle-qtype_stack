@@ -11,6 +11,7 @@
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1" answer="ans2"]][[/ascii]]
+<p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>]]></text>
     </questiontext>

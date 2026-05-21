@@ -605,6 +605,7 @@ class stack_cas_castext2_parsons extends stack_cas_castext2_block {
                         'item-width', 'log', 'style',
                     ];
                     $err[] = stack_string('stackBlock_parsons_param', [
+                        'block' => "Parson's",
                         'param' => implode(', ', $valids),
                     ]);
                 }

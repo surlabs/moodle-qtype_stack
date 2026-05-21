@@ -480,6 +480,11 @@
                 "description":"Information on using question blocks in STACK."
                 },
                 {
+                "file":"ASCII.md",
+                "title":"ASCII Block - STACK Documentation",
+                "description":"Information on using the ASCII block in STACK."
+                },
+                {
                 "file":"Conditional_blocks.md",
                 "title":"Conditional Blocks - STACK Documentation",
                 "description":"Information on using conditional question blocks in STACK."
@@ -1033,6 +1038,11 @@
         "description":"Answers to frequently asked questions aimed at students using STACK."
         },
         {
+        "file":"Free_text.md",
+        "title":"Students' Free text input - STACK Documentation",
+        "description":"How to use free-text input for proof in STACK."
+        },
+        {
         "file":"Answer_input.md",
         "title":"Answer Input for Students- STACK Documentation",
         "description":"Information about answer input for students using STACK."
@@ -1309,6 +1319,15 @@
             }
             ]
         },
+        {
+        "Free_text_input":[
+             {
+             "file":"index.md",
+             "title":"Free text input - STACK Documentation",
+             "description":"How to use free-text input for proof in STACK."
+             }
+             ]
+         },
         {
        "GeoGebra":[
             {
