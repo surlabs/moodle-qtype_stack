@@ -158,8 +158,8 @@ final class input_textarea_test extends qtype_stack_testcase {
                 'stack1__ans1',
                 false,
                 null
-                )
-            );
+            )
+        );
     }
 
     public function test_maxima_to_response_array_1(): void {

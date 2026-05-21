@@ -90,8 +90,8 @@ final class input_freetext_test extends qtype_stack_testcase {
                 'stack1__ans1',
                 false,
                 null
-                )
-            );
+            )
+        );
     }
 
     public function test_validate_string_input(): void {

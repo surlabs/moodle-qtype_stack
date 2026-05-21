@@ -100,7 +100,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
         $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.bundle.js') . "';\n");
 
-        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),stack_js.request_access_to_input("' . $answer . '")])';
+        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),' .
+            'stack_js.request_access_to_input("' . $answer . '")])';
         $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "');});";
 
         $r->items[] = new MP_String($linkcode);
@@ -223,7 +224,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'answer', 'hidden', 'filters'
+                        'width', 'height', 'aspect-ratio', 'input', 'answer', 'hidden', 'filters',
                     ];
                     $err[] = stack_string('stackBlock_parsons_param', [
                         'block' => 'ASCII',
