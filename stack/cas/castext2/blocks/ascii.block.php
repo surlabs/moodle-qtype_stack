@@ -35,6 +35,7 @@ stack_cas_castext2_iframe::register_counter('///ASCII_COUNT///');
 
 // phpcs:ignore moodle.Commenting.MissingDocblock.Class
 class stack_cas_castext2_ascii extends stack_cas_castext2_block {
+    public $answers = null;
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function compile($format, $options): ?MP_Node {
         $r = new MP_List([new MP_String('iframe')]);
@@ -46,7 +47,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             if ($key === 'input') {
                 $input = $value;
             } else if ($key === 'answer') {
-                $answer = $value;
+                $xpars[$key] = $value;
+                $answer = $this->get_answer_details();
             } else if ($key === 'hidden') {
                 $xpars[$key] = ($value === 'true');
             } else {
@@ -99,8 +101,11 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
         $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.bundle.js') . "';\n");
 
-        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),stack_js.request_access_to_input("' . $answer . '")])';
-        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "');});";
+        $answercalls = implode(',', array_map(function($item) {
+            return 'stack_js.request_access_to_input("' . $item[0] . '")';
+        }, $answer));
+        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),' . $answercalls . '])';
+        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "','" . $xpars['answer'] . "');});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
@@ -176,17 +181,17 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         if (!$widthend) {
             $valid    = false;
-            $err[] = stack_string('stackBlock_parsons_width');
+            $err[] = stack_string('stackBlock_ascii_width');
         } else if (!preg_match('/^[0-9]*[\.]?[0-9]+$/', $widthtrim)) {
             $valid    = false;
-            $err[] = stack_string('stackBlock_parsons_width_num');
+            $err[] = stack_string('stackBlock_ascii_width_num');
         }
         if (!$heightend) {
             $valid    = false;
-            $err[] = stack_string('stackBlock_parsons_height');
+            $err[] = stack_string('stackBlock_ascii_height');
         } else if (!preg_match('/^[0-9]*[\.]?[0-9]+$/', $heighttrim)) {
             $valid    = false;
-            $err[] = stack_string('stackBlock_parsons_height_num');
+            $err[] = stack_string('stackBlock_ascii_height_num');
         }
 
         if (
@@ -195,7 +200,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             array_key_exists('aspect-ratio', $this->params)
         ) {
             $valid    = false;
-            $err[] = stack_string('stackBlock_parsons_overdefined_dimension');
+            $err[] = stack_string('stackBlock_ascii_overdefined_dimension');
         }
         if (
             !(array_key_exists('width', $this->params) ||
@@ -203,7 +208,17 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             array_key_exists('aspect-ratio', $this->params)
         ) {
             $valid    = false;
-            $err[] = stack_string('stackBlock_parsons_underdefined_dimension');
+            $err[] = stack_string('stackBlock_ascii_underdefined_dimension');
+        }
+
+        if (!array_key_exists('input', $this->params)) {
+            $valid    = false;
+            $err[] = stack_string('stackBlock_ascii_input_required');
+        }
+
+        if (array_key_exists('answer', $this->params) && !$this->get_answer_details()) {
+            $valid = false;
+            $err[] = stack_string('stackBlock_ascii_answer_format');
         }
 
         // Check that only valid parameters are passed to block header.
@@ -224,7 +239,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                     $valids = [
                         'width', 'height', 'aspect-ratio', 'input', 'answer', 'hidden', 'filters'
                     ];
-                    $err[] = stack_string('stackBlock_parsons_param', [
+                    $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),
                     ]);
                 }
@@ -247,5 +262,34 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
      */
     public function is_interactive(): bool {
         return true;
+    }
+    public function get_answer_details() {
+        if (!isset($this->answers)) {
+            // Check in format [ans1,extractor,filter],[ans2,extractor,filter],...
+            $output = [];
+            $answervalue = trim($this->params['answer']);
+            $entries = preg_split('/\s*\]\s*,\s*\[\s*/', $answervalue);
+            $formatvalid = count($entries) >= 1
+                && substr($entries[0], 0, 1) === '['
+                && substr($entries[count($entries) - 1], -1) === ']';
+            if ($formatvalid) {
+                $entries[0] = substr($entries[0], 1);
+                $entries[count($entries) - 1] = substr($entries[count($entries) - 1], 0, -1);
+                foreach ($entries as $entry) {
+                    $parts = explode(',', $entry, 3);
+                    if (trim($parts[0]) === '') {
+                        $formatvalid = false;
+                        break;
+                    }
+                    $output[] = $parts;
+                }
+            }
+            if ($formatvalid) {
+                $this->answers = $output;
+            } else {
+                $this->answers = false;
+            }
+        }
+        return $this->answers;
     }
 }

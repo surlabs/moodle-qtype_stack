@@ -1038,6 +1038,16 @@ $string['Illegal_illegal_power_of_ten_in_units']  = 'The value may not contain n
 $string['Illegal_input_form_units']               = 'This input expects a numerical value followed or multiplied by an expression defining an unit, e.g. <code>1.23*W/m^2</code>. Note that the unit required here may be something else.';
 $string['Illegal_x10'] = 'Your answer appears to use the character "x" as a multiplication sign.  Please use <code>*</code> for multiplication.';
 
+$string['stackBlock_ascii_width']       = 'The width of the ASCII block display area must use a known CSS-length unit.';
+$string['stackBlock_ascii_height']      = 'The height of the ASCII block display must use a known CSS-length unit.';
+$string['stackBlock_ascii_width_num']   = 'The numeric portion of the width of the ASCII block display must be a raw number and must not contain any extra chars.';
+$string['stackBlock_ascii_height_num']  = 'The numeric portion of the height of the ASCII block display must be a raw number and must not contain any extra chars.';
+$string['stackBlock_ascii_length_num']  = 'The numeric value of length must be a positive integer and must not contain any extra chars or numerical types.';
+$string['stackBlock_ascii_underdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one must define either width or height of the lists.';
+$string['stackBlock_ascii_overdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one should only define width or height not both.';
+$string['stackBlock_ascii_input_required'] = 'You must define the input for the ASCII block to use.';
+$string['stackBlock_ascii_answer_format'] = 'The answer attribute of the ASCII block must be in the format \"[ans1,extractor,filter],[ans2,extractor,filter],...\".';
+
 $string['stackBlock_jsxgraph_width']       = 'The width of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_height']      = 'The height of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_width_num']   = 'The numeric portion of the width of a JSXGraph must be a raw number and must not contain any extra chars.';
