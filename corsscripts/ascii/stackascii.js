@@ -15,8 +15,9 @@ import markdownitrules from './markdownitrules.js';
 import * as mdItPluginTex from './markdownitextensions/tex.js';
 
 import finalfunction from './extractors/finalfunction.js';
+import lastanswer from './extractors/lastanswer.js';
 
-const extractors = { finalfunction };
+const extractors = { finalfunction, lastanswer };
 
 // Parse answers string in format [ans1,extractor,filter],[ans2,extractor,filter],...
 // Returns an array of string entries (one per answer), or false if the format is invalid.
@@ -35,7 +36,13 @@ function getAnswerDetails(answers) {
     }
     entries[0] = entries[0].slice(1);
     entries[entries.length - 1] = entries[entries.length - 1].slice(0, -1);
-    const parsed = entries.map(entry => entry.split(',').map(p => p.trim()));
+    const parsed = entries.map(entry => {
+        const parts = entry.split(',').map(p => p.trim());
+        while (parts.length < 3) {
+            parts.push('');
+        }
+        return parts;
+    });
     for (const parts of parsed) {
         if (parts[0] === '') {
             return false;
@@ -81,7 +88,7 @@ export default function init(inputIds, filters, answers) {
 
         if (parsedAnswers) {
             parsedAnswers.forEach((entry, i) => {
-                const extractor = extractors[entry[1]];
+                const extractor = (extractors[entry[1]]) ? extractors[entry[1]] : extractors['lastanswer'];
                 const answerEl = document.getElementById(inputIds[1 + i]);
                 if (extractor && answerEl) {
                     extractor(raw, answerEl);
