@@ -41,6 +41,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         // Define iframe params.
         $xpars = [];
+        $answer = '';
 
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
@@ -100,9 +101,12 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
         $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.bundle.js') . "';\n");
 
-        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),' .
-            'stack_js.request_access_to_input("' . $answer . '")])';
-        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "');});";
+        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true)';
+        // Linking to an answer is not compulsory.
+        if ($answer != '') {
+            $linkcode .= ',stack_js.request_access_to_input("' . $answer . '")';
+        }
+        $linkcode .= "]).then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "');});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
