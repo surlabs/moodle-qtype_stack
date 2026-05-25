@@ -18,27 +18,51 @@ export default function markdownitrules(mdit, options) {
         .split(',')
         .map(s => s.trim())
         .filter(Boolean);
+    const collector = options.collector || null;
+
+    // Reset the collector at the start of each render pass.
+    mdit.core.ruler.push('reset_collector', () => {
+        if (collector) {
+            collector.blocks = [];
+        }
+    });
 
     mdit.renderer.rules.code_inline = function(tokens, idx) {
         const code = tokens[idx].content;
         const inlineWrap = (s) => `\\(${s}\\)`;
-        return inlineWrap(window.AMparseMath(code, true));
+        const rendered = inlineWrap(window.AMparseMath(code, true));
+        if (collector) {
+            collector.blocks.push({ type: 'code_inline', raw: code, rendered });
+        }
+        return rendered;
     };
 
     mdit.renderer.rules.asciimath_block = function(tokens, idx) {
         const code = tokens[idx].content;
-        return applyFilters(code, true);
+        const rendered = applyFilters(code, true);
+        if (collector) {
+            collector.blocks.push({ type: 'asciimath_block', raw: code, rendered });
+        }
+        return rendered;
     };
 
     mdit.renderer.rules.math_inline = function(tokens, idx) {
         const code = tokens[idx].content;
         const inlineWrap = (s) => `\\(${s}\\)`;
-        return inlineWrap(code);
+        const rendered = inlineWrap(code);
+        if (collector) {
+            collector.blocks.push({ type: 'math_inline', raw: code, rendered });
+        }
+        return rendered;
     };
 
     mdit.renderer.rules.math_block = function(tokens, idx) {
         const code = tokens[idx].content;
-        return applyFilters(code, false);
+        const rendered = applyFilters(code, false);
+        if (collector) {
+            collector.blocks.push({ type: 'math_block', raw: code, rendered });
+        }
+        return rendered;
     };
 
     function splitBlock(code) {

@@ -1,71 +1,39 @@
 // Extractor: lastanswer
-// Returns the last `code_inline` content or the last non-empty line of the last
-// asciimath_block, whichever appears nearer the end of the input.
-export default function lastanswer(raw, answerEl) {
+// Returns the raw content of the last code_inline, or the last non-empty line
+// of the last asciimath_block, in document order.
+// Falls back to the final non-empty line of raw when no blocks are available.
+export default function lastanswer(raw, answerEl, blocks) {
+    if (blocks && blocks.length > 0) {
+        for (let i = blocks.length - 1; i >= 0; i--) {
+            const block = blocks[i];
+            if (block.type === 'code_inline') {
+                answerEl.value = block.raw;
+                answerEl.dispatchEvent(new Event('change'));
+                return;
+            }
+            if (block.type === 'asciimath_block') {
+                const lines = block.raw.split(/\r?\n/);
+                for (let j = lines.length - 1; j >= 0; j--) {
+                    const trimmed = lines[j].trim();
+                    if (trimmed !== '') {
+                        answerEl.value = trimmed;
+                        answerEl.dispatchEvent(new Event('change'));
+                        return;
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    // Fallback: send the final non-empty line when blocks are unavailable.
     const lines = raw.split(/\r?\n/);
-
-    let bestValue = null;
-    let bestLine  = -1;
-    let bestChar  = -1; // char end-index within bestLine; -1 for block-sourced values
-
-    // Pass 1: identify asciimath blocks.
-    // Opening marker: a line whose only non-whitespace content is a single ` (not ``).
-    // Closing marker: first subsequent non-blank line that starts with `.
-    // Collect which lines to skip for the inline-code pass, and track the
-    // last non-empty content line of each block.
-    const skipLines = new Set();
-    let i = 0;
-    while (i < lines.length) {
-        if (/^`[ \t]*$/.test(lines[i])) {
-            skipLines.add(i);
-            i++;
-            let lastNonEmptyLine = -1;
-            let lastNonEmptyText = '';
-            while (i < lines.length) {
-                const trimmed = lines[i].trim();
-                if (trimmed !== '' && trimmed[0] === '`') {
-                    // Closing marker.
-                    skipLines.add(i);
-                    i++;
-                    break;
-                }
-                skipLines.add(i);
-                if (trimmed !== '') {
-                    lastNonEmptyLine = i;
-                    lastNonEmptyText = trimmed;
-                }
-                i++;
-            }
-            if (lastNonEmptyLine > bestLine) {
-                bestLine  = lastNonEmptyLine;
-                bestChar  = -1;
-                bestValue = lastNonEmptyText;
-            }
-        } else {
-            i++;
+    for (let i = lines.length - 1; i >= 0; i--) {
+        const trimmed = lines[i].trim();
+        if (trimmed !== '') {
+            answerEl.value = trimmed;
+            answerEl.dispatchEvent(new Event('change'));
+            return;
         }
-    }
-
-    // Pass 2: find inline code spans on non-block lines.
-    // A span is `content` where content contains no backticks.
-    for (let li = 0; li < lines.length; li++) {
-        if (skipLines.has(li)) {
-            continue;
-        }
-        const re = /`([^`\r\n]+)`/g;
-        let match;
-        while ((match = re.exec(lines[li])) !== null) {
-            const endChar = match.index + match[0].length;
-            if (li > bestLine || (li === bestLine && endChar > bestChar)) {
-                bestLine  = li;
-                bestChar  = endChar;
-                bestValue = match[1];
-            }
-        }
-    }
-
-    if (bestValue !== null) {
-        answerEl.value = bestValue;
-        answerEl.dispatchEvent(new Event('change'));
     }
 }

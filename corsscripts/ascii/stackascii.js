@@ -26,12 +26,14 @@ export default function init(inputIds, filters, operatorsjson) {
     const extractors = operations.filter(operator => operator.operation === 'extractor');
     const inputFilters = filters ? filters : 'latexwrap,boldfilter';
 
+    const blockCollector = { blocks: [] };
+
     // mdItPluginTex.tex must come before markdownitrules.
     const previewMarkdownConverter = markdownit({ html: true })
         .use(markdownitSub)
         .use(mdItPluginTex.tex, { render: (content) => content, delimiters: 'brackets' })
         .use(asciimathBlock)
-        .use(markdownitrules, { filters: inputFilters });
+        .use(markdownitrules, { filters: inputFilters, collector: blockCollector });
 
     function convertMarkdown(markdown) {
         const html = previewMarkdownConverter.render(markdown);
@@ -60,7 +62,7 @@ export default function init(inputIds, filters, operatorsjson) {
                 const extractor = (extractorlib[entry.type]) ? extractorlib[entry.type] : extractorlib['lastanswer'];
                 const answerEl = document.getElementById(inputIds[1 + i]);
                 if (extractor && answerEl) {
-                    extractor(raw, answerEl);
+                    extractor(raw, answerEl, blockCollector.blocks);
                 }
             });
         }
