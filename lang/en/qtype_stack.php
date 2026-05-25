@@ -1076,7 +1076,7 @@ $string['stackBlock_parsons_overdefined_dimension'] = 'When defining aspect-rati
 $string['stackBlock_parsons_unknown_named_version'] = 'The Parson\'s block only supports versions named: {$a->version}.';
 $string['stackBlock_parsons_unknown_mathjax_version'] = 'The Parson\'s block only supports MathJax versions {$a->mjversion}, please check your site administration settings for the mathjax version.';
 $string['stackBlock_parsons_ref']         = 'The Parson\'s block only supports referencing inputs present in the same CASText section \'{$a->var}\' does not exist here.';
-$string['stackBlock_parsons_param']       = 'The Parson\'s block supports only these parameters in this context: \'{$a->param}\'.';
+$string['stackBlock_parsons_param']       = 'The {$a->block} block supports only these parameters in this context: \'{$a->param}\'.';
 $string['stackBlock_parsons_contents']    = 'The contents of a Parson\'s block must be a either a JSON of the form {#stackjson_stringify(steps)#}, where \'steps\' is the two-dimensional Maxima array containing key, value pairs of items, or of the form {\'steps\' : {#stackjson_stringify(steps)#}, \'options\' : {JSON containing Sortable options}, \'header\' : [List of headers], \'available_header\' : \'string containing header for the available list\', \'index\' : [List containing the index]}, where the \'options\', \'header\', \'available_header\', and \'index\' keys are optional. Alternatively, the contents of the Parsons block may contain raw JSON equivalents. If using raw JSON inside the Parsons bock, numeric keys are not supported due to issues with re-ordering; please use descriptive tags. Note that all steps must be strings. See https://docs.stack-assessment.org/en/Authoring/Parsons/ for details.';
 $string['stackBlock_incorrect_header_length'] = 'The list of headers should have the same length as the number of columns passed to the block header.';
 $string['stackBlock_incorrect_available_header_type'] = 'The header for the available list should be passed as a string or a list of length one.';
@@ -1890,6 +1890,15 @@ $string['calc_int_methods_parts_indefinite_fact'] = '\[
 \int u{\mathrm{d}v\over \mathrm{d}x}\mathrm{d}x=uv- \int{\mathrm{d}u\over \mathrm{d}x}v\,\mathrm{d}x\]
 or alternatively: \[\int f(x)g(x)\,\mathrm{d}x=f(x)\,\int
 g(x)\mathrm{d}x -\int {\mathrm{d}f\over \mathrm{d}x}\left\{\int g(x)\mathrm{d}x\right\}\mathrm{d}x.\]';
+
+$string['free_text_name'] = 'Free-text inputs';
+$string['free_text_fact'] = 'This input allows you to type in free text, e.g. your complete working or mathematical proof.
+<ol>
+<li>You can type markdown text.</li>
+<li>You can type AsciiMath between backticks for mathematics: <code>`...`</code></li>
+<li>You can include LaTeX between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.</li>
+</ol>
+More specific documentation on markdown, AsciiMath and LaTeX is available online.';
 
 $string['Illegal_singleton_power'] = 'This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
 $string['Illegal_singleton_floats'] = 'This input does not accept decimal numbers in the given form. This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';

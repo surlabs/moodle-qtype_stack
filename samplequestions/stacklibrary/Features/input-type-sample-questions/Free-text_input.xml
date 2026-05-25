@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 13  -->
+<!-- question: 851  -->
   <question type="stack">
     <name>
       <text>Free-text</text>
     </name>
     <questiontext format="moodle_auto_format">
       <text><![CDATA[<p>Prove that \(\sum_{k=1}^n 2k − 1 = n^2\)</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>]]></text>
+<p>[[input:ans1]] [[validation:ans1]]</p>
+[[ascii input="ans1" filters="latexwrap"]][[/ascii]]]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
       <text></text>
     </generalfeedback>
-    <defaultgrade>1</defaultgrade>
+    <defaultgrade>3</defaultgrade>
     <penalty>0.1</penalty>
     <hidden>0</hidden>
     <idnumber></idnumber>
@@ -27,12 +28,11 @@ Let P(n) be the statement `sum_(k=1)^n 2k − 1 = n²` ∀ n ∈ ℕ.
 Since `sum_(k=1)^1 =1 =1^2`, we see that \\(P(1)\\) is true.
 
 Assume that \\(P(n)\\) is true. Then  
-````
+`
 sum_(k=1)^(n+1) (2k−1) = sum_(k=1)^(n) (2k−1)+ (2(n+1)−1)
                        = n² + 2n + 1
                        = (n+1)².
-````
-
+`
 Since `P(1)` is true and `P(n+1)` follows from `P(n)`, we conclude
 that `P(n)` is true `forall n in NN` by the principle of mathematical induction.";]]></text>
     </questionvariables>
@@ -83,8 +83,8 @@ The teacher's answer contains newline white space, ASCIImath, LaTeX, unicode etc
       <forbidfloat>1</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
-      <mustverify>1</mustverify>
-      <showvalidation>1</showvalidation>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
       <options>monospace:true</options>
     </input>
     <prt>
@@ -109,7 +109,7 @@ The teacher's answer contains newline white space, ASCIImath, LaTeX, unicode etc
         <truenextnode>-1</truenextnode>
         <trueanswernote>prt1-1-T</trueanswernote>
         <truefeedback format="html">
-          <text><![CDATA[<pre>{#ans1#}</pre>]]></text>
+          <text></text>
         </truefeedback>
         <falsescoremode>=</falsescoremode>
         <falsescore>0</falsescore>
@@ -117,7 +117,7 @@ The teacher's answer contains newline white space, ASCIImath, LaTeX, unicode etc
         <falsenextnode>-1</falsenextnode>
         <falseanswernote>prt1-1-F</falseanswernote>
         <falsefeedback format="html">
-          <text><![CDATA[<pre>{#ans1#}</pre>]]></text>
+          <text></text>
         </falsefeedback>
       </node>
     </prt>

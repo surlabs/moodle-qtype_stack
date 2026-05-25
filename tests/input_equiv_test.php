@@ -160,8 +160,8 @@ final class input_equiv_test extends qtype_stack_testcase {
                 'stack1__ans1',
                 false,
                 '[x^2=4,x=2 or x=-2]'
-                )
-            );
+            )
+        );
     }
 
     public function test_validate_student_response_1(): void {

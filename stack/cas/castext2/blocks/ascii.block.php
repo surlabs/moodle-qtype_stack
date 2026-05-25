@@ -42,6 +42,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Define iframe params.
         $xpars = [];
         $inputs = [];
+        $xpars['filters'] = '';
+
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
                 $inputs[] = $value;

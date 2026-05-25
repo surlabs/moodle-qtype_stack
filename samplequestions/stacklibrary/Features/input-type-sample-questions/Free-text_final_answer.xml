@@ -13,7 +13,9 @@
 [[ascii input="ans1" filters="latexwrap"]]
 [[extractor targetinput="ans2" type="finalfunction"/]]
 [[/ascii]]
-<p>[[input:ans2]] [[validation:ans2]]</p>]]></text>
+<p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
+<p style="display:none">[[input:ans2]]</p>
+<p>[[validation:ans2]]</p>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
       <text></text>
@@ -42,7 +44,7 @@ f(x) = int (8x)/sqrt(2x^2+1) dx
 `
 Using the given values `5 = 4sqrt(1)+c => c=1`, we have
 `
-f(x) = 4sqrt(2x^2+1)+1.
+f(x) = 4sqrt(2x^2+1)+1
 `";
 ta2:4*sqrt(2*x^2+1)+1;
 
@@ -105,7 +107,7 @@ ta2:4*sqrt(2*x^2+1)+1;
       <tans>f(x)=ta2</tans>
       <boxsize>15</boxsize>
       <strictsyntax>1</strictsyntax>
-      <insertstars>0</insertstars>
+      <insertstars>5</insertstars>
       <syntaxhint></syntaxhint>
       <syntaxattribute>0</syntaxattribute>
       <forbidwords></forbidwords>

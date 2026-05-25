@@ -22,13 +22,24 @@ Notes
 
 1.  All the notes for "string" inputs above still apply.
 2.  The freetext input takes the default option value is `manualgraded:true`.  If you specify `manualgraded:true` then the _whole STACK question_ will require manual grading!
-3.  Part of this input can be linked to an automatically graded STACK input, e.g. an algebraic input (final answer), textarea (last lines) or units input.
+3.  Part of this input can be [linked to an automatically graded STACK input](../../Specialist_tools/Free_text_input/index.md), e.g. an algebraic input (final answer), textarea (last lines) or units input.
 
 #### JSON input ####
 
 The JSXGraph, GeoGebra and Parsons blocks return a JSON object.  When linking to a STACK input we recommend using the dedicated JSON/Geogebra/Parsons inputs rather than the string input.  String inputs will continue to work (maintaining legacy JSXGraph questions), but using the JSON input for inputs linked to JSXGraph logically indicates the expected type of string.
 
 This input gives the _teacher_ a JSON pretty print view of the JSON object for debugging.
+
+JSON input can be used in PRTs, but note these are always strings.  STACK provides limited faciliites to process JSON within Maxima, to extract parts of the JSON.
+
+For example, if you have
+
+    s1: "{\"matches\":[ \"Apple\", \"Bannan\", \"Cherry\"]}";
+    l1: stackmap_get(stackjson_parse(s1), "matches");
+
+Then the value of `l1` will be the Maxima list `["Apple", "Bannan", "Cherry"]`.
+
+By design it is impossible to parse the value of these strings as Maxima expressions.  If you want Maxima expressions from students then these must be entered via a STACK input (such as algebraic).
 
 ### Parsons input ###
 
