@@ -15,9 +15,11 @@ import markdownitrules from './markdownitrules.js';
 import * as mdItPluginTex from './markdownitextensions/tex.js';
 
 import finalfunction from './extractors/finalfunction.js';
-import lastanswer from './extractors/lastanswer.js';
+import lastexpr from './extractors/lastexpr.js';
+import lastblock from './extractors/lastblock.js';
+import regexmatch from './extractors/regexmatch.js';
 
-const extractorlib = { finalfunction, lastanswer };
+const extractorlib = { finalfunction, lastexpr, lastblock, regexmatch };
 
 export default function init(inputIds, filters, operatorsjson) {
     const markdownContainerId = inputIds[0];
@@ -59,10 +61,10 @@ export default function init(inputIds, filters, operatorsjson) {
 
         if (extractors) {
             extractors.forEach((entry, i) => {
-                const extractor = (extractorlib[entry.type]) ? extractorlib[entry.type] : extractorlib['lastanswer'];
+                const extractor = (extractorlib[entry.type]) ? extractorlib[entry.type] : extractorlib['lastexpr'];
                 const answerEl = document.getElementById(inputIds[1 + i]);
                 if (extractor && answerEl) {
-                    extractor(raw, answerEl, blockCollector.blocks);
+                    extractor(raw, answerEl, blockCollector.blocks, entry);
                 }
             });
         }

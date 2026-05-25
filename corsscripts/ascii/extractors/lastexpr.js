@@ -1,8 +1,8 @@
-// Extractor: lastanswer
+// Extractor: lastexpr
 // Returns the raw content of the last code_inline, or the last non-empty line
 // of the last asciimath_block, in document order.
 // Falls back to the final non-empty line of raw when no blocks are available.
-export default function lastanswer(raw, answerEl, blocks) {
+export default function lastexpr(raw, answerEl, blocks) {
     if (blocks && blocks.length > 0) {
         for (let i = blocks.length - 1; i >= 0; i--) {
             const block = blocks[i];

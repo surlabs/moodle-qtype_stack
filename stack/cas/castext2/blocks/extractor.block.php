@@ -63,21 +63,6 @@ class stack_cas_castext2_extractor extends stack_cas_castext2_block {
             $err[] = stack_string('stackBlock_extractor_targetinput_required');
         }
 
-        // Check that only valid parameters are passed to block header.
-        $valids = null;
-        foreach ($this->params as $key => $value) {
-            if ($key !== 'targetinput' && $key !== 'type') {
-                $err[] = stack_string('stackBlock_extractor_unknown_param', $key);
-                $valid = false;
-                if ($valids === null) {
-                    $valids = ['targetinput', 'type'];
-                    $err[] = stack_string('stackBlock_extractor_param', [
-                        'param' => implode(', ', $valids),
-                    ]);
-                }
-            }
-        }
-
         // Wrap the old string errors with the context details.
         foreach ($err as $er) {
             $errors[] = new $options['errclass']($er, $options['context'] . '/' . $this->position['start'] . '-' .
