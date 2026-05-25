@@ -56,13 +56,26 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         // Get the details of filter and extractor blocks.
         $operations = [];
+        $isfilter = false;
         foreach ($this->children as $child) {
             if (is_a($child, 'stack_cas_castext2_extractor')) {
                 $options = $child->params;
                 $options['operation'] = 'extractor';
                 $inputs[] = $options['targetinput'];
                 $operations[] = $options;
+            } else if (is_a($child, 'stack_cas_castext2_filter')) {
+                $options = $child->params;
+                $options['operation'] = 'filter';
+                $operations[] = $options;
+                $isfilter = true;
             }
+        }
+
+        if (!$isfilter) {
+            $defaultfilter = new StdClass();
+            $defaultfilter->operation = 'filter';
+            $defaultfilter->type = 'markdownit';
+            $defaultfilter->transforms = 'latexwrap,boldfilter';
         }
 
         // Set default width and height here.
@@ -115,7 +128,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
         }, $inputs, array_keys($inputs)));
         $linkcode = 'Promise.all([' . $answercalls . '])';
-        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['transforms'] . "'," . json_encode($operations) . ");});";
+        $linkcode .= ".then((inputIds) => {init(inputIds," . json_encode($operations) . ");});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");

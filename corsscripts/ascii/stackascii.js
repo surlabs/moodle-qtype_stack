@@ -22,11 +22,14 @@ import regexall from './extractors/regexall.js';
 
 const extractorlib = { finalfunction, lastexpr, lastblock, regexmatch, regexall };
 
-export default function init(inputIds, transforms, operations) {
+export default function init(inputIds, operations) {
     const markdownContainerId = inputIds[0];
     // inputIds[1..N] correspond to each parsed answer entry in order.
+    const alloperations = operations;
+    const filters = operations.filter(operator => operator.operation === 'filter');
     const extractors = operations.filter(operator => operator.operation === 'extractor');
-    const inputTransforms = transforms ? transforms : 'latexwrap,boldfilter';
+    const markdownitinfo = filters.find(operator => operator.type === 'markdownit');
+    const inputTransforms = markdownitinfo ? markdownitinfo.transforms : 'latexwrap,boldfilter';
 
     const blockCollector = { blocks: [] };
 

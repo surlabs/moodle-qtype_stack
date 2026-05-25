@@ -1050,9 +1050,12 @@ $string['stackBlock_ascii_answer_format'] = 'The answer attribute of the ASCII b
 $string['stackBlock_ascii_unknown_param'] = 'Unknown parameter \'{$a}\' for the ASCII block.';
 $string['stackBlock_ascii_param'] = 'Valid parameters are: {$a->param}.';
 
-$string['stackBlock_extractor_targetinput_required'] = 'You must define the targetinput for the extractor block to use.';
+$string['stackBlock_extractor_targetinput_required'] = 'You must define the targetinput for the extractor block to send the answer to.';
+$string['stackBlock_extractor_type_required'] = 'You must define the type of extractor you want to use.';
 $string['stackBlock_extractor_unknown_param'] = 'Unknown parameter \'{$a}\' for the extractor block.';
 $string['stackBlock_extractor_param'] = 'Valid parameters are: {$a->param}.';
+
+$string['stackBlock_filter_type_required'] = 'You must define the type of filter you want to use.';
 
 $string['stackBlock_jsxgraph_width']       = 'The width of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_height']      = 'The height of a JSXGraph must use a known CSS-length unit.';

@@ -11,6 +11,7 @@
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1" transforms="latexwrap"]]
+[[filter type="markdownit" transforms="latexwrap" /]]
 [[extractor targetinput="ans2" type="finalfunction"/]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>

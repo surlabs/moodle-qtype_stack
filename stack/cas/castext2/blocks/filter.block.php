@@ -16,7 +16,7 @@
 //
 
 /**
- * A block for linking ascii blocks to specific answer inputs.
+ * A block for specifying parsing options in ascii blocks.
  * @package    qtype_stack
  * @copyright  2024 University of Edinburgh.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
@@ -27,11 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../block.interface.php');
 require_once(__DIR__ . '/../../../utils.class.php');
 
-class stack_cas_castext2_extractor extends stack_cas_castext2_block {
+class stack_cas_castext2_filter extends stack_cas_castext2_block {
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function compile($format, $options): ?MP_Node {
         $r = new MP_List([
-            new MP_String('extractor'),
+            new MP_String('filter'),
             new MP_String(json_encode($this->params)),
         ]);
 
@@ -58,14 +58,9 @@ class stack_cas_castext2_extractor extends stack_cas_castext2_block {
         $valid = true;
         $err = [];
 
-        if (!array_key_exists('targetinput', $this->params)) {
-            $valid = false;
-            $err[] = stack_string('stackBlock_extractor_targetinput_required');
-        }
-
         if (!array_key_exists('type', $this->params)) {
             $valid = false;
-            $err[] = stack_string('stackBlock_extractor_type_required');
+            $err[] = stack_string('stackBlock_filter_type_required');
         }
 
         // Wrap the old string errors with the context details.
