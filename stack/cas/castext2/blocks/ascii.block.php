@@ -41,6 +41,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         // Define iframe params.
         $xpars = [];
+        $xpars['filters'] = '';
         $answer = '';
 
         foreach ($this->params as $key => $value) {
@@ -63,7 +64,6 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $height = $existsuserheight ? $xpars['height'] : "400px";
         $xpars['width'] = $width;
         $xpars['height'] = $height;
-        $xpars['filters'] = '';
 
         // Set a title.
         $xpars['title'] = 'STACK ASCII ///ASCII_COUNT///';
