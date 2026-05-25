@@ -22,11 +22,11 @@ import regexall from './extractors/regexall.js';
 
 const extractorlib = { finalfunction, lastexpr, lastblock, regexmatch, regexall };
 
-export default function init(inputIds, filters, operations) {
+export default function init(inputIds, transforms, operations) {
     const markdownContainerId = inputIds[0];
     // inputIds[1..N] correspond to each parsed answer entry in order.
     const extractors = operations.filter(operator => operator.operation === 'extractor');
-    const inputFilters = filters ? filters : 'latexwrap,boldfilter';
+    const inputTransforms = transforms ? transforms : 'latexwrap,boldfilter';
 
     const blockCollector = { blocks: [] };
 
@@ -35,7 +35,7 @@ export default function init(inputIds, filters, operations) {
         .use(markdownitSub)
         .use(mdItPluginTex.tex, { render: (content) => content, delimiters: 'brackets' })
         .use(asciimathBlock)
-        .use(markdownitrules, { filters: inputFilters, collector: blockCollector });
+        .use(markdownitrules, { transforms: inputTransforms, collector: blockCollector });
 
     function convertMarkdown(markdown) {
         const html = previewMarkdownConverter.render(markdown);

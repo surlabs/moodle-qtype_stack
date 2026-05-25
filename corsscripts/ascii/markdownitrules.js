@@ -1,12 +1,12 @@
 // Markdown-it plugin — bundled into stackascii.bundle.js via stackascii.src.js.
-// Edit filter behaviour in filters/*.js, then run: npm run build:bundle
+// Edit transform behaviour in markdownittransforms/*.js, then run: npm run build:bundle
 
-import boldfilter from './filters/020_boldfilter.js';
-import latexwrap from './filters/010_latexwrap.js';
+import boldfilter from './markdownittransforms/020_boldfilter.js';
+import latexwrap from './markdownittransforms/010_latexwrap.js';
 
-// Registry maps the string names used in options.filters to the actual functions.
-// Add new filters here after creating their file in filters/.
-const filterRegistry = {
+// Registry maps the string names used in options.transforms to the actual functions.
+// Add new transforms here after creating their file in markdownittransforms/.
+const transformRegistry = {
     boldfilter,
     latexwrap,
 };
@@ -14,7 +14,7 @@ const filterRegistry = {
 export default function markdownitrules(mdit, options) {
     "use strict";
     options = options || {};
-    const filters = (options.filters || '')
+    const transforms = (options.transforms || '')
         .split(',')
         .map(s => s.trim())
         .filter(Boolean);
@@ -39,7 +39,7 @@ export default function markdownitrules(mdit, options) {
 
     mdit.renderer.rules.asciimath_block = function(tokens, idx) {
         const code = tokens[idx].content;
-        const rendered = applyFilters(code, true);
+        const rendered = applyTransforms(code, true);
         if (collector) {
             collector.blocks.push({ type: 'asciimath_block', raw: code, rendered });
         }
@@ -58,7 +58,7 @@ export default function markdownitrules(mdit, options) {
 
     mdit.renderer.rules.math_block = function(tokens, idx) {
         const code = tokens[idx].content;
-        const rendered = applyFilters(code, false);
+        const rendered = applyTransforms(code, false);
         if (collector) {
             collector.blocks.push({ type: 'math_block', raw: code, rendered });
         }
@@ -69,16 +69,16 @@ export default function markdownitrules(mdit, options) {
         return code.split(/\r?\n/).map(line => line.trim()).filter(line => line !== '');
     }
 
-    function applyFilters(code, isASCIIMaths) {
+    function applyTransforms(code, isASCIIMaths) {
         let lines = splitBlock(code);
         if (isASCIIMaths) {
             lines = lines.map(line => window.AMparseMath(line, true));
         }
-        for (const filter of filters) {
-            if (!filterRegistry[filter]) {
-                throw new Error(`markdownitrules: unknown filter "${filter}"`);
+        for (const transform of transforms) {
+            if (!transformRegistry[transform]) {
+                throw new Error(`markdownitrules: unknown transform "${transform}"`);
             }
-            lines = filterRegistry[filter](lines);
+            lines = transformRegistry[transform](lines);
         }
         return lines.join('\n') + '\n';
     }

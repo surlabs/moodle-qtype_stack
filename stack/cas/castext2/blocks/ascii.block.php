@@ -42,7 +42,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Define iframe params.
         $xpars = [];
         $inputs = [];
-        $xpars['filters'] = '';
+        $xpars['transforms'] = '';
 
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
@@ -115,7 +115,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
         }, $inputs, array_keys($inputs)));
         $linkcode = 'Promise.all([' . $answercalls . '])';
-        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "'," . json_encode($operations) . ");});";
+        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['transforms'] . "'," . json_encode($operations) . ");});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
@@ -235,13 +235,13 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $key !== 'aspect-ratio' &&
                 $key !== 'input' &&
                 $key !== 'hidden' &&
-                $key !== 'filters'
+                $key !== 'transforms'
             ) {
                 $err[] = stack_string('stackBlock_ascii_unknown_param', $key);
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'hidden', 'filters'
+                        'width', 'height', 'aspect-ratio', 'input', 'hidden', 'transforms'
                     ];
                     $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),
