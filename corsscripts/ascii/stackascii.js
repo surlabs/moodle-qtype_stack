@@ -18,13 +18,13 @@ import finalfunction from './extractors/finalfunction.js';
 import lastexpr from './extractors/lastexpr.js';
 import lastblock from './extractors/lastblock.js';
 import regexmatch from './extractors/regexmatch.js';
+import regexall from './extractors/regexall.js';
 
-const extractorlib = { finalfunction, lastexpr, lastblock, regexmatch };
+const extractorlib = { finalfunction, lastexpr, lastblock, regexmatch, regexall };
 
-export default function init(inputIds, filters, operatorsjson) {
+export default function init(inputIds, filters, operations) {
     const markdownContainerId = inputIds[0];
     // inputIds[1..N] correspond to each parsed answer entry in order.
-    const operations = JSON.parse(operatorsjson);
     const extractors = operations.filter(operator => operator.operation === 'extractor');
     const inputFilters = filters ? filters : 'latexwrap,boldfilter';
 

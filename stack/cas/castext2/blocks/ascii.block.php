@@ -113,7 +113,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
         }, $inputs, array_keys($inputs)));
         $linkcode = 'Promise.all([' . $answercalls . '])';
-        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "','" . json_encode($operations) . "');});";
+        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "'," . json_encode($operations) . ");});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");

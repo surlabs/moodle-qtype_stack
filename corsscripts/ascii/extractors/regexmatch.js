@@ -1,4 +1,7 @@
 // Extractor: regexmatch
+// [[extractor targetinput="ans2" type="regexmatch" regex="^f\\(x\\)\\s*=\\s*" /]]
+// Note the scaped backslashes. Searches for a trimmed line beginning 'f(x) = ' where
+// there can be any amount of whitespace around the equals. Returns 'f(x) = expr'.
 // Scans blocks (bottom-up) for the last code_inline or asciimath_block line
 // matching entry.regex, then sets answerEl.value to the matched string.
 export default function regexmatch(raw, answerEl, blocks, entry) {
@@ -13,7 +16,7 @@ export default function regexmatch(raw, answerEl, blocks, entry) {
             if (block.type === 'code_inline') {
                 const trimmed = block.raw.trim();
                 if (pattern.test(trimmed)) {
-                    answerEl.value = trimmed.match(pattern)[0];
+                    answerEl.value = trimmed;
                     answerEl.dispatchEvent(new Event('change'));
                     return;
                 }
@@ -23,7 +26,7 @@ export default function regexmatch(raw, answerEl, blocks, entry) {
                 for (let j = lines.length - 1; j >= 0; j--) {
                     const trimmed = lines[j].trim();
                     if (pattern.test(trimmed)) {
-                        answerEl.value = trimmed.match(pattern)[0];
+                        answerEl.value = trimmed;
                         answerEl.dispatchEvent(new Event('change'));
                         return;
                     }
@@ -39,7 +42,7 @@ export default function regexmatch(raw, answerEl, blocks, entry) {
     for (const line of lines) {
         const trimmed = line.trim();
         if (pattern.test(trimmed)) {
-            answerEl.value = trimmed.match(pattern)[0];
+            answerEl.value = trimmed;
             answerEl.dispatchEvent(new Event('change'));
             return;
         }
