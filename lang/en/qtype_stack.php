@@ -1047,6 +1047,12 @@ $string['stackBlock_ascii_underdefined_dimension'] = 'When defining aspect-ratio
 $string['stackBlock_ascii_overdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one should only define width or height not both.';
 $string['stackBlock_ascii_input_required'] = 'You must define the input for the ASCII block to use.';
 $string['stackBlock_ascii_answer_format'] = 'The answer attribute of the ASCII block must be in the format \"[ans1,extractor,filter],[ans2,extractor,filter],...\".';
+$string['stackBlock_ascii_unknown_param'] = 'Unknown parameter \'{$a}\' for the ASCII block.';
+$string['stackBlock_ascii_param'] = 'Valid parameters are: {$a->param}.';
+
+$string['stackBlock_extractor_targetinput_required'] = 'You must define the targetinput for the extractor block to use.';
+$string['stackBlock_extractor_unknown_param'] = 'Unknown parameter \'{$a}\' for the extractor block.';
+$string['stackBlock_extractor_param'] = 'Valid parameters are: {$a->param}.';
 
 $string['stackBlock_jsxgraph_width']       = 'The width of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_height']      = 'The height of a JSXGraph must use a known CSS-length unit.';

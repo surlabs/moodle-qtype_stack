@@ -17,44 +17,13 @@ import * as mdItPluginTex from './markdownitextensions/tex.js';
 import finalfunction from './extractors/finalfunction.js';
 import lastanswer from './extractors/lastanswer.js';
 
-const extractors = { finalfunction, lastanswer };
+const extractorlib = { finalfunction, lastanswer };
 
-// Parse answers string in format [ans1,extractor,filter],[ans2,extractor,filter],...
-// Returns an array of string entries (one per answer), or false if the format is invalid.
-// Mirrors the logic of get_answer_details() in ascii.block.php.
-function getAnswerDetails(answers) {
-    if (!answers) {
-        return false;
-    }
-    const answervalue = answers.trim();
-    const entries = answervalue.split(/\s*\]\s*,\s*\[\s*/);
-    const formatvalid = entries.length >= 1
-        && entries[0].startsWith('[')
-        && entries[entries.length - 1].endsWith(']');
-    if (!formatvalid) {
-        return false;
-    }
-    entries[0] = entries[0].slice(1);
-    entries[entries.length - 1] = entries[entries.length - 1].slice(0, -1);
-    const parsed = entries.map(entry => {
-        const parts = entry.split(',').map(p => p.trim());
-        while (parts.length < 3) {
-            parts.push('');
-        }
-        return parts;
-    });
-    for (const parts of parsed) {
-        if (parts[0] === '') {
-            return false;
-        }
-    }
-    return parsed;
-}
-
-export default function init(inputIds, filters, answers) {
+export default function init(inputIds, filters, operatorsjson) {
     const markdownContainerId = inputIds[0];
     // inputIds[1..N] correspond to each parsed answer entry in order.
-    const parsedAnswers = getAnswerDetails(answers);
+    const operations = JSON.parse(operatorsjson);
+    const extractors = operations.filter(operator => operator.operation === 'extractor');
     const inputFilters = filters ? filters : 'latexwrap,boldfilter';
 
     // mdItPluginTex.tex must come before markdownitrules.
@@ -86,9 +55,9 @@ export default function init(inputIds, filters, answers) {
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, 'asciiContainerRow']); // MathJax 2
         }
 
-        if (parsedAnswers) {
-            parsedAnswers.forEach((entry, i) => {
-                const extractor = (extractors[entry[1]]) ? extractors[entry[1]] : extractors['lastanswer'];
+        if (extractors) {
+            extractors.forEach((entry, i) => {
+                const extractor = (extractorlib[entry.type]) ? extractorlib[entry.type] : extractorlib['lastanswer'];
                 const answerEl = document.getElementById(inputIds[1 + i]);
                 if (extractor && answerEl) {
                     extractor(raw, answerEl);

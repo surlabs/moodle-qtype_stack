@@ -35,24 +35,31 @@ stack_cas_castext2_iframe::register_counter('///ASCII_COUNT///');
 
 // phpcs:ignore moodle.Commenting.MissingDocblock.Class
 class stack_cas_castext2_ascii extends stack_cas_castext2_block {
-    public $answers = null;
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function compile($format, $options): ?MP_Node {
         $r = new MP_List([new MP_String('iframe')]);
 
         // Define iframe params.
         $xpars = [];
-
+        $inputs = [];
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
-                $input = $value;
-            } else if ($key === 'answer') {
-                $xpars[$key] = $value;
-                $answer = $this->get_answer_details();
+                $inputs[] = $value;
             } else if ($key === 'hidden') {
                 $xpars[$key] = ($value === 'true');
             } else {
                 $xpars[$key] = $value;
+            }
+        }
+
+        // Get the details of filter and extractor blocks.
+        $operations = [];
+        foreach ($this->children as $child) {
+            if (is_a($child, 'stack_cas_castext2_extractor')) {
+                $options = $child->params;
+                $options['operation'] = 'extractor';
+                $inputs[] = $options['targetinput'];
+                $operations[] = $options;
             }
         }
 
@@ -101,11 +108,12 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
         $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.bundle.js') . "';\n");
 
-        $answercalls = implode(',', array_map(function($item) {
-            return 'stack_js.request_access_to_input("' . $item[0] . '")';
-        }, $answer));
-        $linkcode = 'Promise.all([stack_js.request_access_to_input("' . $input . '",true),' . $answercalls . '])';
-        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "','" . $xpars['answer'] . "');});";
+        $answercalls = implode(',', array_map(function($item, $index) {
+            $extra = $index === 0 ? ',true' : '';
+            return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
+        }, $inputs, array_keys($inputs)));
+        $linkcode = 'Promise.all([' . $answercalls . '])';
+        $linkcode .= ".then((inputIds) => {init(inputIds,'" . $xpars['filters'] . "','" . json_encode($operations) . "');});";
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
@@ -216,11 +224,6 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             $err[] = stack_string('stackBlock_ascii_input_required');
         }
 
-        if (array_key_exists('answer', $this->params) && !$this->get_answer_details()) {
-            $valid = false;
-            $err[] = stack_string('stackBlock_ascii_answer_format');
-        }
-
         // Check that only valid parameters are passed to block header.
         $valids = null;
         foreach ($this->params as $key => $value) {
@@ -229,15 +232,14 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $key !== 'height' &&
                 $key !== 'aspect-ratio' &&
                 $key !== 'input' &&
-                $key !== 'answer' &&
                 $key !== 'hidden' &&
                 $key !== 'filters'
             ) {
-                $err[] = "Unknown parameter '$key' for Parson's block.";
+                $err[] = stack_string('stackBlock_ascii_unknown_param', $key);
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'answer', 'hidden', 'filters'
+                        'width', 'height', 'aspect-ratio', 'input', 'hidden', 'filters'
                     ];
                     $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),
@@ -262,34 +264,5 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
      */
     public function is_interactive(): bool {
         return true;
-    }
-    public function get_answer_details() {
-        if (!isset($this->answers)) {
-            // Check in format [ans1,extractor,filter],[ans2,extractor,filter],...
-            $output = [];
-            $answervalue = trim($this->params['answer']);
-            $entries = preg_split('/\s*\]\s*,\s*\[\s*/', $answervalue);
-            $formatvalid = count($entries) >= 1
-                && substr($entries[0], 0, 1) === '['
-                && substr($entries[count($entries) - 1], -1) === ']';
-            if ($formatvalid) {
-                $entries[0] = substr($entries[0], 1);
-                $entries[count($entries) - 1] = substr($entries[count($entries) - 1], 0, -1);
-                foreach ($entries as $entry) {
-                    $parts = explode(',', $entry, 3);
-                    if (trim($parts[0]) === '') {
-                        $formatvalid = false;
-                        break;
-                    }
-                    $output[] = $parts;
-                }
-            }
-            if ($formatvalid) {
-                $this->answers = $output;
-            } else {
-                $this->answers = false;
-            }
-        }
-        return $this->answers;
     }
 }
