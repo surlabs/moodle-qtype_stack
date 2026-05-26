@@ -1,29 +1,15 @@
 // Markdown-it plugin — bundled into stackascii.bundle.js via stackascii.src.js.
 // Edit transform behaviour in markdownittransforms/*.js, then run: npm run build:bundle
-
-import boldfilter from './markdownittransforms/020_boldfilter.js';
-import latexwrap from './markdownittransforms/010_latexwrap.js';
-
-// Registry maps the string names used in options.transforms to the actual functions.
-// Add new transforms here after creating their file in markdownittransforms/.
-const transformRegistry = {
-    boldfilter,
-    latexwrap,
-};
+// The transformLib is defined in markdown.js and passed via options.state.
 
 export default function markdownitrules(mdit, options) {
     "use strict";
-    options = options || {};
-    const transforms = (options.transforms || '')
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
-    const collector = options.collector || null;
+    const state = options.state;
 
     // Reset the collector at the start of each render pass.
     mdit.core.ruler.push('reset_collector', () => {
-        if (collector) {
-            collector.blocks = [];
+        if (state.collector) {
+            state.collector.blocks = [];
         }
     });
 
@@ -31,8 +17,8 @@ export default function markdownitrules(mdit, options) {
         const code = tokens[idx].content;
         const inlineWrap = (s) => `\\(${s}\\)`;
         const rendered = inlineWrap(window.AMparseMath(code, true));
-        if (collector) {
-            collector.blocks.push({ type: 'code_inline', raw: code, rendered });
+        if (state.collector) {
+            state.collector.blocks.push({ type: 'code_inline', raw: code, rendered });
         }
         return rendered;
     };
@@ -40,8 +26,8 @@ export default function markdownitrules(mdit, options) {
     mdit.renderer.rules.asciimath_block = function(tokens, idx) {
         const code = tokens[idx].content;
         const rendered = applyTransforms(code, true);
-        if (collector) {
-            collector.blocks.push({ type: 'asciimath_block', raw: code, rendered });
+        if (state.collector) {
+            state.collector.blocks.push({ type: 'asciimath_block', raw: code, rendered });
         }
         return rendered;
     };
@@ -50,8 +36,8 @@ export default function markdownitrules(mdit, options) {
         const code = tokens[idx].content;
         const inlineWrap = (s) => `\\(${s}\\)`;
         const rendered = inlineWrap(code);
-        if (collector) {
-            collector.blocks.push({ type: 'math_inline', raw: code, rendered });
+        if (state.collector) {
+            state.collector.blocks.push({ type: 'math_inline', raw: code, rendered });
         }
         return rendered;
     };
@@ -59,8 +45,8 @@ export default function markdownitrules(mdit, options) {
     mdit.renderer.rules.math_block = function(tokens, idx) {
         const code = tokens[idx].content;
         const rendered = applyTransforms(code, false);
-        if (collector) {
-            collector.blocks.push({ type: 'math_block', raw: code, rendered });
+        if (state.collector) {
+            state.collector.blocks.push({ type: 'math_block', raw: code, rendered });
         }
         return rendered;
     };
@@ -74,11 +60,11 @@ export default function markdownitrules(mdit, options) {
         if (isASCIIMaths) {
             lines = lines.map(line => window.AMparseMath(line, true));
         }
-        for (const transform of transforms) {
-            if (!transformRegistry[transform]) {
+        for (const transform of state.transforms) {
+            if (!state.transformLib[transform]) {
                 throw new Error(`markdownitrules: unknown transform "${transform}"`);
             }
-            lines = transformRegistry[transform](lines);
+            lines = state.transformLib[transform](lines);
         }
         return lines.join('\n') + '\n';
     }

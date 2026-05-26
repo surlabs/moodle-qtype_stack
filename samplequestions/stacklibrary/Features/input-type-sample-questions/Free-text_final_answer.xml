@@ -10,8 +10,8 @@
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
-[[ascii input="ans1" transforms="latexwrap"]]
-[[filter type="markdownit" transforms="latexwrap" /]]
+[[ascii input="ans1"]]
+[[filter type="markdown" transforms="latexwrap" /]]
 [[extractor targetinput="ans2" type="finalfunction"/]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
