@@ -1,5 +1,5 @@
 // Extractor: lastblock
-// Returns the raw content of the last code_inline, or the full trimmed content
+// Returns the raw content of the last code_inline, or the full content
 // of the last asciimath_block, in document order.
 // Falls back to the final non-empty line of raw when no blocks are available.
 export default function lastblock(raw, blocks) {
@@ -21,7 +21,7 @@ export default function lastblock(raw, blocks) {
     for (let i = lines.length - 1; i >= 0; i--) {
         const trimmed = lines[i].trim();
         if (trimmed !== '') {
-            return trimmed;
+            return lines[i];
         }
     }
     return 'ERROR';

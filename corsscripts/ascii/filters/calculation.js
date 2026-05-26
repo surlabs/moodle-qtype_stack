@@ -1,4 +1,4 @@
-// Filter: calculation
+// Filter: calculation - Currently for testing purposes.
 // Finds text enclosed in @ characters on a single line and wraps it in double stars.
 // e.g. "The answer is @x^2 + 1@ here" → "The answer is **x^2 + 1** here"
 

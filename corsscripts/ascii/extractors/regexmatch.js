@@ -3,12 +3,12 @@
 // Note the scaped backslashes. Searches for a trimmed line beginning 'f(x) = ' where
 // there can be any amount of whitespace around the equals. Returns 'f(x) = expr'.
 // Scans blocks (bottom-up) for the last code_inline or asciimath_block line
-// matching entry.regex, then sets answerEl.value to the matched string.
-export default function regexmatch(raw, blocks, entry) {
-    if (!entry || !entry.regex) {
-        return;
+// matching operation.regex, then sets answerEl.value to the matched string.
+export default function regexmatch(raw, blocks, operation) {
+    if (!operation || !operation.regex) {
+        return 'ERROR';
     }
-    const pattern = new RegExp(entry.regex);
+    const pattern = new RegExp(operation.regex);
 
     if (blocks && blocks.length > 0) {
         for (let i = blocks.length - 1; i >= 0; i--) {
