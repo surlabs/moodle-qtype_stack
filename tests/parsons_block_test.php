@@ -333,7 +333,7 @@ final class parsons_block_test extends qtype_stack_testcase {
             $this->assertEquals(
                 $err . ', ' . stack_string(
                     'stackBlock_parsons_param',
-                    ['block' => "Parson's", param => implode(', ', $validparameters)]
+                    ['block' => "Parson's", 'param' => implode(', ', $validparameters)]
                 ),
                 $at1->get_errors()
             );
