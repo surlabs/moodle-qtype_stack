@@ -2,7 +2,7 @@
 // [[extractor targetinput="ans2" type="regexall" regex="^f\\(x\\)\\s*=\\s*" /]]
 // Searches the entire raw input for all lines matching entry.regex and returns
 // a JSON object of the form {"matches":[...]} set as answerEl.value.
-export default function regexall(raw, answerEl, blocks, entry) {
+export default function regexall(raw, blocks, entry) {
     if (!entry || !entry.regex) {
         return;
     }
@@ -16,6 +16,8 @@ export default function regexall(raw, answerEl, blocks, entry) {
         }
     }
 
-    answerEl.value = JSON.stringify({ matches });
-    answerEl.dispatchEvent(new Event('change'));
+    if (matches.length === 0) {
+        return 'ERROR';
+    }
+    return JSON.stringify({ matches });
 }

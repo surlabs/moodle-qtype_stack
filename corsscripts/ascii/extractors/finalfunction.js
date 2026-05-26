@@ -1,7 +1,7 @@
 // Extractor: finalfunction
 // Scans blocks (bottom-up) for the last code_inline or asciimath_block line
-// matching f(x) = <expr>, then sets answerEl.value to the extracted expression.
-export default function finalfunction(raw, answerEl, blocks) {
+// matching f(x) = <expr>, then returns the extracted expression.
+export default function finalfunction(raw, blocks) {
     const fxPattern    = /^f\(x\)\s*=\s*/;
     const fxPatternRaw = /^`*f\(x\)\s*=\s*/;
 
@@ -11,9 +11,7 @@ export default function finalfunction(raw, answerEl, blocks) {
             if (block.type === 'code_inline') {
                 const trimmed = block.raw.trim();
                 if (fxPattern.test(trimmed)) {
-                    answerEl.value = trimmed.replace(fxPattern, '');
-                    answerEl.dispatchEvent(new Event('change'));
-                    return;
+                    return trimmed.replace(fxPattern, '');
                 }
             }
             if (block.type === 'asciimath_block') {
@@ -21,14 +19,12 @@ export default function finalfunction(raw, answerEl, blocks) {
                 for (let j = lines.length - 1; j >= 0; j--) {
                     const trimmed = lines[j].trim();
                     if (fxPattern.test(trimmed)) {
-                        answerEl.value = trimmed.replace(fxPattern, '');
-                        answerEl.dispatchEvent(new Event('change'));
-                        return;
+                        return trimmed.replace(fxPattern, '');
                     }
                 }
             }
         }
-        return;
+        return 'ERROR';
     }
 
     // Fallback: raw-text parsing when blocks are unavailable.
@@ -37,9 +33,8 @@ export default function finalfunction(raw, answerEl, blocks) {
     for (const line of lines) {
         const trimmed = line.trim();
         if (fxPatternRaw.test(trimmed)) {
-            answerEl.value = trimmed.replace(/^`*f\(x\)\s*=\s*|`+$/g, '');
-            answerEl.dispatchEvent(new Event('change'));
-            return;
+            return trimmed.replace(/^`*f\(x\)\s*=\s*|`+$/g, '');
         }
     }
+    return 'ERROR';
 }

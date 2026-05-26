@@ -4,7 +4,7 @@
 // there can be any amount of whitespace around the equals. Returns 'f(x) = expr'.
 // Scans blocks (bottom-up) for the last code_inline or asciimath_block line
 // matching entry.regex, then sets answerEl.value to the matched string.
-export default function regexmatch(raw, answerEl, blocks, entry) {
+export default function regexmatch(raw, blocks, entry) {
     if (!entry || !entry.regex) {
         return;
     }
@@ -16,9 +16,7 @@ export default function regexmatch(raw, answerEl, blocks, entry) {
             if (block.type === 'code_inline') {
                 const trimmed = block.raw.trim();
                 if (pattern.test(trimmed)) {
-                    answerEl.value = trimmed;
-                    answerEl.dispatchEvent(new Event('change'));
-                    return;
+                    return trimmed;
                 }
             }
             if (block.type === 'asciimath_block') {
@@ -26,14 +24,12 @@ export default function regexmatch(raw, answerEl, blocks, entry) {
                 for (let j = lines.length - 1; j >= 0; j--) {
                     const trimmed = lines[j].trim();
                     if (pattern.test(trimmed)) {
-                        answerEl.value = trimmed;
-                        answerEl.dispatchEvent(new Event('change'));
-                        return;
+                        return trimmed;
                     }
                 }
             }
         }
-        return;
+        return 'ERROR';
     }
 
     // Fallback: raw-text parsing when blocks are unavailable.
@@ -42,9 +38,8 @@ export default function regexmatch(raw, answerEl, blocks, entry) {
     for (const line of lines) {
         const trimmed = line.trim();
         if (pattern.test(trimmed)) {
-            answerEl.value = trimmed;
-            answerEl.dispatchEvent(new Event('change'));
-            return;
+            return trimmed;
         }
     }
+    return 'ERROR';
 }
