@@ -219,7 +219,8 @@ define([
          * @param {Object} response The data that came back from the ajax validation call.
          */
         function showValidationFailure(response) {
-            lastValidatedValue = '';
+            // ISS1757 - Change from blank to null so validation updates when answer cleared.
+            lastValidatedValue = null;
             // Reponse usually contains backtrace, debuginfo, errorcode, link, message and moreinfourl.
             validationDiv.innerHTML = response.message;
             removeAllClasses();

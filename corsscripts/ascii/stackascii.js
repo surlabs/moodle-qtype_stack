@@ -32,10 +32,6 @@ export default function init(inputIds, operations, stack_js) {
     function renderMath() {
         const raw = document.getElementById(markdownContainerId).value.trim();
         const output = document.getElementById('asciiContainerRow');
-        if (!raw) {
-            output.innerHTML = '';
-            return;
-        }
 
         let processedOutput = raw;
         let displayfixed = false;
@@ -67,11 +63,11 @@ export default function init(inputIds, operations, stack_js) {
                     if (extractor && answerEl) {
                         let value = extractor(raw, blockCollector.blocks, currentop);
                         if (value === 'ERROR') {
-                            stackJS.clear_input(answerEl.id);
+                            answerEl.value = '';
                         } else {
                             answerEl.value = value;
-                            answerEl.dispatchEvent(new Event('change'));
                         }
+                        answerEl.dispatchEvent(new Event('change'));
                     }
                 }
             });
