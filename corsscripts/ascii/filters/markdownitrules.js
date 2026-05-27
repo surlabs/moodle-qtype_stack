@@ -51,6 +51,8 @@ export default function markdownitrules(mdit, options) {
         return rendered;
     };
 
+    // Trims lines and removes blank lines before rendering.
+    // Should we be removing blank lines here or in transforms?
     function splitBlock(code) {
         return code.split(/\r?\n/).map(line => line.trim()).filter(line => line !== '');
     }

@@ -1,4 +1,4 @@
-// Markdown-it block rule plugin intended to be used in the browser only.
+// Markdown-it block rule plugin.
 //
 // Syntax:
 //   Opening marker: a single backtick, optionally followed by spaces/tabs, at end of line.

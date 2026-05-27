@@ -1,5 +1,8 @@
-// Finds the first occurrence of something in needle that is _outside_ any braces,
-// unless it also matches something in without.
+// Return the index of the first token from `needle` found at top level in `str`
+// (outside any (), [], {}, \lbrace/\rbrace nesting). Tokens listed in `without`
+// are ignored even if they also appear in `needle`. Returns false if no match.
+// Example: findtextindex('a = {b = c}', ['=']) returns 2.
+// Example with without: findtextindex('a = b', ['='], ['=']) returns false.
 export default function findtextindex(str, needle, without = []) {
     let braceDepth = 0;
 

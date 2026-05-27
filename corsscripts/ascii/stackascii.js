@@ -50,6 +50,8 @@ export default function init(inputIds, operations, stack_js) {
                         if (currentop.reset === 'true') {
                             filterInput = raw;
                         }
+                        // We are not explicitly resetting thr=e blockCollector here but expecting
+                        // the filter to do so.
                         const filterOutput = filter(filterInput, blockCollector, currentop);
                         if (!displayfixed) {
                             processedOutput = filterOutput;

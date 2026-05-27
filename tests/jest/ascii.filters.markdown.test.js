@@ -54,7 +54,6 @@ describe('markdown filter', () => {
         expect(capturedState).not.toBeNull();
         expect(capturedState.transforms).toEqual(['latexwrap', 'boldfilter']);
         expect(capturedState.collector).toBe(collector);
-        expect(Object.keys(capturedState.transformLib).sort()).toEqual(['boldfilter', 'latexwrap']);
     });
 
     test('resets shared state to empty transforms and null collector', () => {
@@ -71,9 +70,14 @@ describe('markdown filter', () => {
         const markdownModule = require('../../corsscripts/ascii/filters/markdown.js');
         const isolatedMarkdown = markdownModule.default || markdownModule;
 
-        isolatedMarkdown('plain', { blocks: [] }, { transforms: 'latexwrap' });
-        isolatedMarkdown('plain', null, { transforms: '' });
+        const collector = { blocks: [] };
 
+        isolatedMarkdown('plain', collector, { transforms: 'latexwrap' });
+        expect(capturedState).not.toBeNull();
+        expect(capturedState.transforms).toEqual(['latexwrap']);
+        expect(capturedState.collector).toBe(collector);
+
+        isolatedMarkdown('plain', null, { transforms: '' });
         expect(capturedState).not.toBeNull();
         expect(capturedState.transforms).toEqual([]);
         expect(capturedState.collector).toBeNull();

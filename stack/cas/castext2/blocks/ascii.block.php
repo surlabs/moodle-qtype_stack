@@ -42,7 +42,6 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Define iframe params.
         $xpars = [];
         $inputs = [];
-        $xpars['transforms'] = '';
 
         foreach ($this->params as $key => $value) {
             if ($key === 'input') {
@@ -248,14 +247,13 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $key !== 'height' &&
                 $key !== 'aspect-ratio' &&
                 $key !== 'input' &&
-                $key !== 'hidden' &&
-                $key !== 'transforms'
+                $key !== 'hidden'
             ) {
                 $err[] = stack_string('stackBlock_ascii_unknown_param', $key);
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'hidden', 'transforms'
+                        'width', 'height', 'aspect-ratio', 'input', 'hidden'
                     ];
                     $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),
