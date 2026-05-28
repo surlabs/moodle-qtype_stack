@@ -128,14 +128,13 @@ describe('stackascii init', () => {
         });
         mockLastexpr.mockImplementation((raw, blocks, op) => `EXTRACT:${raw}:${blocks.map((block) => block.type).join('|')}`);
 
-        const stackJS = { clear_input: jest.fn() };
         const operations = [
             { operation: 'filter', type: 'markdown', reset: 'false', display: 'true' },
             { operation: 'filter', type: 'calculation', reset: 'true'},
             { operation: 'extractor', type: 'unknown' }
         ];
 
-        init(['markdownInput', 'answer1', 'answer2'], operations, stackJS);
+        init(['markdownInput', 'answer1', 'answer2'], operations);
 
         expect(mockMarkdown).toHaveBeenCalledWith('alpha', expect.any(Object), operations[0]);
         expect(mockCalculation).toHaveBeenCalledWith('alpha', expect.any(Object), operations[1]);
@@ -146,7 +145,6 @@ describe('stackascii init', () => {
         expect(env.output.innerHTML).toBe('MD:alpha');
         expect(env.answers[0].value).toBe('EXTRACT:alpha:markdown|calculation');
         expect(env.answers[0].dispatchEvent).toHaveBeenCalledWith({ type: 'change' });
-        expect(stackJS.clear_input).not.toHaveBeenCalled();
         expect(global.MathJax.typesetPromise).toHaveBeenCalledWith([env.output]);
     });
 
@@ -164,7 +162,6 @@ describe('stackascii init', () => {
         mockLastexpr.mockImplementation((raw, blocks, op) => `EXTRACT:${raw}:${blocks.map((block) => block.type).join('|')}`);
         mockLastcalc.mockImplementation((raw, blocks, op) => `EXTRACTCALC:${raw}:${blocks.map((block) => block.type).join('|')}`);
 
-        const stackJS = { clear_input: jest.fn() };
         const operations = [
             { operation: 'filter', type: 'markdown' },
             { operation: 'extractor', type: 'lastexpr' },
@@ -172,7 +169,7 @@ describe('stackascii init', () => {
             { operation: 'extractor', type: 'lastcalc' }
         ];
 
-        init(['markdownInput', 'answer1', 'answer2'], operations, stackJS);
+        init(['markdownInput', 'answer1', 'answer2'], operations);
 
         expect(mockMarkdown).toHaveBeenCalledWith('alpha', expect.any(Object), operations[0]);
         expect(mockLastexpr).toHaveBeenCalledWith('alpha', [
@@ -187,7 +184,6 @@ describe('stackascii init', () => {
         expect(env.answers[0].dispatchEvent).toHaveBeenCalledWith({ type: 'change' });
         expect(env.answers[1].value).toBe('EXTRACTCALC:alpha:calculation');
         expect(env.answers[1].dispatchEvent).toHaveBeenCalledWith({ type: 'change' });
-        expect(stackJS.clear_input).not.toHaveBeenCalled();
         expect(global.MathJax.typesetPromise).toHaveBeenCalledWith([env.output]);
     });
 
@@ -196,15 +192,13 @@ describe('stackascii init', () => {
 
         mockFinalfunction.mockReturnValue('ERROR');
 
-        const stackJS = { clear_input: jest.fn() };
         const operations = [{ operation: 'extractor', type: 'finalfunction' }];
 
-        init(['markdownInput', 'answer1'], operations, stackJS);
+        init(['markdownInput', 'answer1'], operations);
 
         expect(mockFinalfunction).toHaveBeenCalledWith('beta', [], operations[0]);
-        expect(stackJS.clear_input).toHaveBeenCalledWith('answer1');
         expect(env.answers[0].value).toBe('');
-        expect(env.answers[0].dispatchEvent).not.toHaveBeenCalled();
+        expect(env.answers[0].dispatchEvent).toHaveBeenCalledTimes(1);
         expect(env.output.innerHTML).toBe('beta');
     });
 
@@ -213,10 +207,9 @@ describe('stackascii init', () => {
 
         mockMarkdown.mockImplementation((text) => `MD:${text}`);
 
-        const stackJS = { clear_input: jest.fn() };
         const operations = [{ operation: 'filter', type: 'markdown', reset: 'false', display: 'false' }];
 
-        init(['markdownInput'], operations, stackJS);
+        init(['markdownInput'], operations);
 
         expect(env.markdownInput.addEventListener).toHaveBeenCalledWith('change', expect.any(Function));
         expect(mockMarkdown).toHaveBeenCalledTimes(1);

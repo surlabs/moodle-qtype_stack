@@ -20,8 +20,7 @@ import regexall from './extractors/regexall.js';
 
 const extractorlib = { finalfunction, lastexpr, lastblock, lastcalc, regexmatch, regexall };
 
-export default function init(inputIds, operations, stack_js) {
-    const stackJS = stack_js;
+export default function init(inputIds, operations) {
     const markdownContainerId = inputIds[0];
     // inputIds[1..N] correspond to each parsed answer entry in order.
     const alloperations = operations;
