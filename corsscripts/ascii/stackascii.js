@@ -61,12 +61,15 @@ export default function init(inputIds, operations) {
                     answerIndex++;
                     if (extractor && answerEl) {
                         let value = extractor(raw, blockCollector.blocks, currentop);
+                        const oldValue = answerEl.value;
                         if (value === 'ERROR') {
                             answerEl.value = '';
                         } else {
                             answerEl.value = value;
                         }
-                        answerEl.dispatchEvent(new Event('change'));
+                        if (answerEl.value !== oldValue) {
+                            answerEl.dispatchEvent(new Event('change'));
+                        }
                     }
                 }
             });

@@ -198,7 +198,7 @@ describe('stackascii init', () => {
 
         expect(mockFinalfunction).toHaveBeenCalledWith('beta', [], operations[0]);
         expect(env.answers[0].value).toBe('');
-        expect(env.answers[0].dispatchEvent).toHaveBeenCalledTimes(1);
+        expect(env.answers[0].dispatchEvent).not.toHaveBeenCalled();
         expect(env.output.innerHTML).toBe('beta');
     });
 
