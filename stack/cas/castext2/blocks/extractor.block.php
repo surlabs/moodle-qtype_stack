@@ -15,18 +15,17 @@
 // along with Stack.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../block.interface.php');
+require_once(__DIR__ . '/../../../utils.class.php');
+
 /**
  * A block for linking ascii blocks to specific answer inputs.
  * @package    qtype_stack
  * @copyright  2024 University of Edinburgh.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once(__DIR__ . '/../block.interface.php');
-require_once(__DIR__ . '/../../../utils.class.php');
-
 class stack_cas_castext2_extractor extends stack_cas_castext2_block {
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function compile($format, $options): ?MP_Node {

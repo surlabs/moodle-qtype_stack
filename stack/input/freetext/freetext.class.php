@@ -91,7 +91,7 @@ class stack_freetext_input extends stack_string_input {
             }
         }
 
-        // TODO: sort out size of text area.
+        // TO-DO: sort out size of text area.
         $attributes['rows'] = 5;
         $attributes['cols'] = $this->parameters['boxWidth'];
 
@@ -149,7 +149,7 @@ class stack_freetext_input extends stack_string_input {
         } else {
             $valid = false;
         }
-        // TODO: something better here.
+        // TO-DO: something better here.
         $display = html_writer::tag('p', $display);
         return [$valid, $errors, $display, $notes];
     }

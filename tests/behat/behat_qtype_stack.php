@@ -126,6 +126,71 @@ class behat_qtype_stack extends behat_base {
     }
 
     /**
+     * Check an answer value
+     *
+     * @param string $name name of input
+     * @param string $value the expected
+     *
+     * @Given /^I check the input "(?P<name>[^"]*)" is '(?P<value>[^']*)'$/
+     */
+    public function i_check_input_value($name, $value) {
+        $js = <<<EOF
+            return (function() {
+                let value = document.querySelector('input[id$="$name"]').value;
+                return value;
+            })();
+        EOF;
+        $formvalue = $this->evaluate_script($js);
+        Assert::assertEquals($value, $formvalue);
+    }
+
+    /**
+     * Check an iframe element value
+     *
+     * @param string $id id of element
+     * @param string $value the expected
+     *
+     * @Given /^I check the value of iframe element "(?P<id>[^"]*)" is '(?P<value>[^']*)'$/
+     */
+    public function i_check_element_value($id, $value) {
+        $generalcontext = behat_context_helper::get('behat_general');
+        $generalcontext->switch_to_iframe('stack-iframe-1');
+        $js = <<<EOF
+            return (function() {
+                let el = document.getElementById("$id");
+                return el ? el.textContent : null;
+            })();
+        EOF;
+        $formvalue = $this->evaluate_script($js);
+        $this->getSession()->switchToWindow();
+        $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
+        Assert::assertEquals($value, $formvalue);
+    }
+
+    /**
+     * Check an iframe element value contains a substring
+     *
+     * @param string $id id of element
+     * @param string $value the expected substring
+     *
+     * @Given /^I check the value of iframe element "(?P<id>[^"]*)" contains '(?P<value>[^']*)'$/
+     */
+    public function i_check_element_value_contains($id, $value) {
+        $generalcontext = behat_context_helper::get('behat_general');
+        $generalcontext->switch_to_iframe('stack-iframe-1');
+        $js = <<<EOF
+            return (function() {
+                let el = document.getElementById("$id");
+                return el ? el.textContent : null;
+            })();
+        EOF;
+        $formvalue = $this->evaluate_script($js);
+        $this->getSession()->switchToWindow();
+        $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
+        Assert::assertStringContainsString($value, $formvalue);
+    }
+
+    /**
      * Set the response for a given input in the Moodle app.
      *
      * @param string $identifier the text of the item to drag. E.g. '2:answer'.

@@ -42,10 +42,9 @@ use stack_cas_castext2_iframe;
 /**
  * Tests for {@link stack_cas_castext2_ascii}.
  * @group qtype_stack
- * @group qtype_stack_castext_module
+ * @covers \qtype_stack\stack_cas_castext2_ascii
  */
 final class ascii_block_test extends qtype_stack_testcase {
-
     /**
      * Extract all MP_String values from a compiled MP_List.
      * @param \MP_List $compiled
@@ -61,9 +60,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         return $strings;
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_basic_ascii_block(): void {
         stack_cas_castext2_iframe::register_counter('///IFRAME_COUNT///');
 
@@ -77,9 +73,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertEquals($expected, $at1->apply_placeholder_holder($at1->get_rendered()));
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_block_with_filter_and_extractor_children(): void {
         stack_cas_castext2_iframe::register_counter('///IFRAME_COUNT///');
 
@@ -97,9 +90,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertEquals($expected, $at1->apply_placeholder_holder($at1->get_rendered()));
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_compile_adds_default_filter_and_input_request(): void {
         $block = new \stack_cas_castext2_ascii(['input' => 'ans1'], []);
         $compiled = $block->compile(null, []);
@@ -125,9 +115,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         );
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_compile_uses_child_filter_and_extractor_operations(): void {
         $filter = new \stack_cas_castext2_filter([
             'type' => 'markdown',
@@ -164,9 +151,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertStringNotContainsString('"transforms":"latexwrap,boldfilter"', $joined);
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_requires_input_param(): void {
         $raw = '[[ascii]][[/ascii]]';
 
@@ -176,9 +160,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertEquals(stack_string('stackBlock_ascii_input_required'), $at1->get_errors());
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_validate_width_unit_and_number(): void {
         $valid = '[[ascii input="ans1" width="500px"]][[/ascii]]';
         $invalidunit = '[[ascii input="ans1" width="500bad"]][[/ascii]]';
@@ -198,9 +179,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertEquals(stack_string('stackBlock_ascii_width_num'), $atnum->get_errors());
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_validate_height_unit_and_number(): void {
         $valid = '[[ascii input="ans1" height="500px"]][[/ascii]]';
         $invalidunit = '[[ascii input="ans1" height="500bad"]][[/ascii]]';
@@ -220,9 +198,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertEquals(stack_string('stackBlock_ascii_height_num'), $atnum->get_errors());
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_aspect_ratio_dimension_rules(): void {
         $overdefined = '[[ascii input="ans1" width="100%" height="400px" aspect-ratio="1"]][[/ascii]]';
         $underdefined = '[[ascii input="ans1" aspect-ratio="1"]][[/ascii]]';
@@ -236,9 +211,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertEquals(stack_string('stackBlock_ascii_underdefined_dimension'), $atunder->get_errors());
     }
 
-    /**
-     * @covers \qtype_stack\stack_cas_castext2_ascii
-     */
     public function test_ascii_unknown_param_rejected(): void {
         $raw = '[[ascii input="ans1" bad_param="x"]][[/ascii]]';
 
