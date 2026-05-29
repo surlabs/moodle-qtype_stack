@@ -28,7 +28,6 @@
 require_once(__DIR__ . '/../../../../../lib/behat/behat_base.php');
 
 use Moodle\BehatExtension\Exception\SkippedException;
-use PHPUnit\Framework\Assert;
 
 /**
  * Steps definitions related with the question bank management.
@@ -141,7 +140,9 @@ class behat_qtype_stack extends behat_base {
             })();
         EOF;
         $formvalue = $this->evaluate_script($js);
-        Assert::assertEquals($value, $formvalue);
+        if ($formvalue !== $value) {
+            throw new \Exception("Expected input value '$value' but got '$formvalue'.");
+        }
     }
 
     /**
@@ -164,7 +165,9 @@ class behat_qtype_stack extends behat_base {
         $formvalue = $this->evaluate_script($js);
         $this->getSession()->switchToWindow();
         $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
-        Assert::assertEquals($value, $formvalue);
+        if ($formvalue !== $value) {
+            throw new \Exception("Expected element value '$value' but got '$formvalue'.");
+        }
     }
 
     /**
@@ -187,7 +190,35 @@ class behat_qtype_stack extends behat_base {
         $formvalue = $this->evaluate_script($js);
         $this->getSession()->switchToWindow();
         $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
-        Assert::assertStringContainsString($value, $formvalue);
+        if (strpos($formvalue, $value) === false) {
+            throw new \Exception("Expected element value to contain '$value' but got '$formvalue'.");
+        }
+    }
+
+    /**
+     * Check an iframe element value contains one of two substrings.
+     *
+     * @param string $id id of element
+     * @param string $value1 first expected substring
+     * @param string $value2 second expected substring
+     *
+     * @Given /^I check the value of iframe element "(?P<id>[^"]*)" contains either '(?P<value1>[^']*)' or '(?P<value2>[^']*)'$/
+     */
+    public function i_check_element_value_contains_either($id, $value1, $value2) {
+        $generalcontext = behat_context_helper::get('behat_general');
+        $generalcontext->switch_to_iframe('stack-iframe-1');
+        $js = <<<EOF
+            return (function() {
+                let el = document.getElementById("$id");
+                return el ? el.textContent : null;
+            })();
+        EOF;
+        $formvalue = $this->evaluate_script($js);
+        $this->getSession()->switchToWindow();
+        $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
+        if (strpos($formvalue, $value1) === false && strpos($formvalue, $value2) === false) {
+            throw new \Exception("Expected element value to contain either '$value1' or '$value2' but got '$formvalue'.");
+        }
     }
 
     /**
@@ -275,7 +306,9 @@ class behat_qtype_stack extends behat_base {
         foreach ($urls as $url) {
             $this->execute('behat_general::i_visit', [$url]);
         }
-        Assert::assertEquals(true, count($urls) === (int) $number);
+        if (count($urls) !== (int) $number) {
+            throw new \Exception("Expected $number images but found " . count($urls) . ".");
+        }
     }
 
     /**
