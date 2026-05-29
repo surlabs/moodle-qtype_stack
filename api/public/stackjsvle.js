@@ -111,6 +111,10 @@
             if (possible !== null) {
                 return possible;
             }
+            possible = iter.querySelector('textarea[id$="_' + name + '"]');
+            if (possible !== null) {
+                return possible;
+            }
             // Radios have interesting ids, but the name makes sense
             possible = iter.querySelector('input[id$="_' + name + '_1"][type=radio]');
             if (possible !== null) {
@@ -274,7 +278,7 @@
         switch (msg.type) {
         case 'register-input-listener':
             // 1. Find the input.
-            input = vle_get_input_element(msg.name, msg.src);
+            input = vle_get_input_element(msg.name, msg.src, !msg['limit-to-question']);
 
             if (input === null) {
                 // Requested something that is not available.
@@ -295,6 +299,14 @@
             if (input.nodeName.toLowerCase() === 'select') {
                 response.value = input.value;
                 response['input-type'] = 'select';
+                response['input-readonly'] = input.hasAttribute('disabled');
+            } else if (input.nodeName.toLowerCase() === 'textarea') {
+                response.value = input.value;
+                if (input.dataset.stackInputType === 'freetext') {
+                    response['input-type'] = 'freetext';
+                } else {
+                    response['input-type'] = 'textarea';
+                }
                 response['input-readonly'] = input.hasAttribute('disabled');
             } else if (input.type === 'checkbox') {
                 response.value = input.checked;
