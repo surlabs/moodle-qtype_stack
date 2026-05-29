@@ -170,41 +170,18 @@ class behat_qtype_stack extends behat_base {
         }
     }
 
-    /**
-     * Check an iframe element value contains a substring
-     *
-     * @param string $id id of element
-     * @param string $value the expected substring
-     *
-     * @Given /^I check the value of iframe element "(?P<id>[^"]*)" contains '(?P<value>[^']*)'$/
-     */
-    public function i_check_element_value_contains($id, $value) {
-        $generalcontext = behat_context_helper::get('behat_general');
-        $generalcontext->switch_to_iframe('stack-iframe-1');
-        $js = <<<EOF
-            return (function() {
-                let el = document.getElementById("$id");
-                return el ? el.textContent : null;
-            })();
-        EOF;
-        $formvalue = $this->evaluate_script($js);
-        $this->getSession()->switchToWindow();
-        $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
-        if (strpos($formvalue, $value) === false) {
-            throw new \Exception("Expected element value to contain '$value' but got '$formvalue'.");
-        }
-    }
 
     /**
-     * Check an iframe element value contains one of two substrings.
+     * Check an iframe element value contains one of three substrings.
      *
      * @param string $id id of element
      * @param string $value1 first expected substring
      * @param string $value2 second expected substring
+     * @param string $value3 third expected substring
      *
-     * @Given /^I check the value of iframe element "(?P<id>[^"]*)" contains either '(?P<value1>[^']*)' or '(?P<value2>[^']*)'$/
+     * @Given /^I check the value of iframe element "(?P<id>[^"]*)" contains one of '(?P<value1>[^']*)' or '(?P<value2>[^']*)' or '(?P<value3>[^']*)'$/
      */
-    public function i_check_element_value_contains_either($id, $value1, $value2) {
+    public function i_check_element_value_contains_one_of($id, $value1, $value2, $value3) {
         $generalcontext = behat_context_helper::get('behat_general');
         $generalcontext->switch_to_iframe('stack-iframe-1');
         $js = <<<EOF
@@ -216,8 +193,8 @@ class behat_qtype_stack extends behat_base {
         $formvalue = $this->evaluate_script($js);
         $this->getSession()->switchToWindow();
         $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
-        if (strpos($formvalue, $value1) === false && strpos($formvalue, $value2) === false) {
-            throw new \Exception("Expected element value to contain either '$value1' or '$value2' but got '$formvalue'.");
+        if (strpos($formvalue, $value1) === false && strpos($formvalue, $value2) === false && strpos($formvalue, $value3) === false) {
+            throw new \Exception("Expected element value to contain one of '$value1', '$value2' or '$value3' but got '$formvalue'.");
         }
     }
 
