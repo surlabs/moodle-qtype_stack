@@ -22,11 +22,18 @@ export default function markdownitrules(mdit, options) {
     mdit.renderer.rules.code_inline = function(tokens, idx) {
         const code = tokens[idx].content;
         const inlineWrap = (s) => `\\(${s}\\)`;
+        if (isLaTeX(code)) {
+            return inlineWrap(code);
+        }
         return inlineWrap(window.AMparseMath(code, true));
     };
 
     mdit.renderer.rules.asciimath_block = function(tokens, idx) {
         const code = tokens[idx].content;
+        const blockWrap = (s) => `\\[${s}\\]`;
+        if (isLaTeX(code)) {
+            return blockWrap(code);
+        }
         return applyFilters(code, true);
     };
 
@@ -40,6 +47,24 @@ export default function markdownitrules(mdit, options) {
         const code = tokens[idx].content;
         return applyFilters(code, false);
     };
+
+    function isLaTeX(code) {
+        // Do not attempt to apply ASCIIMath to blocks which are already LaTeX.
+        const islatex = [
+            '^{',
+            '_{',
+            '\\left',
+            '\\right',
+            '\\begin',
+            ];
+        if (islatex.some(s => code.includes(s))) {
+            return true;
+        };
+        // Use of a general control code. 
+        // (Yes, this duplicates \left, \right, \begin above...)
+        const regex = /\\[a-zA-Z]+/;
+        return regex.test(code);
+        };
 
     function splitBlock(code) {
         return code.split(/\r?\n/).map(line => line.trim()).filter(line => line !== '');
