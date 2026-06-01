@@ -102,7 +102,7 @@ class qtype_stack_renderer extends qtype_renderer {
             $questiontext = str_replace(
                 [
                     "<span class=\"nolink\">[[InMNEYMWDx:{$name}]]</span>",
-                    "&lt;span class=\"nolink\"&gt;[[InMNEYMWDx:{$name}]]&lt;/span&gt;"
+                    "&lt;span class=\"nolink\"&gt;[[InMNEYMWDx:{$name}]]&lt;/span&gt;",
                 ],
                 "[[input:{$name}]]",
                 $questiontext
@@ -110,7 +110,7 @@ class qtype_stack_renderer extends qtype_renderer {
             $questiontext = str_replace(
                 [
                     "<span class=\"nolink\">[[VnMNEYMWDx:{$name}]]</span>",
-                    "&lt;span class=\"nolink\"&gt;[[VnMNEYMWDx:{$name}]]&lt;/span&gt;"
+                    "&lt;span class=\"nolink\"&gt;[[VnMNEYMWDx:{$name}]]&lt;/span&gt;",
                 ],
                 "[[validation:{$name}]]",
                 $questiontext
@@ -120,7 +120,7 @@ class qtype_stack_renderer extends qtype_renderer {
             $questiontext = str_replace(
                 [
                     "<span class=\"nolink\">[[GDBBdLBJLg:{$index}]]</span>",
-                    "&lt;span class=\"nolink\"&gt;[[GDBBdLBJLg:{$index}]]&lt;/span&gt;"
+                    "&lt;span class=\"nolink\"&gt;[[GDBBdLBJLg:{$index}]]&lt;/span&gt;",
                 ],
                 "[[feedback:{$index}]]",
                 $questiontext
