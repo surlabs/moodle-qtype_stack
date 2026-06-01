@@ -1,3 +1,26 @@
+// This file is part of Stack - https://stack.maths.ed.ac.uk
+//
+// Stack is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Stack is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Stack.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * This is part of the free text input/ ASCII display block.
+ *
+ * @package    qtype_stack
+ * @copyright  2026 University of Edinburgh
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 // Bundle entry point for the full ascii bundle.
 // Includes all dependencies so cors.php only needs to serve one file.
 // Build with: npm run build
@@ -20,53 +43,78 @@ import regexall from './extractors/regexall.js';
 
 const extractorlib = { finalfunction, lastexpr, lastblock, lastcalc, regexmatch, regexall };
 
+/**
+ * Initialise the ASCII block for one question instance.
+ * Called by the PHP-compiled [[ascii]] block once all required input elements
+ * are available in the DOM.
+ *
+ * @param {string[]} inputIds   - DOM element ids; inputIds[0] is the free-text
+ *   textarea (source), inputIds[1..N] are the answer inputs for extractors,
+ *   in the same order as the [[extractor]] blocks.
+ * @param {Object[]} operations - ordered array of operation objects compiled from
+ *   [[filter]] and [[extractor]] child blocks, e.g.
+ *   [{ operation:'filter',    type:'markdown', transforms:'latexwrap' },
+ *    { operation:'extractor', type:'lastexpr', targetinput:'ans2'     }]
+ */
 export default function init(inputIds, operations) {
     const markdownContainerId = inputIds[0];
-    // inputIds[1..N] correspond to each parsed answer entry in order.
+    // inputIds[1..N] correspond to each extractor's target answer input in order.
     const alloperations = operations;
-    const filters = operations.filter(operator => operator.operation === 'filter');
-    const extractors = operations.filter(operator => operator.operation === 'extractor');
+    // blockCollector is populated by the active filter's renderer rules and then
+    // read by each extractor.  It is reset at the start of every filter render pass.
     const blockCollector = { blocks: [] };
 
+    /**
+     * Re-render the display and re-run all extractors from the current textarea value.
+     * Called on every `change` event (debounced) and once immediately on load.
+     */
     function renderMath() {
         const raw = document.getElementById(markdownContainerId).value.trim();
         const output = document.getElementById('asciiContainerRow');
 
         let processedOutput = raw;
-        let displayfixed = false;
-        let answerIndex = 1;
+        let displayfixed = false; // true once a filter with display:'true' has run
+        let answerIndex = 1;      // tracks which inputIds entry the next extractor writes to
 
         if (alloperations) {
             alloperations.forEach((currentop, i) => {
                 if (currentop.operation === 'filter') {
                     const filter = filterlib[currentop.type];
                     if (filter) {
+                        // reset:'true' re-processes the original raw input rather than
+                        // the output of the previous filter in the chain.
                         let filterInput = processedOutput;
                         if (currentop.reset === 'true') {
                             filterInput = raw;
                         }
-                        // We are not explicitly resetting thr=e blockCollector here but expecting
-                        // the filter to do so.
+                        // The filter is responsible for resetting blockCollector.blocks
+                        // at the start of its own render pass (see markdownitrules.js).
                         const filterOutput = filter(filterInput, blockCollector, currentop);
                         if (!displayfixed) {
                             processedOutput = filterOutput;
                         }
+                        // display:'true' freezes processedOutput so subsequent filters
+                        // cannot modify what is shown to the student.
                         if (currentop.display === 'true') {
                             displayfixed = true;
                         }
                     }
                 } else if (currentop.operation === 'extractor') {
+                    // Fall back to lastexpr if the requested extractor type is unknown.
                     const extractor = (extractorlib[currentop.type]) ? extractorlib[currentop.type] : extractorlib['lastexpr'];
                     const answerEl = document.getElementById(inputIds[answerIndex]);
                     answerIndex++;
                     if (extractor && answerEl) {
                         let value = extractor(raw, blockCollector.blocks, currentop);
                         const oldValue = answerEl.value;
+                        // Clear the input on extraction failure rather than leaving a stale value.
                         if (value === 'ERROR') {
                             answerEl.value = '';
                         } else {
                             answerEl.value = value;
                         }
+                        // Only fire 'change' when the value actually changed to avoid
+                        // unnecessary STACK validation requests.
                         if (answerEl.value !== oldValue) {
                             answerEl.dispatchEvent(new Event('change'));
                         }
@@ -77,7 +125,7 @@ export default function init(inputIds, operations) {
 
         document.getElementById('asciiContainerRow').innerHTML = processedOutput;
 
-        // Tell MathJax to typeset only this element.
+        // Tell MathJax to typeset only the output container element.
         if (typeof MathJax.typesetPromise === 'function') {
             MathJax.typesetPromise([output]); // MathJax 3
         } else {
@@ -85,10 +133,11 @@ export default function init(inputIds, operations) {
         }
     }
 
+    // Debounce rendering so rapid keystrokes don't trigger multiple MathJax typesets.
     let debounceTimer;
     document.getElementById(markdownContainerId).addEventListener('change', () => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(renderMath, 100); // debounce 100ms
     });
-    renderMath();
+    renderMath(); // initial render on load
 }

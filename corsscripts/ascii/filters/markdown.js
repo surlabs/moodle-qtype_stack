@@ -1,7 +1,13 @@
 // Markdown filter — creates a single markdownit instance with the full transformLib.
-// Call markdown(text, transforms, blockCollector) to render text with a chosen
-// subset of transforms. The transformLib is the authoritative registry; add new
-// transforms here after creating their file in markdownittransforms/.
+// Called by stackascii.js as: filter(rawText, blockCollector, op)
+// where op is the [[filter]] block's parameter object, e.g.
+//   { operation: 'filter', type: 'markdown', transforms: 'latexwrap,boldfilter' }
+//
+// The transformLib is the authoritative registry for named transforms.
+// To add a new transform:
+//   1. Create its file in markdownittransforms/ (use the NN_ prefix for ordering).
+//   2. Import it here and add it to transformLib.
+//   3. Document it in doc/en/Authoring/Question_blocks/ASCII.md.
 
 import markdownit from '../markdownit.js';
 import markdownitSub from '../markdownitextensions/sub.js';
@@ -14,15 +20,25 @@ import * as mdItPluginTex from '../markdownitextensions/tex.js';
 import boldfilter from '../markdownittransforms/020_boldfilter.js';
 import latexwrap from '../markdownittransforms/010_latexwrap.js';
 
-// Registry maps the string names used in the transforms option to the actual functions.
-// Add new transforms here after creating their file in markdownittransforms/.
+/**
+ * Registry maps the transform name strings used in the [[filter]] block's `transforms`
+ * parameter to the actual transform functions.  The ordering of entries here does not
+ * affect execution order — that is determined by the comma-separated list in `transforms`.
+ * @type {Object.<string, function(string[]): string[]>}
+ */
 const transformLib = {
     boldfilter,
     latexwrap,
 };
 
-// Shared mutable state updated before each render so the single converter instance
-// can serve calls with different transforms / collectors.
+/**
+ * Shared mutable state updated before each render so the single shared converter instance
+ * can serve calls with different transforms and collectors without being re-created.
+ * @property {string[]}    transforms   - ordered array of transform names, derived from op.transforms.
+ * @property {Object}      transformLib - map from name → transform function.
+ * @property {Object|null} collector    - { blocks: [] } object populated by the renderer rules,
+ *   or null when no extractor blocks are present.
+ */
 const state = { transforms: [], transformLib, collector: null };
 
 // mdItPluginTex.tex must come before markdownitrules.
@@ -32,7 +48,20 @@ const converter = markdownit({ html: true })
     .use(asciimathBlock)
     .use(markdownitrules, { state });
 
+/**
+ * Entry point called by stackascii.js for each render pass.
+ * Updates the shared state so the single converter instance uses the correct
+ * transforms and collector for this particular call, then renders the text.
+ * @param {string}      text          - the raw student input to render.
+ * @param {Object|null} blockCollector - { blocks: [] } collector for extractors, or null.
+ * @param {Object}      op            - the [[filter]] block parameter object;
+ *   op.transforms is a comma-separated list of transform names (e.g. 'latexwrap,boldfilter').
+ * @returns {string} rendered HTML string.
+ */
 export default function markdown(text, blockCollector, op) {
+    // Split op.transforms (e.g. 'latexwrap, boldfilter') into an ordered array of
+    // trimmed, non-empty names (['latexwrap', 'boldfilter']) that applyTransforms
+    // iterates over when processing each block.
     state.transforms = (op.transforms || '')
         .split(',')
         .map(s => s.trim())

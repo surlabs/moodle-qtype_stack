@@ -1,21 +1,34 @@
 import findtextindex from './findtextindex.js';
 
-// Takes an array of LaTeX strings (one per line) and returns an array whose first
-// element is \[\begin{align*} and last element is \end{align*}\], with the content
-// lines in between formatted for a 3-column aligned layout:
-//   col 1 – leading implies/therefore symbol (if present)
-//   col 2 – left-hand side up to (but not including) the relation symbol
-//   col 3 – relation symbol and right-hand side
-// A \text{…} that is not \text{or/and/if} is pushed into a 4th column.
+/**
+ * Transform: wraps an array of LaTeX lines in an `align*` environment formatted
+ * as a 3-column (plus optional 4th) aligned layout.
+ *
+ * Column assignment per line (insertions are applied right-to-left so earlier
+ * positions are not shifted by later insertions):
+ *   col 1 – leading logical connective (\\Rightarrow, \\therefore, …), if present
+ *   col 2 – left-hand side up to (but not including) the relation symbol
+ *   col 3 – relation symbol and right-hand side
+ *   col 4 – \\text{…} that is not \\text{or}, \\text{and}, or \\text{if}
+ *
+ * @param {string[]} lines - array of LaTeX strings, one expression per line.
+ * @returns {string[]} array whose first element is \[\begin{align*}, last element
+ *   is \end{align*}\], and whose interior lines are the formatted content rows.
+ */
 export default function latexwrap(lines) {
     const output = [`\\[\\begin{align*}`];
     for (let str of lines) {
-        // 3. Find first occurrence of \text{ and bump that to the next column.
+        // Step 3 (rightmost): find the first \text{ that is not \text{or/and/if}
+        // and push it into col 4 by inserting '& &' before it.
         const matchtxt = findtextindex(str, ['\\text{'], [`\\text{or}`, `\\text{and}`, `\\text{if}`]);
         if (matchtxt) {
             str = str.slice(0, matchtxt) + '& &' + str.slice(matchtxt);
         }
-        // 2. Find first occurrence of equals, inequality etc. and bump rest to the next column.
+
+        // Step 2 (middle): find the first relation symbol at top brace level
+        // (=, >, <, \leq, \subset, etc.) and split col 2 from col 3 with '&'.
+        // A trailing '&' is appended even when no relation is found so MathJax
+        // still aligns the line correctly within the environment.
         const bracest = [
             `in`, `notin`, `subset`, `subseteq`, `supset`, `supseteq`,
             `leq`, `lt`, `le`, `geq`, `gt`, `ge`,
@@ -24,22 +37,27 @@ export default function latexwrap(lines) {
         ];
         const braces = [`=`, `>`, `<`].concat(bracest.flatMap(token => [`\\${token}{`, `\\${token} `]));
         const matcheq = findtextindex(str, braces);
-        // Zero vs false issue.
+        // findtextindex returns 0 (falsy) when the match is at position 0, so
+        // compare strictly against false rather than using a truthiness check.
         if (matcheq !== false) {
             str = str.slice(0, matcheq) + '&' + str.slice(matcheq);
         } else {
             str = str + `&`;
         }
-        // 1. If we _start_ with an implies, therefore, etc. put it in col 1.
+
+        // Step 1 (leftmost): if the line opens with a logical connective
+        // (\Rightarrow, \therefore, etc.), move it into col 1.
         const imptxt = [`Rightarrow`, `Leftarrow`, `Leftrightarrow`, `therefore`, `because`];
         const imptxttk = imptxt.flatMap(token => [`\\${token}{`, `\\${token} `]);
         const matchimp = imptxttk.find(token => str.startsWith(token));
         if (matchimp === undefined) {
+            // No connective — leave col 1 empty with leading '& & '.
             str = `& & ` + str;
         } else {
+            // Connective found — insert '& &' after it to push the rest into col 2.
             str = str.slice(0, matchimp.length) + '& &' + str.slice(matchimp.length);
         }
-        str += `\\\\`;
+        str += `\\\\`;   // LaTeX row separator
         output.push(str);
     }
     output.push(`\\end{align*}\\]`);

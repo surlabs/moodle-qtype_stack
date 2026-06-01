@@ -1,3 +1,26 @@
+// This file is part of Stack - https://stack.maths.ed.ac.uk
+//
+// Stack is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Stack is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Stack.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * This is part of the free text input/ ASCII display block.
+ *
+ * @package    qtype_stack
+ * @copyright  2026 University of Edinburgh
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 // Markdown-it block rule plugin.
 //
 // Syntax:
@@ -18,9 +41,27 @@
     }
 })(typeof globalThis !== 'undefined' ? globalThis : this, function() {
 
+/**
+ * Markdown-it plugin that registers the asciimath_block block rule.
+ * @param {Object} mdit - the markdownit instance to extend.
+ */
 function asciimathBlock(mdit) {
     "use strict";
 
+    /**
+     * Markdown-it block rule for multi-line AsciiMath blocks.
+     * Registered before 'paragraph' so it takes priority over plain text.
+     *
+     * Opening marker: a single backtick on its own line (trailing spaces/tabs allowed).
+     * Closing marker: a single backtick on its own line (no other non-whitespace content).
+     * Emits an 'asciimath_block' token whose content is the joined interior lines.
+     *
+     * @param {Object}  state     - markdown-it state object.
+     * @param {number}  startLine - index of the candidate opening line.
+     * @param {number}  endLine   - index of the last line in the current block context.
+     * @param {boolean} silent    - if true, probe only; do not emit tokens.
+     * @returns {boolean} true if the rule consumed input, false otherwise.
+     */
     function asciimathBlockRule(state, startLine, endLine, silent) {
         // Position of first non-whitespace character on the opening line.
         const startPos = state.bMarks[startLine] + state.tShift[startLine];
