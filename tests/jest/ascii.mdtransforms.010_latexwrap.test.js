@@ -111,4 +111,27 @@ describe('latexwrap transform', () => {
             '\\end{align*}\\]'
         ]);
     });
+
+    test('returns lines unchanged when any line contains a skip environment', () => {
+        const input = ['a = b', '\\begin{align} x &= y \\end{align}'];
+        expect(latexwrap(input)).toEqual(input);
+    });
+
+    test('returns lines unchanged for starred skip environments', () => {
+        const input = ['\\begin{equation*} x = y \\end{equation*}'];
+        expect(latexwrap(input)).toEqual(input);
+    });
+
+    test('skips wrapping for every environment in the nonest list and its starred variant', () => {
+        const envs = [
+            'align', 'flalign', 'alignat', 'xalignat', 'xxalignat',
+            'gather', 'multline', 'equation', 'split', 'subequations'
+        ];
+        for (const env of envs) {
+            const plain = [`\\begin{${env}} a \\end{${env}}`];
+            const starred = [`\\begin{${env}*} a \\end{${env}*}`];
+            expect(latexwrap(plain)).toEqual(plain);
+            expect(latexwrap(starred)).toEqual(starred);
+        }
+    });
 });

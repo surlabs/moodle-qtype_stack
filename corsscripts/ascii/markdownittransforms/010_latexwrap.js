@@ -16,6 +16,29 @@ import findtextindex from './findtextindex.js';
  *   is \end{align*}\], and whose interior lines are the formatted content rows.
  */
 export default function latexwrap(lines) {
+    // Do not attempt to wrap LaTeX which is already aligned.
+    const nonest = [
+        'align',
+        'flalign',
+        'alignat',
+        'xalignat',
+        'xxalignat',
+        'gather',
+        'multline',
+        'equation',
+        'split',
+        'subequations'
+        ];
+    const skipenv = nonest.flatMap(token => [`\\begin{${token}}`, `\\begin{${token}*}`]);
+    var skip = false;
+    for (let str of lines) {
+        if (findtextindex(str, skipenv) !== false) {
+            skip = true;
+        }
+    }
+    if (skip) {
+        return lines;
+    }
     const output = [`\\[\\begin{align*}`];
     for (let str of lines) {
         // Step 3 (rightmost): find the first \text{ that is not \text{or/and/if}

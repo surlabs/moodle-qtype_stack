@@ -156,4 +156,45 @@ describe('markdownitrules filter', () => {
 
         expect(rendered).toBe('\n');
     });
+
+    test('code_inline treats content with a LaTeX control sequence as LaTeX and skips AMparseMath', () => {
+        const collector = { blocks: [] };
+        const { mdit } = setup({ collector });
+
+        const rendered = mdit.renderer.rules.code_inline([{ content: '\\frac{a}{b}' }], 0);
+
+        expect(window.AMparseMath).not.toHaveBeenCalled();
+        expect(rendered).toBe('\\(\\frac{a}{b}\\)');
+        expect(collector.blocks).toEqual([
+            { type: 'code_inline', raw: '\\frac{a}{b}', rendered: '\\(\\frac{a}{b}\\)' }
+        ]);
+    });
+
+    test('code_inline treats content with ^{ as LaTeX and skips AMparseMath', () => {
+        const { mdit } = setup();
+
+        mdit.renderer.rules.code_inline([{ content: 'x^{2}' }], 0);
+
+        expect(window.AMparseMath).not.toHaveBeenCalled();
+    });
+
+    test('asciimath_block wraps LaTeX content in \\[...\\] without calling AMparseMath or applying transforms', () => {
+        const t1 = jest.fn(lines => lines);
+        const collector = { blocks: [] };
+        const { mdit } = setup({
+            transforms: ['t1'],
+            transformLib: { t1 },
+            collector
+        });
+
+        const raw = '\\begin{matrix} a & b \\end{matrix}';
+        const rendered = mdit.renderer.rules.asciimath_block([{ content: raw }], 0);
+
+        expect(window.AMparseMath).not.toHaveBeenCalled();
+        expect(t1).not.toHaveBeenCalled();
+        expect(rendered).toBe('\\[\\begin{matrix} a & b \\end{matrix}\\]');
+        expect(collector.blocks).toEqual([
+            { type: 'asciimath_block', raw, rendered: '\\[\\begin{matrix} a & b \\end{matrix}\\]' }
+        ]);
+    });
 });

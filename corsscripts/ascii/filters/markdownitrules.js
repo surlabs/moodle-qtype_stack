@@ -39,7 +39,12 @@ export default function markdownitrules(mdit, options) {
     mdit.renderer.rules.code_inline = function(tokens, idx) {
         const code = tokens[idx].content;
         const inlineWrap = (s) => `\\(${s}\\)`;
-        const rendered = inlineWrap(window.AMparseMath(code, true));
+        let rendered = '';
+        if (isLaTeX(code)) {
+            rendered = inlineWrap(code);
+        } else {
+            rendered = inlineWrap(window.AMparseMath(code, true));
+        }
         if (state.collector) {
             state.collector.blocks.push({ type: 'code_inline', raw: code, rendered });
         }
@@ -54,7 +59,13 @@ export default function markdownitrules(mdit, options) {
      */
     mdit.renderer.rules.asciimath_block = function(tokens, idx) {
         const code = tokens[idx].content;
-        const rendered = applyTransforms(code, true);
+        let rendered = '';
+        if (isLaTeX(code)) {
+            const blockWrap = (s) => `\\[${s}\\]`;
+            rendered = blockWrap(code);
+        } else {
+            rendered = applyTransforms(code, true);
+        }
         if (state.collector) {
             state.collector.blocks.push({ type: 'asciimath_block', raw: code, rendered });
         }
@@ -89,6 +100,24 @@ export default function markdownitrules(mdit, options) {
             state.collector.blocks.push({ type: 'math_block', raw: code, rendered });
         }
         return rendered;
+    };
+
+    function isLaTeX(code) {
+        // Do not attempt to apply ASCIIMath to blocks which are already LaTeX.
+        const islatex = [
+            '^{',
+            '_{',
+            '\\left',
+            '\\right',
+            '\\begin',
+            ];
+        if (islatex.some(s => code.includes(s))) {
+            return true;
+        };
+        // Use of a general control code.
+        // (Yes, this duplicates \left, \right, \begin above...)
+        const regex = /\\[a-zA-Z]+/;
+        return regex.test(code);
     };
 
     /**
