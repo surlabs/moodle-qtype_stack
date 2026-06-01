@@ -16,7 +16,7 @@
 /****************************************************************/
 /*  Chemistry functions for STACK                               */
 /*                                                              */
-/*  V1.0 June 2025                                              */
+/*  V1.1 June 2026                                              */
 /*                                                              */
 /****************************************************************/
 
@@ -45,6 +45,10 @@ chem_data_units(element, dp) := block([cunit],
 /* This function returns the units addociated with field "dp". */
 chem_units(dp) := assoc(dp, zip_with("[", %_CHEM_FIELDS, %_CHEM_UNITS))$
 
+/************************************************************************/
+/* This function wraps declaration of the large, static arrays of data. */
+/************************************************************************/
+stack_chemistry_declare(ex) := block(
 /* 
    This is the order of data below.  For efficiency, we don't store all the data as nested lists with repeaed fields.
    The functions above return formatted data for use with "assoc".
@@ -55,16 +59,14 @@ chem_units(dp) := assoc(dp, zip_with("[", %_CHEM_FIELDS, %_CHEM_UNITS))$
     "IonizationEnergy", "ElectronAffinity", "OxidationStates",
     "StandardState", "MeltingPoint", "BoilingPoint", "Density",
     "GroupBlock", "YearDiscovered"
-]$
-
+],
 %_CHEM_UNITS : [
     null, null, g*mol^(-1), null,
     null, null, pm,
     J, null, null,
     null, K, K, g/cm^3,
     null, null
-]$
-
+],
 /*
   Chemical data reformatted from https://pubchem.ncbi.nlm.nih.gov/rest/pug/periodictable/JSON on 2025-06-17.
   Missing numerical data is indicated by the atom "null" rather than a zero.
@@ -188,7 +190,7 @@ chem_units(dp) := assoc(dp, zip_with("[", %_CHEM_FIELDS, %_CHEM_UNITS))$
   ["Lv", [116, "Livermorium", 293.205, "", "[Rn]7s2 7p4 5f14 6d10 (predicted)", null, null, null, null, "+4, +2, -2", "Expected to be a Solid", null, null, null, "Post-transition metal", 2000]],
   ["Ts", [117, "Tennessine", 294.211, "", "[Rn]7s2 7p5 5f14 6d10 (predicted)", null, null, null, null, "+5, +3, +1, -1", "Expected to be a Solid", null, null, null, "Halogen", 2010]],
   ["Og", [118, "Oganesson", 295.216, "", "[Rn]7s2 7p6 5f14 6d10 (predicted)", null, null, null, null, "+6, +4, +2, +1, 0, -1", "Expected to be a Gas", null, null, null, "Noble gas", 2006]]
-]$
+],
 
 /*
   Separating the language data in this format makes it easier to add a new language.
@@ -439,5 +441,6 @@ chem_units(dp) := assoc(dp, zip_with("[", %_CHEM_FIELDS, %_CHEM_UNITS))$
     ["Ts", "livermorium"],
     ["Og", "tennessiini"]]
   ]
-]$
+]
+)$
 

@@ -171,8 +171,7 @@ load("functs");
 
 /* Combined and processed maximasrc/ content. */
 load("maximasrccompiled.mac");
-
-stack_chemistry_declare(ex) := load("chemistry.mac");
+load("chemistry.mac");
 
 /* Are we printing normal Maxima or plain atoms? */
 tex_plain_atoms:false$
