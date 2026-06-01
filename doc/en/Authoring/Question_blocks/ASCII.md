@@ -161,7 +161,9 @@ Scans blocks bottom-up for the last expression matching `f(x) = <expr>` and retu
 
 #### `regexmatch`
 
-Scans blocks bottom-up for the last inline AsciiMath expression or last line of a multi-line block matching the given regular expression, and returns the matched line. The `regex` parameter is required. The target input could be a Maxima input (e.g. algebraic) or STACK's string input.
+Scans blocks bottom-up for the last inline AsciiMath expression or last line of a multi-line block matching the given regular expression, and returns the expression with the matched expression removed. The `regex` parameter is required. The target input could be a Maxima input (e.g. algebraic) or STACK's string input.
+
+For example, to extract `<expr>` from a line such as `f(x) = <expr>`:
 
 ```
 [[extractor type="regexmatch" targetinput="ans2" regex="^f\\(x\\)\\s*=\\s*" /]]
@@ -187,7 +189,7 @@ in the feedback variables.
 
 Imagine we are expecting a student to conclude with
 ```
-`f(x) =  <expr> ` 
+`f(x) = <expr> ` 
 ```
 and we wish to assess their answer `<expr>` in a PRT automatically.
 
