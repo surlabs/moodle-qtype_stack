@@ -399,7 +399,8 @@ var result = {
              * @param {Object} response The data that came back from the ajax validation call.
              */
             function showValidationFailure(response) {
-                lastValidatedValue = '';
+                // ISS1757 - Change from blank to null so validation updates when answer cleared.
+                lastValidatedValue = null;
                 // Reponse usually contains backtrace, debuginfo, errorcode, link, message and moreinfourl.
                 validationDiv.innerHTML = response.message;
                 removeAllClasses();
@@ -532,6 +533,34 @@ var result = {
                 return raw.split(/\s*[\r\n]\s*/).join('<br>');
             };
         }
+
+    /**
+     * Input type for freetext inputs.
+     *
+     * @constructor
+     * @param {Object} freetext The input element wrapped in jquery.
+     */
+    function StackFreetextInput(freetext) {
+        /**
+         * Add the event handler to call when the user input changes.
+         *
+         * @param {Function} valueChanging the callback to call when we detect a value change.
+         */
+        this.addEventHandlers = function(valueChanging) {
+            freetext.addEventListener('input', valueChanging);
+        };
+
+        /**
+         * Get the current value of this input.
+         *
+         * @return {String}.
+         */
+        this.getValue = function() {
+            var raw = freetext.value.replace(/^\s+|\s+$/g, '');
+            // Using <br> here is weird, but it gets sorted out at the PHP end.
+            return raw.split(/\s*[\r\n]\s*/).join('<br>');
+        };
+    }
 
         /**
          * Input type for inputs that are a set of radio buttons.
@@ -729,7 +758,11 @@ var result = {
             var input = document.querySelector('#' + questionDivId + ' [name="' + prefix + name + '"]');
             if (input) {
                 if (input.nodeName === 'TEXTAREA') {
-                    return new StackTextareaInput(input);
+                    if (input.dataset.stackInputType === 'freetext') {
+                        return new StackFreetextInput(input);
+                    } else {
+                        return new StackTextareaInput(input);
+                    }
                 } else if (input.tagName === 'ION-RADIO-GROUP') {
                     return new StackRadioInput(questionDivId, prefix, name);
                 } else if (input.tagName === 'ION-SELECT') {
@@ -1139,7 +1172,11 @@ var result = {
                     response['input-readonly'] = input.hasAttribute('disabled');
                 } else if (input.nodeName.toLowerCase() === 'textarea') {
                     response.value = input.value;
-                    response['input-type'] = 'textarea';
+                    if (input.dataset.stackInputType === 'freetext') {
+                        response['input-type'] = 'freetext';
+                    } else {
+                        response['input-type'] = 'textarea';
+                    }
                     response['input-readonly'] = input.hasAttribute('disabled');
                 } else if (input.tagName.toLowerCase() === 'ion-checkbox') {
                     response.value = input.checked;
