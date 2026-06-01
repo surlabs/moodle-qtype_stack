@@ -21,8 +21,10 @@ This input is a text area into which students may type whatever they choose.  Th
 Notes
 
 1.  All the notes for "string" inputs above still apply.
-2.  The freetext input takes the default option value is `manualgraded:true`.  If you specify `manualgraded:true` then the _whole STACK question_ will require manual grading!
-3.  Part of this input can be [linked to an automatically graded STACK input](../../Specialist_tools/Free_text_input/index.md), e.g. an algebraic input (final answer), textarea (last lines) or units input.
+2.  The freetext input defaults to `manualgraded:true`.  If `manualgraded:true` is set then the _whole STACK question_ will require manual grading!
+3.  Part of this input can be [linked to an automatically graded STACK input](../../Specialist_tools/Free_text_input/index.md) via `[[extractor]]` blocks inside an `[[ascii]]` display block, e.g. an algebraic input (final answer), textarea (last lines) or units input.
+4.  The `align` extra option controls text alignment within the textarea: `align:right` aligns the text to the right; the default is `align:left`.
+5.  The `monospace` extra option renders the textarea in a monospace font when set to `monospace:true`.
 
 #### JSON input ####
 
