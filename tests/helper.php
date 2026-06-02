@@ -5834,7 +5834,7 @@ final class qtype_stack_test_helper extends question_test_helper {
     public static function get_stack_question_form_data_freetext_input() {
         $formform = new stdClass();
         $formform->stackversion = '2026042402';
-        $formform->name = 'Free-text with final answer (calculus)';
+        $formform->name = 'Freetext';
         $formform->questionvariables = 'fx:8*x/sqrt(2*x^2+1);
 y0:5;
 

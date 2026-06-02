@@ -692,18 +692,11 @@ Feature: Test input of correct answers on various inputs in the Moodle app.
 
   Scenario: Test Freetext input in app
 
-    Given the site is running Moodle version 4.1 or higher
-    And the following "users" exist:
-      | username | firstname |
-      | student  | Student   |
-    And the following "course enrolments" exist:
-      | user    | course | role    |
-      | student | C1     | student |
-    And the following "activities" exist:
-      | activity | name      | course | idnumber | preferredbehaviour |
-      | quiz     | Test quiz | C1     | quiz     | adaptive           |
+    Given the following "questions" exist:
+      | questioncategory | qtype | name                                     | template                  |
+      | Test questions   | stack | Freetext                                 | freetext_input            |
     And quiz "Test quiz" contains the following questions:
-      | Freetext | 1 |
+      | Freetext                                 | 1  |
     When I entered the "quiz" activity "Test quiz" on course "Course 1" as "student" in the app
     And I press "Attempt quiz now" in the app
     And I set the STACK input "ans1" to multiline in app:
