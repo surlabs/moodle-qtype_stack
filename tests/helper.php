@@ -5865,7 +5865,7 @@ ta2:4*sqrt(2*x^2+1)+1;
 [[filter type="markdown" transforms="latexwrap" /]]
 [[extractor targetinput="ans2" type="finalfunction"/]]
 [[extractor targetinput="ans3" type="lastexpr"/]]
-[[extractor targetinput="ans4" type="regexmatch" regex="^f\\\\(0\\\\)"/]]
+[[extractor targetinput="ans4" type="regexmatch" regex="^f\\\\(0\\\\)\\\\s*=\\\\s*"/]]
 [[extractor targetinput="ans5" type="regexall" regex="^f\\\\(x\\\\)"/]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>

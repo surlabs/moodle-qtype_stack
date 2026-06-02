@@ -9,7 +9,10 @@
       <text><![CDATA[<p> Solve {@eqn1@}.<p>
 <p>Work line by line below, justifying your answer fully. </p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
-[[ascii input="ans1" answer="ans2"]][[/ascii]]
+[[ascii input="ans1"]]
+[[filter type="markdown" transforms="latexwrap" /]]
+[[extractor type="lastblock" targetinput="ans2" /]]
+[[/ascii]]
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>
 [[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]]]></text>

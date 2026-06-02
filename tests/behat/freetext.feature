@@ -1,4 +1,4 @@
-@qtype @qtype_stack @_file_upload @javascript
+@qtype @qtype_stack @javascript
 Feature: Test input of correct answers on freetext inputs.
   As a teacher
   In order to check different STACK inputs will work for students

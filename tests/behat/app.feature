@@ -721,4 +721,3 @@ Feature: Test input of correct answers on various inputs in the Moodle app.
     And I check the input "ans3" is 'f(x) = 4sqrt(2x^2+1)+1'
     And I check the input "ans4" is '5 => c = 1'
     And I check the input "ans5" is '{"matches":["f(x) = 4sqrt(2x^2+1)+c","f(x) = 4sqrt(2x^2+1)+1"]}'
-
