@@ -689,3 +689,36 @@ Feature: Test input of correct answers on various inputs in the Moodle app.
     And I press "Check" in the app
     And I press "OK" in the app
     And I wait until "Correct answer, well done" "text" exists
+
+  Scenario: Test Freetext input in app
+
+    Given the site is running Moodle version 4.1 or higher
+    And the following "users" exist:
+      | username | firstname |
+      | student  | Student   |
+    And the following "course enrolments" exist:
+      | user    | course | role    |
+      | student | C1     | student |
+    And the following "activities" exist:
+      | activity | name      | course | idnumber | preferredbehaviour |
+      | quiz     | Test quiz | C1     | quiz     | adaptive           |
+    And quiz "Test quiz" contains the following questions:
+      | Freetext | 1 |
+    When I entered the "quiz" activity "Test quiz" on course "Course 1" as "student" in the app
+    And I press "Attempt quiz now" in the app
+    And I set the STACK input "ans1" to multiline in app:
+    """
+    words
+    4+ 4
+    `
+    f(x) = 4sqrt(2x^2+1)+c
+    f(0) = 5 => c = 1
+    f(x) = 4sqrt(2x^2+1)+1
+    `
+    """
+    And I wait until "Your last answer was interpreted as follows" "text" exists
+    And I check the input "ans2" is '4sqrt(2x^2+1)+1'
+    And I check the input "ans3" is 'f(x) = 4sqrt(2x^2+1)+1'
+    And I check the input "ans4" is '5 => c = 1'
+    And I check the input "ans5" is '{"matches":["f(x) = 4sqrt(2x^2+1)+c","f(x) = 4sqrt(2x^2+1)+1"]}'
+
