@@ -1895,6 +1895,7 @@ or alternatively: \[\int f(x)g(x)\,\mathrm{d}x=f(x)\,\int
 g(x)\mathrm{d}x -\int {\mathrm{d}f\over \mathrm{d}x}\left\{\int g(x)\mathrm{d}x\right\}\mathrm{d}x.\]';
 
 $string['free_text_name'] = 'Free-text inputs';
+// phpcs:disable moodle.Strings.ForbiddenStrings.Found
 $string['free_text_fact'] = 'This input allows you to type in free text, e.g. your complete working or mathematical proof.
 <ol>
 <li>You can type markdown text.</li>
@@ -1902,7 +1903,7 @@ $string['free_text_fact'] = 'This input allows you to type in free text, e.g. yo
 <li>You can include LaTeX between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.</li>
 </ol>
 More specific documentation on markdown, AsciiMath and LaTeX is available online.';
-
+// phpcs:enable moodle.Strings.ForbiddenStrings.Found
 $string['Illegal_singleton_power'] = 'This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
 $string['Illegal_singleton_floats'] = 'This input does not accept decimal numbers in the given form. This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
 $string['Illegal_singleton_integer'] = 'This input does not accept integer values. This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';

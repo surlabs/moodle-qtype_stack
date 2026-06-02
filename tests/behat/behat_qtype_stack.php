@@ -170,7 +170,6 @@ class behat_qtype_stack extends behat_base {
         }
     }
 
-
     /**
      * Check an iframe element value contains one of three substrings.
      *
@@ -179,7 +178,9 @@ class behat_qtype_stack extends behat_base {
      * @param string $value2 second expected substring
      * @param string $value3 third expected substring
      *
+     * phpcs:disable moodle.Files.LineLength.TooLong
      * @Given /^I check the value of iframe element "(?P<id>[^"]*)" contains one of '(?P<value1>[^']*)' or '(?P<value2>[^']*)' or '(?P<value3>[^']*)'$/
+     * phpcs:enable moodle.Files.LineLength.TooLong
      */
     public function i_check_element_value_contains_one_of($id, $value1, $value2, $value3) {
         $generalcontext = behat_context_helper::get('behat_general');
@@ -193,8 +194,13 @@ class behat_qtype_stack extends behat_base {
         $formvalue = $this->evaluate_script($js);
         $this->getSession()->switchToWindow();
         $formvalue = str_replace(["\r\n", "\r", "\n"], '\n', $formvalue);
-        if (strpos($formvalue, $value1) === false && strpos($formvalue, $value2) === false && strpos($formvalue, $value3) === false) {
-            throw new \Exception("Expected element value to contain one of '$value1', '$value2' or '$value3' but got '$formvalue'.");
+        if (
+            strpos($formvalue, $value1) === false &&
+            strpos($formvalue, $value2) === false &&
+            strpos($formvalue, $value3) === false
+        ) {
+            throw new \Exception("Expected element value to contain one of '$value1'," .
+                " '$value2' or '$value3' but got '$formvalue'.");
         }
     }
 

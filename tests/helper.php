@@ -5835,6 +5835,7 @@ final class qtype_stack_test_helper extends question_test_helper {
         $formform = new stdClass();
         $formform->stackversion = '2026042402';
         $formform->name = 'Freetext';
+        // phpcs:disable moodle.Strings.ForbiddenStrings.Found
         $formform->questionvariables = 'fx:8*x/sqrt(2*x^2+1);
 y0:5;
 
@@ -5856,6 +5857,7 @@ f(x) = 4sqrt(2x^2+1)+1
 ta2:4*sqrt(2*x^2+1)+1;
 
 ';
+        // phpcs:enable moodle.Strings.ForbiddenStrings.Found
         $formform->questiontext = [
             'text' => '<p> Let \(f\'(x)= {@fx@}\). Given that \(f(0)={@y0@}\), find \(f(x)\).</p>
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
@@ -6061,7 +6063,8 @@ ta2:4*sqrt(2*x^2+1)+1;
         $formform->prt2falsescoremode[0] = '-';
         $formform->prt2falsepenalty[0] = '';
         $formform->prt2falsefeedback[0] = [
-            'text' => 'When we evaluate \(f(0)\) with your answer we get \({@ev(sa2,x=0)@}\\neq {@y0@}\), so you must have done something wrong.',
+            'text' => 'When we evaluate \(f(0)\) with your answer we get \({@ev(sa2,x=0)@}\\neq {@y0@}\),' .
+                ' so you must have done something wrong.',
             'format' => '1',
             'itemid' => 0,
         ];
