@@ -1,20 +1,24 @@
 import calculation from '../../corsscripts/ascii/filters/calculation.js';
 
 describe('calculation filter', () => {
-    test('wraps text between {@ and @} in double stars', () => {
-        expect(calculation('The answer is {@x^2 + 1@} here')).toBe('The answer is **x^2 + 1** here');
+    test('evaluates text between {@ and @}', () => {
+        expect(calculation('The answer is {@2^2 + 1@} here')).toBe('The answer is 5 here');
     });
 
-    test('handles multiple {@...@} in one line', () => {
-        expect(calculation('A: {@x@}, B: {@y@}')).toBe('A: **x**, B: **y**');
+    test('handles multiple {@...@} on one line as separate blocks', () => {
+        expect(calculation('A: {@2+3@}, B: {@10/2@}')).toBe('A: 5, B: 5');
     });
 
-    test('ignores {@ with no closing @}', () => {
-        expect(calculation('A: {@x, B: {@y@}')).toBe('A: {@x, B: **y**');
+    test('falls back to raw content when evaluation fails', () => {
+        expect(calculation('A: {@2+@}, B: {@3*3@}')).toBe('A: 2+, B: 9');
+    });
+
+    test('does not throw for malformed content ending at a single @}', () => {
+        expect(calculation('A: {@2+3, B: {@4+1@}')).toBe('A: 2+3, B: {@4+1');
     });
 
     test('requires opening brace and closing brace around markers', () => {
-        expect(calculation('A: @x@ and {@y@} and @z@')).toBe('A: @x@ and **y** and @z@');
+        expect(calculation('A: @2+3@ and {@3*3@} and @4-1@')).toBe('A: @2+3@ and 9 and @4-1@');
     });
 
     test('does not match across newlines', () => {
@@ -26,23 +30,23 @@ describe('calculation filter', () => {
     });
 
     test('does not transform old @...@ syntax', () => {
-        expect(calculation('A: @x@, B: @y@')).toBe('A: @x@, B: @y@');
+        expect(calculation('A: @2+3@, B: @4+5@')).toBe('A: @2+3@, B: @4+5@');
     });
 
     test('populates blockCollector with calculation blocks', () => {
         const collector = { blocks: [] };
-        calculation('A: {@x@}, B: {@y@}', collector);
+        calculation('A: {@2+3@}, B: {@2^3@}', collector);
         expect(collector.blocks).toEqual([
-            { type: 'calculation', raw: 'x', rendered: '**x**' },
-            { type: 'calculation', raw: 'y', rendered: '**y**' }
+            { type: 'calculation', raw: '2+3', rendered: '5' },
+            { type: 'calculation', raw: '2^3', rendered: '8' }
         ]);
     });
 
     test('clears blockCollector.blocks if provided', () => {
         const collector = { blocks: [{ type: 'old', raw: 'z' }] };
-        calculation('A: {@x@}', collector);
+        calculation('A: {@7-4@}', collector);
         expect(collector.blocks).toEqual([
-            { type: 'calculation', raw: 'x', rendered: '**x**' }
+            { type: 'calculation', raw: '7-4', rendered: '3' }
         ]);
     });
 });
