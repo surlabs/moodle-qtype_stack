@@ -17,7 +17,7 @@ The `[[ascii]]` castext block takes one or more optional `[[filter]]` child bloc
 ```
 The student's text is run through a markdown filter first which applies normal markdown display formatting.  In this example we also apply a special STACK transformation (`latexwrap`) which translates and aligns AsciiMath surrounded by backticks.
 
-Multiple `[[extractor]]` blocks may be used to extract answers from the block into multiple STACK inputs. Multiple `[[filter]]` blocks can also be used to translate the raw original input in different ways in succession. By default, the output of one filter is fed into the next filter as the 'raw' input. Extractors are supplied with the cumulative output of the filters so far and 'map' information from the most recent filter applied. For instance, the markdown filter supplies a list of all the identified occurences of code and asciimaths sections in the student's text (in order) and with both the initial contents given to the filter and the transformed output.
+Multiple `[[extractor]]` blocks may be used to extract answers from the block into multiple STACK inputs. Multiple `[[filter]]` blocks can also be used to translate the raw original input in different ways in succession. By default, the output of one filter is fed into the next filter as the 'raw' input. Extractors are supplied with the cumulative output of the filters so far and 'map' information from the most recent filter applied. For instance, the markdown filter supplies a list of all the identified occurrences of code and AsciiMath sections in the student's text (in order) and with both the initial contents given to the filter and the transformed output.
 
 Filters and extractors are applied in the order listed in the `[[ascii]]` block. Filters have the option to break the chain and return to processing the initial raw student input and/or to display the output of the current filter even if there are later filters in the chain (which will thus be used for creating input for extractors, not display).
 
@@ -25,12 +25,12 @@ Currently, it is only possible to link one source input.
 
 ### Block parameters
 
-Functionality and styling can be customised through the use of block parameters.
+Functionality and styling can be customized through the use of block parameters.
 
 1. `input` (required): string. The name of the free-text input which provides input to this block.
 2. `height`: string containing a positive float + a valid CSS unit (e.g. `"480px"`, `"100%"`, ...). Default is `"400px"`. This fixes the height of the display window.
 3. `width`: string containing a positive float + a valid CSS unit (e.g. `"480px"`, `"100%"`, ...). Default is `"100%"`. This fixes the width of the display window.
-4. `aspect-ratio`: string, containing a positive float. This can be used with `height` _or_ `width` (not both) and automatically determines the value of the un-used parameter. An error will occur if values for both `width` and `height` are also set.
+4. `aspect-ratio`: string, containing a positive float. This can be used with `height` _or_ `width` (not both) and automatically determines the value of the unused parameter. An error will occur if values for both `width` and `height` are also set.
 5. `hidden`: To hide the display of the contents use the block option `hidden="true"`.
 
 ## Filters
@@ -59,7 +59,7 @@ A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` blo
 
 #### `markdown` filter
 
-The `markdown` filter processes the student's text as Markdown and renders mathematical content. The following rendering rules are applied to recognised token types:
+The `markdown` filter processes the student's text as Markdown and renders mathematical content. The following rendering rules are applied to recognized token types:
 
 - **`code_inline`**: A single backtick expression is treated as inline AsciiMath.  If the content is identified as LaTeX then no processing takes place.  Otherwise, the content is converted to LaTeX by `AMparseMath`.  The result is always wrapped in `\(...\)`.
 
@@ -100,7 +100,7 @@ In the following example, the transform `latexwrap` is applied to line up equati
 
 Available transforms (specified via the `transforms` parameter):
 
-- `latexwrap`: Formats multiple-line mathematics (in asciimath_block) aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
+- `latexwrap`: Formats multiple-line mathematics (in `asciimath_block`) aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
   - col 1 – leading logical connective, such as implies/therefore symbol (if present, e.g. `=>`, `:.` (therefore) in AsciiMath)
   - col 2 – left-hand side up to (but not including) the relation symbol
   - col 3 – relation symbol and right-hand side
@@ -111,13 +111,33 @@ Available transforms (specified via the `transforms` parameter):
 
 #### `calculation` filter
 
-The `calculation` filter finds text enclosed in `@` characters on a single line and renders it in bold. For example, `The answer to \(1+1=@1+1@\).` displays **1+1** in bold. The enclosed text is also collected as a block and available to the `lastcalc` extractor. ***Eventually this will actually do the calculation but is currently included for testing purposes only.***
+The `calculation` filter finds text enclosed between `{@...@}` tags on a single line and renders it in bold. For example, `The answer to \(1+1={@1+1@}\).` displays the answer as **1+1** in bold. The enclosed text is also collected as a block and available to the `lastcalc` extractor. ***Eventually this will actually do the calculation but is currently included for testing purposes only.***
 
     [[filter type="calculation" /]]
 
+Note, the order of filters is important, and it is essential that the calculation filter is applied before the markdown filter.  That way the results of any calculation are inserted into text which is then processed by the markdown filter.  The _results_ of the calculation can then be captured by the `lastexpr` and `lastblock` extractors (see below).  Hence, you will typically need to use
+
+```
+[[ascii input="ans1"]]
+  [[filter type="calculation" /]]
+  [[filter type="markdown" transforms="latexwrap" /]]
+  [[extractor type="lastexpr" targetinput="ans2" /]]
+[[/ascii]]
+```
+
+Note, the calculation filter really does a search and replace on the text. It's therefore important for users (including students) to embed a calculation within a mathematics environment.  If you would like the result of a numerical calculation within a LaTeX inline expression then use
+
+    \( {@3*31@} \)
+
+or, if using the AsciiMath filter
+
+    `{@3*31@}`
+
+While just `{@3*31@}` will be replaced within the text (and probably looks OK as numbers within text), it won't be within a mathematics environment.  (Experienced castext users might not have noticed that when rendering castext server-side we auto-detect if a calculation is within a mathematics environment, and if not we ensure it's inline mathematics. This auto-detection does not happen here!)
+
 ### Filter developer notes
 
-Filters are defined in `corsscripts/ascii/filters`. This has been designed to add flexibility for filtering.  Markdown transforms and associated shared functions are in `corsscripts/ascii/markdownittransforms`. Markdown extensions for identifying additonal document sections are in `corsscripts/ascii/markdownitextensions`. The rules for how to display these sections are in `corsscripts/ascii/filters/markdownitextensions.js`.
+Filters are defined in `corsscripts/ascii/filters`. This has been designed to add flexibility for filtering.  Markdown transforms and associated shared functions are in `corsscripts/ascii/markdownittransforms`. Markdown extensions for identifying additional document sections are in `corsscripts/ascii/markdownitextensions`. The rules for how to display these sections are in `corsscripts/ascii/filters/markdownitextensions.js`.
 
 ## Extractors
 
@@ -133,7 +153,7 @@ The purpose of "extractors" is to identify parts of the student's text, extract 
 
 #### `lastexpr`
 
-Returns the trimmed content of the last inline AsciiMath expression (delimited by backticks), or the last non-empty line of the last multi-line AsciiMath block, in document order. Falls back to the final non-empty line of the raw input when no blocks are present.
+Returns the trimmed content of the last inline AsciiMath expression (delimited by backticks), or the last nonempty line of the last multi-line AsciiMath block, in document order. Falls back to the final nonempty line of the raw input when no blocks are present.
 
 ```
 [[extractor type="lastexpr" targetinput="ans2" /]]
@@ -188,7 +208,7 @@ If the result is assigned to input `ans2`, you can create a Maxima list of the m
 
 For example, if you have a regular expression which matches "fruit" within the student's answer (!), then the expected output will be in the form:
 
-    "{\"matches\":[ \"Apple\", \"Bannan\", \"Cherry\"]}";
+    "{\"matches\":[ \"Apple\", \"Banana\", \"Cherry\"]}";
 
 If this is assigned to input `ans2`, then you can create a Maxima list of the matched strings for use in the PRT with the following in the feedback variables.
 
@@ -226,7 +246,7 @@ Alternatively, send _everything_ to the input (e.g. `ans1`) and post-process in 
 
 If `ans1` is an equation, this takes the right-hand side of `ans1`, or the whole expression otherwise. This approach condones lack of `f(x)=` in a student's answer or them using something else.
 
-Both client-side regular expressions and post-processing in Maxima have their merits and uses and so we suppport both options for teachers.
+Both client-side regular expressions and post-processing in Maxima have their merits and uses and so we support both options for teachers.
 
 ### Extractor developer notes
 

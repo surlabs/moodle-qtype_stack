@@ -49,6 +49,7 @@ So this requires a DB change as well.
 
 1. Support an option so that `#` can be used instead of backticks to delimit AsciiMath.
 2. Error messages for unknown filter/extractor names! (To help authors....)
+3. Write an AsciiMath to Maxima parser to ensure the `lastblock` and `lastexpr` extractors create correct syntax for the input.
 
 ## Future equivalence reasoning development track.
 
