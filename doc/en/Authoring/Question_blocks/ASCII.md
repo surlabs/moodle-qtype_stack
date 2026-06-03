@@ -46,6 +46,8 @@ A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` blo
 [[/ascii]]
 ```
 
+***Note: content-less filter blocks must have a closing tag `/`.***
+
 ### Filter block parameters
 
 1. `type` (required): the filter type. Currently available: `markdown`, `calculation`.
@@ -109,7 +111,9 @@ Available transforms (specified via the `transforms` parameter):
 
 #### `calculation` filter
 
-The `calculation` filter finds text enclosed in `@` characters on a single line and renders it in bold. For example, `The answer is @x^2 + 1@ here` displays **x^2 + 1** in bold. The enclosed text is also collected as a block and available to the `lastcalc` extractor. ***Eventually this will actually do the calculation but is currently included for testing purposes only.***
+The `calculation` filter finds text enclosed in `@` characters on a single line and renders it in bold. For example, `The answer to \(1+1=@1+1@\).` displays **1+1** in bold. The enclosed text is also collected as a block and available to the `lastcalc` extractor. ***Eventually this will actually do the calculation but is currently included for testing purposes only.***
+
+    [[filter type="calculation" /]]
 
 ### Filter developer notes
 
