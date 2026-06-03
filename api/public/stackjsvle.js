@@ -68,8 +68,6 @@
      * @param {String} id the identifier of the element we want.
      */
     function vle_get_element(id) {
-        /* In the case of Moodle we are happy as long as the element is inside
-           something with the `formulation`-class. */
         let candidate = document.getElementById(id);
         let iter = candidate;
         while (iter && !iter.classList.contains('formulation') &&
@@ -737,6 +735,37 @@
             });
 
             break;
+        case 'register-button-listener':
+            // 1. Find the element.
+            element = vle_get_element(msg.target);
+
+            if (element === null) {
+                // Requested something that is not available.
+                const ret = {
+                    version: 'STACK-JS:1.2.0',
+                    type: 'error',
+                    msg: 'Failed to find element: "' + msg.target + '"',
+                    tgt: msg.src
+                };
+                IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(ret), '*');
+                return;
+            }
+
+            // 2. Add a listener, no need to do anything more
+            // complicated than this.
+            element.addEventListener('click', (event) => {
+                let resp = {
+                    version: 'STACK-JS:1.2.0',
+                    type: 'button-click',
+                    name: msg.target,
+                    tgt: msg.src
+                };
+                IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(resp), '*');
+                // These listeners will stop the submissions of buttons which might be a problem.
+                event.preventDefault();
+            });
+
+            break;
         case 'toggle-visibility':
             // 1. Find the element.
             element = vle_get_element(msg.target);
@@ -970,5 +999,13 @@
             document.getElementById(targetdivid).replaceChildren(frm);
             IFRAMES[iframeid] = frm;
 
+    };
 
+    /**
+     * Register an iframe if already created.
+     * @param string iframeid
+     */
+    function register_iframe(iframeid) {
+        const iframe = document.getElementById(iframeid);
+        IFRAMES[iframeid] = iframe;
     };

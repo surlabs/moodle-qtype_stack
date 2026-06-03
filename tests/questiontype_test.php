@@ -143,7 +143,6 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
     }
 
     public function test_initialise_question_instance(): void {
-
         $qdata = test_question_maker::get_question_data('stack', 'test3');
         $q = $this->qtype->make_question($qdata);
         $expectedq = test_question_maker::make_question('stack', 'test3');
@@ -193,17 +192,29 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
         ));
         $testcases[] = $qtest;
 
-        // This unit test runs a question test, with an input name as
-        // the expected answer, which should work.
+        // This unit test runs a question test, with an input name as the expected answer.
         $qtest = new stack_question_test('', ['ans2' => 'ans2']);
         $qtest->add_expected_result('even', new stack_potentialresponse_tree_state(
             1,
-            true,
+            false,
             1,
             0,
             '',
             ['even-1-T']
         ));
+        $testcases[] = $qtest;
+
+        // This unit test runs a question test, accepting any score and penalty.
+        $qtest = new stack_question_test('', ['ans2' => 'x^2']);
+        $qtest->add_expected_result('even', new stack_potentialresponse_tree_state(
+            1,
+            true,
+            -1,
+            -1,
+            '',
+            ['even-1-T']
+            ));
+        $testcases[] = $qtest;
 
         foreach ($testcases as $testcase) {
             $result = $testcase->test_question($questionid, $seed, context_system::instance());
@@ -253,13 +264,13 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
     <assumepositive>0</assumepositive>
     <assumereal>0</assumereal>
     <prtcorrect format="html">
-      <text><![CDATA[<p>Correct answer, well done.</p>]]></text>
+      <text><![CDATA[<p>[[commonstring key="defaultprtcorrectfeedback"/]]</p>]]></text>
     </prtcorrect>
     <prtpartiallycorrect format="html">
-      <text><![CDATA[<p>Your answer is partially correct.</p>]]></text>
+      <text><![CDATA[<p>[[commonstring key="defaultprtpartiallycorrectfeedback"/]]</p>]]></text>
     </prtpartiallycorrect>
     <prtincorrect format="html">
-      <text><![CDATA[<p>Incorrect answer.</p>]]></text>
+      <text><![CDATA[<p>[[commonstring key="defaultprtincorrectfeedback"/]]</p>]]></text>
     </prtincorrect>
     <decimals>.</decimals>
     <scientificnotation>*10</scientificnotation>
@@ -378,13 +389,13 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
     <assumepositive>0</assumepositive>
     <assumereal>0</assumereal>
     <prtcorrect format="html">
-      <text><![CDATA[<p>Correct answer, well done.</p>]]></text>
+      <text><![CDATA[<p>[[commonstring key="defaultprtcorrectfeedback"/]]</p>]]></text>
     </prtcorrect>
     <prtpartiallycorrect format="html">
-      <text><![CDATA[<p>Your answer is partially correct.</p>]]></text>
+      <text><![CDATA[<p>[[commonstring key="defaultprtpartiallycorrectfeedback"/]]</p>]]></text>
     </prtpartiallycorrect>
     <prtincorrect format="html">
-      <text><![CDATA[<p>Incorrect answer.</p>]]></text>
+      <text><![CDATA[<p>[[commonstring key="defaultprtincorrectfeedback"/]]</p>]]></text>
     </prtincorrect>
     <decimals>.</decimals>
     <scientificnotation>*10</scientificnotation>
@@ -572,15 +583,15 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
         $expectedq->assumepositive        = 0;
         $expectedq->assumereal            = 0;
         $expectedq->prtcorrect            = [
-            'text' => '<p>Correct answer, well done.</p>',
+            'text' => '<p>[[commonstring key="defaultprtcorrectfeedback"/]]</p>',
             'format' => FORMAT_HTML, 'files' => [],
         ];
         $expectedq->prtpartiallycorrect   = [
-            'text' => '<p>Your answer is partially correct.</p>',
+            'text' => '<p>[[commonstring key="defaultprtpartiallycorrectfeedback"/]]</p>',
             'format' => FORMAT_HTML, 'files' => [],
         ];
         $expectedq->prtincorrect          = [
-            'text' => '<p>Incorrect answer.</p>',
+            'text' => '<p>[[commonstring key="defaultprtincorrectfeedback"/]]</p>',
             'format' => FORMAT_HTML, 'files' => [],
         ];
         $expectedq->decimals              = '.';
@@ -875,17 +886,18 @@ final class questiontype_test extends qtype_stack_walkthrough_test_base {
         );
         $this->assertEquals(FORMAT_HTML, $question->generalfeedbackformat);
         $this->assertEquals(
-            '<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.',
+            '[[commonstring key="symbolicprtcorrectfeedback"/]] [[commonstring key="defaultprtcorrectfeedback"/]]',
             $question->prtcorrect['text']
         );
         $this->assertEquals(FORMAT_HTML, $question->prtpartiallycorrect['format']);
         $this->assertEquals(
-            '<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.',
+            '[[commonstring key="symbolicprtpartiallycorrectfeedback"/]] ' .
+            '[[commonstring key="defaultprtpartiallycorrectfeedback"/]]',
             $question->prtpartiallycorrect['text']
         );
         $this->assertEquals(FORMAT_HTML, $question->prtincorrect['format']);
         $this->assertEquals(
-            '<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.',
+            '[[commonstring key="symbolicprtincorrectfeedback"/]] [[commonstring key="defaultprtincorrectfeedback"/]]',
             $question->prtincorrect['text']
         );
         $this->assertEquals(FORMAT_HTML, $question->prtcorrect['format']);

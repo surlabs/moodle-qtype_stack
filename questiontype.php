@@ -798,7 +798,8 @@ class qtype_stack extends question_type {
         if (question_has_capability_on($question, 'view')) {
             $actions[] = new \action_menu_link_secondary(
                 new moodle_url('/question/type/stack/questiontestrun.php', $linkparams),
-                new \pix_icon('t/approve', ''),
+                // Should be the wrench.
+                new \pix_icon('t/preferences', ''),
                 get_string('runquestiontests', 'qtype_stack')
             );
         }
@@ -807,8 +808,8 @@ class qtype_stack extends question_type {
         if (question_has_capability_on($question, 'view')) {
             $actions[] = new \action_menu_link_secondary(
                 new moodle_url('/question/type/stack/tidyquestion.php', $linkparams),
-                new \pix_icon('t/edit', ''),
-                get_string('tidyquestion', 'qtype_stack')
+                new \pix_icon('t/sort_by', ''),
+                get_string('tidyquestion_txt', 'qtype_stack')
             );
         }
 
@@ -1030,7 +1031,8 @@ class qtype_stack extends question_type {
                     (float) $expectedresults->penalty
                 );
             }
-            $expected->expectedanswernote = $expectedresults->answernotes[0];
+            // We coerce the score and penalty to be numeric (correct DB type), so we should make sure the note isn't too long.
+            $expected->expectedanswernote = substr($expectedresults->answernotes[0], 0, 1000);
             $DB->insert_record('qtype_stack_qtest_expected', $expected);
         }
 
@@ -1309,30 +1311,6 @@ class qtype_stack extends question_type {
                     'prtname' => $prtname,
                     'nodename' => $from,
                     'falseanswernote' => $prtname . '-' . (intval($from) + 1) . '-F',
-            ]
-        );
-
-        // True answer notes in question test data if default is used.
-        $DB->set_field(
-            'qtype_stack_qtest_expected',
-            'expectedanswernote',
-            $prtname . '-' . (intval($to) + 1) . '-T',
-            [
-                    'questionid' => $questionid,
-                    'prtname' => $prtname,
-                    'expectedanswernote' => $prtname . '-' . (intval($from) + 1) . '-T',
-            ]
-        );
-
-        // False answer notes in question test data if default is used.
-        $DB->set_field(
-            'qtype_stack_qtest_expected',
-            'expectedanswernote',
-            $prtname . '-' . (intval($to) + 1) . '-F',
-            [
-                    'questionid' => $questionid,
-                    'prtname' => $prtname,
-                    'expectedanswernote' => $prtname . '-' . (intval($from) + 1) . '-F',
             ]
         );
 

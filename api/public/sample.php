@@ -27,7 +27,7 @@ require_once(__DIR__ . '../../emulation/MoodleEmulation.php');
 require_once(__DIR__ . '/../../stack/questionlibrary.class.php');
 // Required to pass Moodle code check. Uses emulation stub.
 require_login();
-$files = stack_question_library::get_file_list('../../samplequestions/stackdemo/*');
+$files = stack_question_library::get_file_list(realpath(__DIR__ . '/../../samplequestions/stackdemo') . '/*');
 
 $questions = [];
 foreach ($files->children as $file) {
@@ -172,14 +172,14 @@ foreach ($files->children as $file) {
                 <div id="stackapi_validity" style="color:darkred"></div>
               </div>
               <br>
-              <div id="stackapi_combinedfeedback" class="feedback col-lg-8" style="display: none">
+              <div id="stackapi_combinedfeedback" class="feedback outcome col-lg-8" style="display: none">
                 <div id="specificfeedback"></div>
                 <div id="generalfeedback"></div>
               </div>
               <div id="stackapi_correct" style="display: none">
                 <div class="noninfo">
                   <h2>Correct answers:</h2>
-                  <div id="formatcorrectresponse" class="feedback"></div>
+                  <div id="formatcorrectresponse" class="feedback outcome"></div>
                 </div>
               </div>
             </div>
