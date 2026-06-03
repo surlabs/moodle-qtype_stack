@@ -74,7 +74,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             $defaultfilter = new StdClass();
             $defaultfilter->operation = 'filter';
             $defaultfilter->type = 'markdown';
-            $defaultfilter->transforms = 'latexwrap,boldfilter';
+            $defaultfilter->transforms = 'latexwrap';
             array_unshift($operations, $defaultfilter);
         }
 

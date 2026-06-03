@@ -107,7 +107,7 @@ final class ascii_block_test extends qtype_stack_testcase {
         $strings = $this->get_string_items($compiled);
         $joined = implode("\n", $strings);
         $this->assertStringContainsString('stack_js.request_access_to_input("ans1",true)', $joined);
-        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"latexwrap,boldfilter"}]);}';
+        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"latexwrap"}]);}';
         $this->assertStringContainsString($expectedlinkcode, $joined);
         $this->assertStringContainsString(
             'id="asciiContainerRow" style="width:calc(100% - 20px);height:calc(400px - 30px);"',

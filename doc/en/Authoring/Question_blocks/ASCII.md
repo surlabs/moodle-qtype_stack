@@ -113,7 +113,7 @@ The `calculation` filter finds text enclosed in `@` characters on a single line 
 
 ### Filter developer notes
 
-Filters are defined in `corsscripts/ascii/filters`. This has been designed to add flexibility for filtering. Markdown transforms and associated shared functions are in `corsscripts/ascii/markdownittransforms`. Markdown extensions for identifying additonal document sections are in `corsscripts/ascii/markdownitextensions`. The rules for how to display these sections are in `corsscripts/ascii/filters/markdownitextensions.js`.
+Filters are defined in `corsscripts/ascii/filters`. This has been designed to add flexibility for filtering.  Markdown transforms and associated shared functions are in `corsscripts/ascii/markdownittransforms`. Markdown extensions for identifying additonal document sections are in `corsscripts/ascii/markdownitextensions`. The rules for how to display these sections are in `corsscripts/ascii/filters/markdownitextensions.js`.
 
 ## Extractors
 
