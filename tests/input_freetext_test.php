@@ -73,7 +73,7 @@ final class input_freetext_test extends qtype_stack_testcase {
             )
         );
         $this->assertEquals(
-            'The answer Hello world would be correct.',
+            'The answer <pre>Hello world</pre> would be correct.',
             $el->get_teacher_answer_display('"Hello world"', '\\text{Hello world}')
         );
     }
@@ -109,7 +109,7 @@ final class input_freetext_test extends qtype_stack_testcase {
         $this->assertEquals('"Hello world"', $state->contentsmodified);
         $this->assertEquals('<p>Hello world</p>', $state->contentsdisplayed);
         $this->assertEquals(
-            'The answer <p>Hello world</p> would be correct.',
+            'The answer <pre>Hello world</pre> would be correct.',
             $el->get_teacher_answer_display($state->contentsmodified, $state->contentsdisplayed)
         );
     }

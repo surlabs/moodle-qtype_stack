@@ -153,4 +153,23 @@ class stack_freetext_input extends stack_string_input {
         $display = html_writer::tag('p', $display);
         return [$valid, $errors, $display, $notes];
     }
+
+    /**
+     * Add description here.
+     * @return string the teacher's answer, displayed to the student in the general feedback.
+     */
+    public function get_teacher_answer_display($value, $display) {
+        if ($this->get_extra_option('hideanswer')) {
+            return '';
+        }
+        // By default, we don't show how to "type this in".  This is only done for some, e.g. algebraic and textarea.
+        if (trim($value) == 'EMPTYANSWER' || trim($value) == '""') {
+            return stack_string('teacheranswerempty');
+        }
+        if (substr($value, 0, 1) == '"') {
+            $value = trim($value);
+            $value = substr($value, 1, strlen($value) - 2);
+        }
+        return stack_string('teacheranswershow_disp', ['display' => '<pre>' . $value . '</pre>']);
+    }
 }
