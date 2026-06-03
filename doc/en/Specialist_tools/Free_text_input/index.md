@@ -11,6 +11,10 @@ The free-text input allows students to type a complete mathematical argument.
 
 This can be used with [semi-automatic marking](../../Moodle/Semi-automatic_Marking.md).  Or, (algebraic) expressions can be extracted and used in standard STACK inputs for automatic marking.
 
+The processing and display of free text inputs is rather flexible and is controlled by the [`[[ascii]]` block](../../Authoring/Question_blocks/ASCII.md).
+
+The default is for students to use unicode text in markdown format, extended by AsciiMath.
+
 ### Help for students
 
 Built-in help for students can be provided with either

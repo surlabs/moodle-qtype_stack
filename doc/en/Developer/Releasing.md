@@ -32,6 +32,7 @@ Unless you want to discuss something confidential with the developers, please do
 * Run `php cli/stack_maxima_compiler.php` to process `stack/maximasrc` and generate `stack/maxima/maximasrccompiled.mac`, the test version, and the documentation.
 * Run Maxima unit tests for the `stack/maximasrc` content with `load("maximasrccompiled_tests.mac");`, it should say `"All tests successfully executed."`
 * Run Maxima unit tests of contributed packages by re-defining `stacklocation` and running `s_test_case.mac` in the sandbox.  E.g.
+* Run tests of Javascript in `tests/jest`.  See `tests/jest/Readme.md`.
 
 ````
     stacklocation:"/var/www/html/m40/question/type/stack"$

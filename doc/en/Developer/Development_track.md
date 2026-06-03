@@ -45,6 +45,11 @@ So this requires a DB change as well.
 
 1. Add in a "counter" option to the button.  If set to true, then the value of the counter changes from true/false to the number of times the button has been pressed.
 
+## Future ASCII block development ideas
+
+1. Support an option so that `#` can be used instead of backticks to delimit AsciiMath.
+2. Error messages for unknown filter/extractor names! (To help authors....)
+
 ## Future equivalence reasoning development track.
 
 1. Allow bespoke validation (actually quite difficult).

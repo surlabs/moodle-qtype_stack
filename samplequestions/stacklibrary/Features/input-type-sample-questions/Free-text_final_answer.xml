@@ -32,11 +32,7 @@
       <text><![CDATA[fx:8*x/sqrt(2*x^2+1);
 y0:5;
 
-ta1:"Let
-`
-u=x^2+1 => (du)/(dx) = 4x
-`
-Hence
+ta1:"Let `u=x^2+1 => (du)/(dx) = 4x`. Then
 `
 f(x) = int (8x)/sqrt(2x^2+1) dx
      = int 2/sqrt(u) du.

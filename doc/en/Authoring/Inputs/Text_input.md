@@ -16,7 +16,7 @@ Notes
 
 #### Free-text input ####
 
-This input is a text area into which students may type whatever they choose.  This input is intended to capture text input of mathematical proof.  It is always converted into a Maxima string internally.  We accept, for now, there are limitations on the ability to automatically assess free-text proofs.
+This input is a text area into which students may type whatever they choose.  This input is intended to capture text input, such as a mathematical proof.  It is always converted into a Maxima string internally.  We accept, for now, there are limitations on the ability to automatically assess free-text proofs.
 
 Notes
 

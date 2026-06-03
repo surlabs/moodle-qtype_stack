@@ -8,7 +8,9 @@
     <questiontext format="moodle_auto_format">
       <text><![CDATA[<p>Prove that \(\sum_{k=1}^n 2k − 1 = n^2\)</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
-[[ascii input="ans1" filters="latexwrap"]][[/ascii]]]]></text>
+[[ascii input="ans1"]]
+[[filter type="markdown" transforms="latexwrap"/]]
+[[/ascii]]]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
       <text></text>

@@ -13,9 +13,9 @@ STACK provides the "free-text" and "notes" [input type](../Authoring/Inputs/Text
 
 ## Manual grading.
 
-Most input types support the extra option extra option `manualgraded`, and the default is `manualgraded:false`.  When `manualgraded:true` then the _whole STACK question_ will require manual grading!
+Most input types support the extra option extra option `manualgraded`, and the default is `manualgraded:false`.  If one input in a STACK question has `manualgraded:true` then the _whole STACK question_ will require manual grading!
 
-The free-text default extra option `manualgraded:true`.
+The free-text input default extra option sets `manualgraded:true`.
 
 There really is no way to mix automatic and manually grading within a question. Therefore, if you want automatic and manual marking you have two options.
 
@@ -35,3 +35,7 @@ When you are manually grading you can see both the student's attempt, and the "R
 The `Raw Score` reports the total weighted mark of those PRTs which actually evaluated (i.e. with valid inputs).  The total weighted mark is given in terms of the question default mark, set in the question itself.  In this example, the question is out of two.  The student got partical credit.  It is then up to the teacher to record a final mark taking account any automatic partial grade, and their academic judgement of the manually graded input(s).
 
 Note, questions which "Requires grading" really do need human input (manually graded).  Even though in this example some partial credit is awarded automatically, this is not automatically recorded in the gradebook.
+
+An example manual graded question is given in
+
+    samplequestions/stacklibrary/Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_manually_graded_mathematical_proof.xml
