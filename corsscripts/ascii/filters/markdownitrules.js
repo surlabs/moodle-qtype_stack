@@ -22,6 +22,7 @@
 export default function markdownitrules(mdit, options) {
     "use strict";
     const state = options.state;
+    const originalCodeRule = mdit.renderer.rules.code_inline;
 
     // Core rule: runs before rendering to clear the block list from the previous pass.
     mdit.core.ruler.push('reset_collector', () => {
@@ -32,18 +33,14 @@ export default function markdownitrules(mdit, options) {
 
     /**
      * Inline AsciiMath: a single backtick expression, e.g. `x^2 + 1`.
-     * AMparseMath converts AsciiMath to LaTeX; the result is wrapped in \(...\)
-     * for MathJax to render.  The raw AsciiMath source and rendered LaTeX are
-     * recorded so extractors can recover the original expression.
      */
-    mdit.renderer.rules.code_inline = function(tokens, idx) {
+    mdit.renderer.rules.code_inline = function(tokens, idx, options, env, self) {
         const code = tokens[idx].content;
-        const inlineWrap = (s) => `\\(${s}\\)`;
         let rendered = '';
-        if (isLaTeX(code)) {
-            rendered = inlineWrap(code);
+        if (state.transforms.length === 0) {
+            rendered = originalCodeRule(tokens, idx, options, env, self);
         } else {
-            rendered = inlineWrap(window.AMparseMath(code, true));
+            rendered = applyTransforms(code, 'code_inline');
         }
         if (state.collector) {
             state.collector.blocks.push({ type: 'code_inline', raw: code, rendered });
@@ -53,18 +50,14 @@ export default function markdownitrules(mdit, options) {
 
     /**
      * Multi-line AsciiMath block: opened and closed by a solitary backtick on its own line.
-     * Each line is converted individually by AMparseMath, then the configured transforms
-     * (e.g. latexwrap, boldfilter) are applied to the array of LaTeX lines.
-     * The raw multi-line AsciiMath source is recorded for extractors.
      */
     mdit.renderer.rules.asciimath_block = function(tokens, idx) {
         const code = tokens[idx].content;
         let rendered = '';
-        if (isLaTeX(code)) {
-            const blockWrap = (s) => `\\[${s}\\]`;
-            rendered = blockWrap(code);
+        if (state.transforms.length === 0) {
+            rendered = '`' + mdit.render(code) + '`';
         } else {
-            rendered = applyTransforms(code, true);
+            rendered = applyTransforms(code, 'asciimath_block');
         }
         if (state.collector) {
             state.collector.blocks.push({ type: 'asciimath_block', raw: code, rendered });
@@ -73,14 +66,17 @@ export default function markdownitrules(mdit, options) {
     };
 
     /**
-     * Inline LaTeX: \(...\) or $...$ (added by the tex extension).
-     * Passed through as-is — no AsciiMath conversion — and wrapped in \(...\).
+     * Inline LaTeX: \(...\).
      * Recorded for extractors as a math_inline block.
      */
     mdit.renderer.rules.math_inline = function(tokens, idx) {
         const code = tokens[idx].content;
-        const inlineWrap = (s) => `\\(${s}\\)`;
-        const rendered = inlineWrap(code);
+        let rendered = '';
+        if (state.transforms.length === 0) {
+            rendered = '\\(' + mdit.renderInline(code) + '\\)';
+        } else {
+            rendered = applyTransforms(code, 'math_inline');
+        }
         if (state.collector) {
             state.collector.blocks.push({ type: 'math_inline', raw: code, rendered });
         }
@@ -88,36 +84,21 @@ export default function markdownitrules(mdit, options) {
     };
 
     /**
-     * Display LaTeX: \[...\] or $$...$$ (added by the tex extension).
-     * Passed through as-is — no AsciiMath conversion — but configured transforms
-     * are still applied to the array of LaTeX lines.
+     * Display LaTeX: \[...\].
      * Recorded for extractors as a math_block block.
      */
     mdit.renderer.rules.math_block = function(tokens, idx) {
         const code = tokens[idx].content;
-        const rendered = applyTransforms(code, false);
+        let rendered = '';
+        if (state.transforms.length === 0) {
+            rendered =  '\\[' + mdit.render(code) + '\\]';
+        } else {
+            rendered = applyTransforms(code, 'math_block');
+        }
         if (state.collector) {
             state.collector.blocks.push({ type: 'math_block', raw: code, rendered });
         }
         return rendered;
-    };
-
-    function isLaTeX(code) {
-        // Do not attempt to apply ASCIIMath to blocks which are already LaTeX.
-        const islatex = [
-            '^{',
-            '_{',
-            '\\left',
-            '\\right',
-            '\\begin',
-            ];
-        if (islatex.some(s => code.includes(s))) {
-            return true;
-        };
-        // Use of a general control code.
-        // (Yes, this duplicates \left, \right, \begin above...)
-        const regex = /\\[a-zA-Z]+/;
-        return regex.test(code);
     };
 
     /**
@@ -133,23 +114,18 @@ export default function markdownitrules(mdit, options) {
     /**
      * Convert a raw block string to a rendered string by:
      *   1. Splitting into lines and trimming.
-     *   2. Optionally converting each line from AsciiMath to LaTeX (isASCIIMaths).
-     *   3. Passing the line array through each named transform in order.
+     *   2. Passing the line array through each named transform in order.
      * Transforms receive an array of strings and must return an array of strings.
      * @param {string}  code         - raw multi-line string from a markdown-it token.
-     * @param {boolean} isASCIIMaths - if true, each line is converted via AMparseMath.
      * @returns {string} rendered string with a trailing newline.
      */
-    function applyTransforms(code, isASCIIMaths) {
+    function applyTransforms(code, rule) {
         let lines = splitBlock(code);
-        if (isASCIIMaths) {
-            lines = lines.map(line => window.AMparseMath(line, true));
-        }
         for (const transform of state.transforms) {
             if (!state.transformLib[transform]) {
                 throw new Error(`markdownitrules: unknown transform "${transform}"`);
             }
-            lines = state.transformLib[transform](lines);
+            lines = state.transformLib[transform](lines, rule);
         }
         return lines.join('\n') + '\n';
     }
