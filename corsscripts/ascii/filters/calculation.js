@@ -55,7 +55,7 @@ export default function calculation(text, blockCollector) {
         try {
             const node = math.parse(raw);
             validate(node, allowed);
-            rendered = node.evaluate();
+            rendered = String(node.evaluate());
         } catch (error) {
             rendered = raw;
         }

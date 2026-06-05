@@ -1,5 +1,6 @@
 const mockMarkdown = jest.fn();
 const mockCalculation = jest.fn();
+const mockCas = jest.fn();
 const mockFinalfunction = jest.fn();
 const mockLastexpr = jest.fn();
 const mockLastblock = jest.fn();
@@ -15,6 +16,11 @@ jest.mock('../../corsscripts/ascii/filters/markdown.js', () => ({
 jest.mock('../../corsscripts/ascii/filters/calculation.js', () => ({
     __esModule: true,
     default: (...args) => mockCalculation(...args)
+}));
+
+jest.mock('../../corsscripts/ascii/filters/cas.js', () => ({
+    __esModule: true,
+    default: (...args) => mockCas(...args)
 }));
 
 jest.mock('../../corsscripts/ascii/extractors/finalfunction.js', () => ({
@@ -99,6 +105,7 @@ describe('stackascii init', () => {
     beforeEach(() => {
         mockMarkdown.mockReset();
         mockCalculation.mockReset();
+        mockCas.mockReset();
         mockFinalfunction.mockReset();
         mockLastexpr.mockReset();
         mockLastblock.mockReset();

@@ -81,7 +81,7 @@ export default function aligneq(lines, rule) {
         // Step 1 (leftmost): if the line opens with a logical connective
         // (\Rightarrow, \therefore, etc.), move it into col 1.
         const imptxt = [`Rightarrow`, `Leftarrow`, `Leftrightarrow`, `therefore`, `because`];
-        const imptxttk = imptxt.flatMap(token => [`\\${token}{`, `\\${token} `]);
+        const imptxttk = imptxt.flatMap(token => [`\\${token}{`, `\\${token} `, `\\${token}\\`]);
         const matchimp = imptxttk.find(token => str.startsWith(token));
         if (matchimp === undefined) {
             // No connective — leave col 1 empty with leading '& & '.

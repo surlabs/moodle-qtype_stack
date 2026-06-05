@@ -89,7 +89,7 @@ In the following example, the transform `aligneq` is applied to line up equation
   ```
 ![Math_inline display](../../../content/math_inline.png)
 
-- **`math_block`**: Display LaTeX delimited by `\[...\]` or `$$...$$` is passed through and any configured transforms are applied.  In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments
+- **`math_block`**: Display LaTeX delimited by `\[...\]` is passed through and any configured transforms are applied.  Note, while our code ignores `$$...$$` as LaTeX delimeters, your local MathJax settings might pick this up and display the contents as mathematics.  In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments
 
   ```
   \[
@@ -102,7 +102,7 @@ In the following example, the transform `aligneq` is applied to line up equation
 
 Available transforms (specified via the `transforms` parameter):
 
-- `aligneq`: This only affects mathematics in the `asciimath_block`.  It formats multiple-line mathematics aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
+- `aligneq`: This affects mathematics in the `asciimath_block` and `math_block` (but not inline mathematics). It formats multiple-line mathematics aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
   - col 1 – leading logical connective, such as implies/therefore symbol (if present, e.g. `=>`, `:.` (therefore) in AsciiMath)
   - col 2 – left-hand side up to (but not including) the relation symbol
   - col 3 – relation symbol and right-hand side
@@ -130,6 +130,8 @@ The default behaviour when no markdown filter, or plain filter, is present is
 
     [[filter type="markdown" transforms="asciimath,aligneq,minwrap" /]]
 
+Note, many of the extractor blocks require the identification of mathematics.  This is done within the markdown filter.
+
 #### `plain` filter
 
 If you use this filter then the text is not processed as markdown.
@@ -137,6 +139,9 @@ If you use this filter then the text is not processed as markdown.
     [[filter type="plain" /]]
 
 This is used to switch off the default behaviour of adding markdown.
+
+Note, many of the extractor blocks require the identification of mathematics.  These include `lastexpr`, and `lastblock`, which will not function without the markdown filter of some kind being used.
+
 
 #### `calculation` and `cas` filters
 

@@ -17,7 +17,7 @@ describe('markdown filter', () => {
     });
 
     test('applies transforms from op.transforms', () => {
-        // aligneq and boldfilter are in the transformLib, but we just check no error is thrown
+        // aligneq and boldfilter are in the transformLib, but we just check no error is thrown.
         const html = markdown('`f(x) = x^2`', null, { transforms: 'aligneq,boldfilter' });
         expect(typeof html).toBe('string');
     });

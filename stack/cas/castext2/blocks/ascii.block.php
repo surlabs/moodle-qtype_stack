@@ -56,7 +56,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Get the details of filter and extractor blocks.
         $operations = [];
         // Is the markdown (maths) default filter needed?
-        $ismarkdown = true;
+        $markdownneeded = true;
         foreach ($this->children as $child) {
             if (is_a($child, 'stack_cas_castext2_extractor')) {
                 $options = $child->params;
@@ -67,10 +67,10 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $options = $child->params;
                 $options['operation'] = 'filter';
                 if ($options['type'] == 'markdown') {
-                    $ismarkdown = false;
+                    $markdownneeded = false;
                 }
                 if ($options['type'] == 'markdown-math') {
-                    $ismarkdown = false;
+                    $markdownneeded = false;
                     $options['type'] == 'markdown';
                     $transforms = '';
                     if (array_key_exists('transforms', $options['transforms'])) {
@@ -80,7 +80,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 }
                 // In this case don't add in any markdown filters at all (even the default below).
                 if ($options['type'] == 'plain') {
-                    $ismarkdown = false;
+                    $markdownneeded = false;
                 } else {
                     $operations[] = $options;
                 }
@@ -88,7 +88,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         }
 
         // Is the markdown (maths) default filter needed?
-        if ($ismarkdown) {
+        if ($markdownneeded) {
             $defaultmarkdown = [
                 'operation'  => 'filter',
                 'type'       => 'markdown',
@@ -177,7 +177,6 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         if ($minwrapneeded) {
             $transforms = array_merge($transforms, ['minwrap' => null]);
         }
-        var_dump($transforms);
         return(implode(',', array_keys($transforms)));
     }
 
