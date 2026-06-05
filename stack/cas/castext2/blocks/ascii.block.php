@@ -56,7 +56,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Get the details of filter and extractor blocks.
         $operations = [];
         // Is the markdown (maths) default filter needed?
-        $markdownneeded = true;
+        $filterneeded = true;
         foreach ($this->children as $child) {
             if (is_a($child, 'stack_cas_castext2_extractor')) {
                 $options = $child->params;
@@ -64,13 +64,10 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $inputs[] = $options['targetinput'];
                 $operations[] = $options;
             } else if (is_a($child, 'stack_cas_castext2_filter')) {
+                $filterneeded = false;
                 $options = $child->params;
                 $options['operation'] = 'filter';
-                if ($options['type'] == 'markdown') {
-                    $markdownneeded = false;
-                }
                 if ($options['type'] == 'markdown-math') {
-                    $markdownneeded = false;
                     $options['type'] = 'markdown';
                     $transforms = '';
                     if (array_key_exists('transforms', $options)) {
@@ -78,17 +75,15 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                     }
                     $options['transforms'] = $this->set_markdown_filter_defaults($transforms);
                 }
-                // In this case don't add in any markdown filters at all (even the default below).
-                if ($options['type'] == 'plain') {
-                    $markdownneeded = false;
-                } else {
+                // In this case don't add in any filters at all (even the default below).
+                if ($options['type'] != 'plain') {
                     $operations[] = $options;
                 }
             }
         }
 
         // Is the markdown (maths) default filter needed?
-        if ($markdownneeded) {
+        if ($filterneeded) {
             $defaultmarkdown = [
                 'operation'  => 'filter',
                 'type'       => 'markdown',
@@ -145,8 +140,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $answercalls = implode(',', array_map(function($item, $index) {
             $extra = $index === 0 ? ',true' : '';
             return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
-            },
-            $inputs, array_keys($inputs)));
+        }, $inputs, array_keys($inputs)));
         $linkcode = 'Promise.all([' . $answercalls . '])';
         $linkcode .= ".then((inputIds) => {init(inputIds," . json_encode($operations) . ");});";
 
@@ -288,7 +282,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             if (
                 $key !== 'width' &&
                 $key !== 'height' &&
-                $key !== 'aspect-ratio' &&
+                $key !== 'aspect-ratio' &
                 $key !== 'input' &&
                 $key !== 'hidden'
             ) {
@@ -296,7 +290,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'hidden',
+                        'width', 'height', 'aspect-ratio', 'input', 'hidden'
                     ];
                     $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),
