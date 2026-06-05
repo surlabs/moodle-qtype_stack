@@ -97,7 +97,7 @@ The complete (html) question text is therefore
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[extractor targetinput="ans2" type="finalexpression"/]]
+  [[extractor targetinput="ans2" type="lastexpr"/]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
 <p style="display:none">[[input:ans2]]</p>
@@ -106,7 +106,7 @@ The complete (html) question text is therefore
 
 Notice, the `[[ascii]]` block uses the default `markdown-math` filter, and also has an explicit child block that controls how the student's text is processed and displayed, and one or more `[[extractor]]` child blocks that extract parts of the text and send them to other STACK inputs.
 
-The `[[extractor]]` block specifies what to extract and where to send it. Here `type="finalexpression"` sends the last line of the last AsciiMath block to `ans2`. See [the ASCII block documentation](../../Authoring/Question_blocks/ASCII.md) for the full list of extractor types.
+The `[[extractor]]` block specifies what to extract and where to send it. Here `type="lastexpr"` sends the last line of the last AsciiMath block to `ans2`. See [the ASCII block documentation](../../Authoring/Question_blocks/ASCII.md) for the full list of extractor types.
 
 Note the `[[hint]]` block, using a `[[commonstring]]` block to provide standard help to students for this input type.
 

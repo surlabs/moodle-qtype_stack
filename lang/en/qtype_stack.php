@@ -1906,6 +1906,8 @@ $string['free_text_fact'] = 'This input allows you to type in free text, e.g. yo
 <li>You can include LaTeX between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.</li>
 </ol>
 More specific documentation on markdown, AsciiMath and LaTeX is available online.';
+$string['free_text_calc'] = 'This input allows you embed simple calculations between <code>{@...@}</code>, rather than reaching for an external calculator.';
+$string['free_text_calc_min'] = '{@...@}';
 // phpcs:enable moodle.Strings.ForbiddenStrings.Found
 $string['Illegal_singleton_power'] = 'This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
 $string['Illegal_singleton_floats'] = 'This input does not accept decimal numbers in the given form. This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';

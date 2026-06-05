@@ -28,9 +28,9 @@ ta2:45*2-2;
 [[ascii input="ans1"]]
   [[filter type="calculation" /]]
   [[filter type="markdown-math" transforms="aligneq" /]]
-  [[extractor targetinput="ans2" type="finalexpression"/]]
+  [[extractor targetinput="ans2" type="lastexpr"/]]
 [[/ascii]]
-<p>Note, you can embed simple mathematical calculations with rather than reaching for an external calculator.</p>
+<p>[[commonstring key="free_text_calc"/]]</p>
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>
 ```
