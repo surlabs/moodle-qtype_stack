@@ -3,7 +3,15 @@
 // any bold wrapper applied before it hides those tokens inside {}, breaking alignment.
 // \boldsymbol is used (not \textbf) because \textbf is text-mode and breaks on
 // math content such as \displaystyle which AMparseMath inserts.
-export default function boldfilter(lines) {
+export default function boldfilter(lines, rule) {
+    switch (rule) {
+        case 'asciimath_block':
+        case 'math_block':
+        case 'code_inline':
+        case 'math_inline':
+        default:
+            break;
+    }
     // lines[0] = '\[\begin{align*}', lines[-1] = '\end{align*}\]'
     // latexwrap appends \\ (the LaTeX row-break) directly onto the last content
     // column (e.g. "after\\"), so splitting on & gives ["", " ", " before", "after\\"].

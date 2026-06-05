@@ -15,7 +15,17 @@ import findtextindex from './findtextindex.js';
  * @returns {string[]} array whose first element is \[\begin{align*}, last element
  *   is \end{align*}\], and whose interior lines are the formatted content rows.
  */
-export default function latexwrap(lines) {
+export default function latexwrap(lines, rule) {
+    switch (rule) {
+        case 'asciimath_block':
+        case 'math_block':
+            break;
+        case 'code_inline':
+        case 'math_inline':
+            return lines;
+        default:
+            return lines;
+    }
     // Do not attempt to wrap LaTeX which is already aligned.
     const nonest = [
         'align',
@@ -39,7 +49,7 @@ export default function latexwrap(lines) {
     if (skip) {
         return lines;
     }
-    const output = [`\\[\\begin{align*}`];
+    const output = [`\\begin{align*}`];
     for (let str of lines) {
         // Step 3 (rightmost): find the first \text{ that is not \text{or/and/if}
         // and push it into col 4 by inserting '& &' before it.
@@ -83,6 +93,6 @@ export default function latexwrap(lines) {
         str += `\\\\`;   // LaTeX row separator
         output.push(str);
     }
-    output.push(`\\end{align*}\\]`);
+    output.push(`\\end{align*}`);
     return output;
 }

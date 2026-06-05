@@ -17,8 +17,10 @@ import markdownitrules from './markdownitrules.js';
 // tex.js uses named CJS exports (exports.tex = ...) — import the whole namespace.
 import * as mdItPluginTex from '../markdownitextensions/tex.js';
 
+import asciimath from '../markdownittransforms/005_asciimath.js';
 import boldfilter from '../markdownittransforms/020_boldfilter.js';
 import latexwrap from '../markdownittransforms/010_latexwrap.js';
+import minwrap from '../markdownittransforms/015_minwrap.js';
 
 /**
  * Registry maps the transform name strings used in the [[filter]] block's `transforms`
@@ -27,8 +29,10 @@ import latexwrap from '../markdownittransforms/010_latexwrap.js';
  * @type {Object.<string, function(string[]): string[]>}
  */
 const transformLib = {
+    asciimath,
     boldfilter,
     latexwrap,
+    minwrap
 };
 
 /**
