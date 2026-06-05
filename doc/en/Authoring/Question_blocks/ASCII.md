@@ -57,9 +57,11 @@ A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` blo
 
 ### Available filters
 
-#### `markdown` filter
+#### `markdown-math` filter
 
-The `markdown` filter processes the student's text as Markdown and renders mathematical content. The following rendering rules are applied to recognized token types:
+This is the default behaviour.  You do not need to add `[[filter type="markdown-math" /]]` to your block.
+
+The `markdown-math` filter processes the student's text as markdown and renders mathematical content. The following rendering rules are applied to recognized token types:
 
 - **`code_inline`**: A single backtick expression is treated as inline AsciiMath.  If the content is identified as LaTeX then no processing takes place.  Otherwise, the content is converted to LaTeX by `AMparseMath`.  The result is always wrapped in `\(...\)`.
 
@@ -68,7 +70,7 @@ The `markdown` filter processes the student's text as Markdown and renders mathe
   ```
 ![Code_inline display](../../../content/code_inline.png)
 
-- **`asciimath_block`**: A backtick on its own line opens a multi-line AsciiMath block; another solitary backtick closes it. If the content is identified as LaTeX then no processing takes place.  Otherwise, each line of content is converted to LaTeX by `AMparseMath` and any configured transforms are applied.
+- **`asciimath_block`**: A backtick on its own line opens a multi-line AsciiMath block; another solitary backtick closes it. If the content is identified as LaTeX then no processing takes place.  Otherwise, each line of content is converted to LaTeX by `AMparseMath` and any configured transforms are applied. The result is wrapped in `\[...\]` if needed.
 
 In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments.
 
@@ -87,7 +89,7 @@ In the following example, the transform `aligneq` is applied to line up equation
   ```
 ![Math_inline display](../../../content/math_inline.png)
 
-- **`math_block`**: Display LaTeX delimited by `\[...\]` or `$$...$$` is passed through and any configured transforms are applied.
+- **`math_block`**: Display LaTeX delimited by `\[...\]` or `$$...$$` is passed through and any configured transforms are applied.  In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments
 
   ```
   \[
@@ -100,14 +102,41 @@ In the following example, the transform `aligneq` is applied to line up equation
 
 Available transforms (specified via the `transforms` parameter):
 
-- `aligneq`: Formats multiple-line mathematics (in `asciimath_block`) aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
+- `aligneq`: This only affects mathematics in the `asciimath_block`.  It formats multiple-line mathematics aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
   - col 1 – leading logical connective, such as implies/therefore symbol (if present, e.g. `=>`, `:.` (therefore) in AsciiMath)
   - col 2 – left-hand side up to (but not including) the relation symbol
   - col 3 – relation symbol and right-hand side
 
   A `\text{…}` that is not `\text{or}`, `\text{and}`, or `\text{if}` is pushed into a 4th column.
 
+There are two internal transformations: `asciimath` and `minwrap`.  The `asciimath` transformation actually parses each expression/line from AsciiMath to LaTeX.  The `minwrap` transformation automatically adds LaTeX mathematics delimieters, e.g. `\(...\)` for inline and `\[...\]` if they are needed (noting some LaTeX maths do not need these), typically at the end of the chain of transformations.  
+
+While you are free to specify these transformations, the `markdown-math` filter ensures they are used, typically at the start and end.  For full control you can specify these transformations using the `markdown` filter below.  (In the future, other transformations may need to come before `asciimath`, for example).
+
 - `boldfilter`: Changes each mathematical expression to bold. Must be applied after `aligneq` (use `transforms="aligneq,boldfilter"`). This is a temporary addition for testing purposes.
+
+#### `markdown` filter
+
+This proceses the text as (plain) markdown, without the mathematical extensions above.  You can add any of the transforms as arguments, but the following will treat the text as markdown, without processing any of the AsciiMath (as is done by `markdown-math`
+
+    [[filter type="markdown" transforms="" /]]
+
+Note that the following are equivalent
+
+    [[filter type="markdown" transforms="asciimath,minwrap" /]]
+    [[filter type="markdown-maths" /]]
+
+The default behaviour when no markdown filter, or plain filter, is present is
+
+    [[filter type="markdown" transforms="asciimath,aligneq,minwrap" /]]
+
+#### `plain` filter
+
+If you use this filter then the text is not processed as markdown.
+
+    [[filter type="plain" /]]
+
+This is used to switch off the default behaviour of adding markdown.
 
 #### `calculation` and `cas` filters
 

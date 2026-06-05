@@ -55,7 +55,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         // Get the details of filter and extractor blocks.
         $operations = [];
-        $isfilter = false;
+        // Is the markdown (maths) default filter needed?
+        $ismarkdown = true;
         foreach ($this->children as $child) {
             if (is_a($child, 'stack_cas_castext2_extractor')) {
                 $options = $child->params;
@@ -65,17 +66,31 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             } else if (is_a($child, 'stack_cas_castext2_filter')) {
                 $options = $child->params;
                 $options['operation'] = 'filter';
-                $operations[] = $options;
-                $isfilter = true;
+                if ($options['type'] == 'markdown') {
+                    $ismarkdown = false;
+                }
+                if ($options['type'] == 'markdown-math') {
+                    $ismarkdown = false;
+                    $options['type'] == 'markdown';
+                    $options['transforms'] = $this->set_markdown_filter_defaults($options['transforms']);
+                }
+                // In this case don't add in any markdown filters at all (even the default below).
+                if ($options['type'] == 'plain') {
+                    $ismarkdown = false;
+                } else {
+                    $operations[] = $options;
+                }
             }
         }
 
-        if (!$isfilter) {
-            $defaultfilter = new StdClass();
-            $defaultfilter->operation = 'filter';
-            $defaultfilter->type = 'markdown';
-            $defaultfilter->transforms = 'aligneq';
-            array_unshift($operations, $defaultfilter);
+        // Is the markdown (maths) default filter needed?
+        if ($ismarkdown) {
+            $defaultmarkdown = [
+                'operation'  => 'filter',
+                'type'       => 'markdown',
+                'transforms' => 'asciimath,aligneq,minwrap',
+            ];
+            array_unshift($operations, $defaultmarkdown);
         }
 
         // Set default width and height here.
@@ -136,6 +151,30 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String('<div class="container row asciimath" id="asciiContainerRow" style="' . $astyle . '"></div>');
 
         return $r;
+    }
+
+    /*
+     * Ensure the markdown filter transforms have the correct defaults.
+     */
+    private function set_markdown_filter_defaults($transforms) {
+        // Sort out the default transforms.
+        $asccimathneeded = true;
+        $minwrapneeded = true;
+        $transforms = array_fill_keys(array_map('trim', explode(',', $transforms)), null);
+        if (array_key_exists('asciimath', $transforms)) {
+            $asccimathneeded = false;
+        }
+        if (array_key_exists('minwrap', $transforms)) {
+            $minwrapneeded = false;
+        }
+        if ($asccimathneeded) {
+            $transforms = array_merge(['asciimath' => null], $transforms);
+        }
+        if ($minwrapneeded) {
+            $transforms = array_merge($transforms, ['minwrap' => null]);
+        }
+        var_dump($transforms);
+        return(implode(',', array_keys($transforms)));
     }
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function

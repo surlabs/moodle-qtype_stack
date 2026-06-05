@@ -1,5 +1,5 @@
 import aligneq from '../../corsscripts/ascii/markdownittransforms/010_aligneq.js';
-// TODO These tests essentially define what the function currently does. Is the behaviour correct?
+
 describe('aligneq transform', () => {
     test('returns only wrappers for empty input', () => {
         expect(aligneq([])).toEqual([
