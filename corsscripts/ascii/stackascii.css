@@ -6,3 +6,6 @@
     margin-top: 10px;
     overflow: scroll;
 }
+.plaintext {
+    white-space: pre-line;
+}

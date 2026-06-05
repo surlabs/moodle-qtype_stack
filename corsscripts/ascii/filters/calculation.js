@@ -47,6 +47,7 @@ const allowed = {
 
 export default function calculation(text, blockCollector) {
     if (blockCollector) {
+        blockCollector.isHTML = false;
         blockCollector.blocks = [];
     }
 

@@ -1058,7 +1058,7 @@ $string['stackBlock_extractor_unknown'] = 'Unknown type \'{$a->type}\' for the e
 
 $string['stackBlock_filter_type_required'] = 'You must define the type of filter you want to use.';
 $string['stackBlock_filter_unknown'] = 'Unknown type \'{$a->type}\' for the filter block. Valid types are: \'{$a->filters}\'';
-$string['stackBlock_filter_trans_unknown'] = 'Unknown type \'{$a->transforms}\' for the filter block. Valid types are: \'{$a->valid}\'';
+$string['stackBlock_filter_trans_unknown'] = 'Unknown transform \'{$a->transforms}\' for the filter block. Valid transforms are: \'{$a->valid}\'';
 
 $string['stackBlock_jsxgraph_width']       = 'The width of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_height']      = 'The height of a JSXGraph must use a known CSS-length unit.';
