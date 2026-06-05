@@ -51,11 +51,13 @@ export default function aligneq(lines, rule) {
     }
     const output = [`\\begin{align*}`];
     for (let str of lines) {
+        // Remove any display style commands and trim the string.
+        str = str.replace(/^\s*(?:\\displaystyle\s*)?/, '');
         // Step 3 (rightmost): find the first \text{ that is not \text{or/and/if}
         // and push it into col 4 by inserting '& &' before it.
         const matchtxt = findtextindex(str, ['\\text{'], [`\\text{or}`, `\\text{and}`, `\\text{if}`]);
         if (matchtxt) {
-            str = str.slice(0, matchtxt) + '& &' + str.slice(matchtxt);
+            str = str.slice(0, matchtxt) + ' & & ' + str.slice(matchtxt);
         }
 
         // Step 2 (middle): find the first relation symbol at top brace level
@@ -73,9 +75,9 @@ export default function aligneq(lines, rule) {
         // findtextindex returns 0 (falsy) when the match is at position 0, so
         // compare strictly against false rather than using a truthiness check.
         if (matcheq !== false) {
-            str = str.slice(0, matcheq) + '&' + str.slice(matcheq);
+            str = str.slice(0, matcheq) + ' & ' + str.slice(matcheq);
         } else {
-            str = str + `&`;
+            str = str.trim() + ` & `;
         }
 
         // Step 1 (leftmost): if the line opens with a logical connective
@@ -85,10 +87,10 @@ export default function aligneq(lines, rule) {
         const matchimp = imptxttk.find(token => str.startsWith(token));
         if (matchimp === undefined) {
             // No connective — leave col 1 empty with leading '& & '.
-            str = `& & ` + str;
+            str = `& & ` + str.trim();
         } else {
             // Connective found — insert '& &' after it to push the rest into col 2.
-            str = str.slice(0, matchimp.length) + '& &' + str.slice(matchimp.length);
+            str = str.slice(0, matchimp.length - 1) + ' & & ' + str.slice(matchimp.length - 1);
         }
         str += `\\\\`;   // LaTeX row separator
         output.push(str);
