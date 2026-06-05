@@ -70,10 +70,11 @@ export default function init(inputIds, operations) {
      * Called on every `change` event (debounced) and once immediately on load.
      */
     function renderMath() {
-        const raw = document.getElementById(markdownContainerId).value.trim();
+        const raw = document.getElementById(markdownContainerId).value;
         const output = document.getElementById('asciiContainerRow');
 
         let processedOutput = raw;
+        let isHTML = false;
         let displayfixed = false; // true once a filter with display:'true' has run
         let answerIndex = 1;      // tracks which inputIds entry the next extractor writes to
 
@@ -93,6 +94,7 @@ export default function init(inputIds, operations) {
                         const filterOutput = filter(filterInput, blockCollector, currentop);
                         if (!displayfixed) {
                             processedOutput = filterOutput;
+                            isHTML = blockCollector.isHTML;
                         }
                         // display:'true' freezes processedOutput so subsequent filters
                         // cannot modify what is shown to the student.
@@ -124,7 +126,10 @@ export default function init(inputIds, operations) {
             });
         }
 
-        document.getElementById('asciiContainerRow').innerHTML = processedOutput;
+        if (!isHTML) {
+            output.classList.add("plaintext")
+        }
+        output.innerHTML = processedOutput;
 
         // Tell MathJax to typeset only the output container element.
         if (typeof MathJax.typesetPromise === 'function') {

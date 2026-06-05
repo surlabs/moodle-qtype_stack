@@ -27,6 +27,7 @@ export default function markdownitrules(mdit, options) {
     // Core rule: runs before rendering to clear the block list from the previous pass.
     mdit.core.ruler.push('reset_collector', () => {
         if (state.collector) {
+            state.collector.isHTML = true;
             state.collector.blocks = [];
         }
     });
