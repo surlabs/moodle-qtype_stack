@@ -107,7 +107,7 @@ final class ascii_block_test extends qtype_stack_testcase {
         $strings = $this->get_string_items($compiled);
         $joined = implode("\n", $strings);
         $this->assertStringContainsString('stack_js.request_access_to_input("ans1",true)', $joined);
-        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"aligneq"}]);}';
+        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"asciimath,aligneq,minwrap"}]);}';
         $this->assertStringContainsString($expectedlinkcode, $joined);
         $this->assertStringContainsString(
             'id="asciiContainerRow" style="width:calc(100% - 20px);height:calc(400px - 30px);"',
@@ -148,6 +148,42 @@ final class ascii_block_test extends qtype_stack_testcase {
             'id="asciiContainerRow" style="width:calc(80% - 20px);height:calc(300px - 30px);"',
             $joined
         );
+        $this->assertStringNotContainsString('"transforms":"aligneq,boldfilter"', $joined);
+    }
+
+    public function test_ascii_compile_uses_child_filter_markdown_maths(): void {
+        $filter = new \stack_cas_castext2_filter([
+            'type' => 'markdown-math',
+            'transforms' => 'aligneq',
+            'display' => 'true',
+        ]);
+        $extractor = new \stack_cas_castext2_extractor([
+            'type' => 'lastexpr',
+            'targetinput' => 'ans2',
+        ]);
+
+        $block = new \stack_cas_castext2_ascii(
+            ['input' => 'ans1', 'width' => '80%', 'height' => '300px'],
+            [$filter, $extractor]
+            );
+        $compiled = $block->compile(null, []);
+
+        $this->assertInstanceOf(\MP_List::class, $compiled);
+        $xpars = json_decode($compiled->items[1]->value, true);
+        $this->assertEquals('80%', $xpars['width']);
+        $this->assertEquals('300px', $xpars['height']);
+
+        $strings = $this->get_string_items($compiled);
+        $joined = implode("\n", $strings);
+        $this->assertStringContainsString('stack_js.request_access_to_input("ans1",true)', $joined);
+        $this->assertStringContainsString('stack_js.request_access_to_input("ans2")', $joined);
+        $expectedlinkcode = '{init(inputIds,[{"type":"markdown","transforms":"asciimath,aligneq,minwrap","display":"true","operation":"filter"}' .
+            ',{"type":"lastexpr","targetinput":"ans2","operation":"extractor"}]);}';
+        $this->assertStringContainsString($expectedlinkcode, $joined);
+        $this->assertStringContainsString(
+            'id="asciiContainerRow" style="width:calc(80% - 20px);height:calc(300px - 30px);"',
+            $joined
+            );
         $this->assertStringNotContainsString('"transforms":"aligneq,boldfilter"', $joined);
     }
 

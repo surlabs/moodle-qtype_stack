@@ -71,9 +71,9 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 }
                 if ($options['type'] == 'markdown-math') {
                     $markdownneeded = false;
-                    $options['type'] == 'markdown';
+                    $options['type'] = 'markdown';
                     $transforms = '';
-                    if (array_key_exists('transforms', $options['transforms'])) {
+                    if (array_key_exists('transforms', $options)) {
                         $transforms = $options['transforms'];
                     }
                     $options['transforms'] = $this->set_markdown_filter_defaults($transforms);
@@ -145,7 +145,8 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $answercalls = implode(',', array_map(function($item, $index) {
             $extra = $index === 0 ? ',true' : '';
             return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
-        }, $inputs, array_keys($inputs)));
+            },
+            $inputs, array_keys($inputs)));
         $linkcode = 'Promise.all([' . $answercalls . '])';
         $linkcode .= ".then((inputIds) => {init(inputIds," . json_encode($operations) . ");});";
 
@@ -295,7 +296,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'hidden'
+                        'width', 'height', 'aspect-ratio', 'input', 'hidden',
                     ];
                     $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),
