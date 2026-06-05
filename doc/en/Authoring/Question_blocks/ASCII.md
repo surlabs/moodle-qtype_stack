@@ -126,11 +126,13 @@ Note that the following are equivalent
     [[filter type="markdown" transforms="asciimath,minwrap" /]]
     [[filter type="markdown-maths" /]]
 
-The default behaviour when no markdown filter, or plain filter, is present is
+The default behaviour when no filter is present is
 
     [[filter type="markdown" transforms="asciimath,aligneq,minwrap" /]]
 
-Note, many of the extractor blocks require the identification of mathematics.  This is done within the markdown filter.
+This filter will be applied before any extractors you specify if you do not explicitly include a filter in your ASCII block.
+
+Note, many of the extractor blocks require the identification of mathematics.  This is done within the markdown filter. If you use another filter (e.g. `calculation`) no markdown filter will be added automatically - you will need to specify one yourself if required.
 
 #### `plain` filter
 

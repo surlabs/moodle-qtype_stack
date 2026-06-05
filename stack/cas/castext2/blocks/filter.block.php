@@ -27,6 +27,23 @@ require_once(__DIR__ . '/../../../utils.class.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 class stack_cas_castext2_filter extends stack_cas_castext2_block {
+    /** @var array valid filter types. */
+    public static $filtertypes = [
+        'calculation',
+        'cas',
+        'markdown',
+        'markdown-math',
+        'plain',
+    ];
+
+    /** @var array valid transform types. */
+    public static $transtypes = [
+        'asciimath',
+        'aligneq',
+        'boldfilter',
+        'minwrap',
+    ];
+
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function compile($format, $options): ?MP_Node {
         $r = new MP_List([
@@ -61,40 +78,29 @@ class stack_cas_castext2_filter extends stack_cas_castext2_block {
             $valid = false;
             $err[] = stack_string('stackBlock_filter_type_required');
         } else {
-            $filtertypes = [
-                'calculation',
-                'cas',
-                'markdown',
-                'markdown-maths',
-                'plain',
-            ];
-            if (!in_array($this->params['type'], $filtertypes)) {
+            if (!in_array($this->params['type'], self::$filtertypes)) {
+                    $valid = false;
                     $err[] = stack_string('stackBlock_filter_unknown', [
                         'type' => $this->params['type'],
-                        'filters' => implode(', ', $filtertypes),
+                        'filters' => implode(', ', self::$filtertypes),
                     ]);
             }
         }
 
         if (array_key_exists('transforms', $this->params)) {
-            $transtypes = [
-                'asciimath',
-                'aligneq',
-                'boldfilter',
-                'minwrap',
-            ];
             $transforms = explode(',', $this->params['transforms']);
             $invalidtrans = [];
             foreach ($transforms as $transform) {
-                if (!in_array($transform, $transtypes)) {
+                if (!in_array($transform, self::$transtypes)) {
                     $invalidtrans[] = $transform;
                 }
             }
             if (count($invalidtrans)) {
+                $valid = false;
                 $invalidtrans = implode(', ', $invalidtrans);
                 $err[] = stack_string('stackBlock_filter_trans_unknown', [
                         'transforms' => $invalidtrans,
-                    'valid' => implode(', ', $transtypes),
+                    'valid' => implode(', ', self::$transtypes),
                 ]);
             }
         }

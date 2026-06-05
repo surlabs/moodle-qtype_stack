@@ -27,6 +27,16 @@ require_once(__DIR__ . '/../../../utils.class.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 class stack_cas_castext2_extractor extends stack_cas_castext2_block {
+    /** @var array valid extractor types. */
+    public static $extractortypes = [
+        'finalfunction',
+        'lastblock',
+        'lastcalc',
+        'lastexpr',
+        'regexall',
+        'regexmatch',
+    ];
+
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public function compile($format, $options): ?MP_Node {
         $r = new MP_List([
@@ -66,18 +76,11 @@ class stack_cas_castext2_extractor extends stack_cas_castext2_block {
             $valid = false;
             $err[] = stack_string('stackBlock_extractor_type_required');
         } else {
-            $extractortypes = [
-                'finalfunction',
-                'lastblock',
-                'lastcalc',
-                'lastexpr',
-                'regexall',
-                'regexmatch',
-            ];
-            if (!in_array($this->params['type'], $extractortypes)) {
+            if (!in_array($this->params['type'], self::$extractortypes)) {
+                    $valid = false;
                     $err[] = stack_string('stackBlock_extractor_unknown', [
                         'type' => $this->params['type'],
-                        'extractors' => implode(', ', $extractortypes),
+                        'extractors' => implode(', ', self::$extractortypes),
                     ]);
             }
         }
