@@ -119,7 +119,7 @@ While you are free to specify these transformations, the `markdown-math` filter 
 
 This proceses the text as (plain) markdown, without the mathematical extensions above.  You can add any of the transforms as arguments, but the following will treat the text as markdown, without processing any of the AsciiMath (as is done by `markdown-math`
 
-    [[filter type="markdown" transforms="" /]]
+    [[filter type="markdown" /]]
 
 Note that the following are equivalent
 

@@ -72,7 +72,11 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 if ($options['type'] == 'markdown-math') {
                     $ismarkdown = false;
                     $options['type'] == 'markdown';
-                    $options['transforms'] = $this->set_markdown_filter_defaults($options['transforms']);
+                    $transforms = '';
+                    if (array_key_exists('transforms', $options['transforms'])) {
+                        $transforms = $options['transforms'];
+                    }
+                    $options['transforms'] = $this->set_markdown_filter_defaults($transforms);
                 }
                 // In this case don't add in any markdown filters at all (even the default below).
                 if ($options['type'] == 'plain') {
