@@ -65,6 +65,21 @@ class stack_cas_castext2_extractor extends stack_cas_castext2_block {
         if (!array_key_exists('type', $this->params)) {
             $valid = false;
             $err[] = stack_string('stackBlock_extractor_type_required');
+        } else {
+            $extractortypes = [
+                'finalfunction',
+                'lastblock',
+                'lastcalc',
+                'lastexpr',
+                'regexall',
+                'regexmatch',
+            ];
+            if (!in_array($this->params['type'], $extractortypes)) {
+                    $err[] = stack_string('stackBlock_extractor_unknown', [
+                        'type' => $this->params['type'],
+                        'extractors' => implode(', ', $extractortypes),
+                    ]);
+            }
         }
 
         // Wrap the old string errors with the context details.

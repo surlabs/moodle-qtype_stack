@@ -60,6 +60,43 @@ class stack_cas_castext2_filter extends stack_cas_castext2_block {
         if (!array_key_exists('type', $this->params)) {
             $valid = false;
             $err[] = stack_string('stackBlock_filter_type_required');
+        } else {
+            $filtertypes = [
+                'calculation',
+                'cas',
+                'markdown',
+                'markdown-maths',
+                'plain',
+            ];
+            if (!in_array($this->params['type'], $filtertypes)) {
+                    $err[] = stack_string('stackBlock_filter_unknown', [
+                        'type' => $this->params['type'],
+                        'filters' => implode(', ', $filtertypes),
+                    ]);
+            }
+        }
+
+        if (array_key_exists('transforms', $this->params)) {
+            $transtypes = [
+                'asciimath',
+                'aligneq',
+                'boldfilter',
+                'minwrap',
+            ];
+            $transforms = explode(',', $this->params['transforms']);
+            $invalidtrans = [];
+            foreach ($transforms as $transform) {
+                if (!in_array($transform, $transtypes)) {
+                    $invalidtrans[] = $transform;
+                }
+            }
+            if (count($invalidtrans)) {
+                $invalidtrans = implode(', ', $invalidtrans);
+                $err[] = stack_string('stackBlock_filter_trans_unknown', [
+                        'transforms' => $invalidtrans,
+                    'valid' => implode(', ', $transtypes),
+                ]);
+            }
         }
 
         // Wrap the old string errors with the context details.
