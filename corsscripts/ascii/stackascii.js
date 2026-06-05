@@ -31,8 +31,9 @@
 
 import markdown from './filters/markdown.js';
 import calculation from './filters/calculation.js';
+import cas from './filters/cas.js';
 
-const filterlib = { markdown, calculation };
+const filterlib = { markdown, calculation, cas };
 
 import finalfunction from './extractors/finalfunction.js';
 import lastexpr from './extractors/lastexpr.js';

@@ -500,6 +500,11 @@
                 "description":"STACK lets question authors easily embed standard facts into their questions."
                 },
                 {
+                "file":"Filter_calculations.md",
+                "title":"Filter blocks: calculations - STACK Documentation",
+                "description":"The ASCII block can filter and calculate, this is reference documentation."
+                },
+                {
                 "file":"Iframe_blocks.md",
                 "title":"Iframe blocks - STACK Documentation",
                 "description":"Some content needs to be embedded into iframes."

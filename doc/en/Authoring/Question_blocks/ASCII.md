@@ -109,31 +109,13 @@ Available transforms (specified via the `transforms` parameter):
 
 - `boldfilter`: Changes each mathematical expression to bold. Must be applied after `latexwrap` (use `transforms="latexwrap,boldfilter"`). This is a temporary addition for testing purposes.
 
-#### `calculation` filter
+#### `calculation` and `cas` filters
 
-The `calculation` filter finds text enclosed between `{@...@}` tags on a single line and renders it in bold. For example, `The answer to \(1+1={@1+1@}\).` displays the answer as **1+1** in bold. The enclosed text is also collected as a block and available to the `lastcalc` extractor. ***Eventually this will actually do the calculation but is currently included for testing purposes only.***
+The `calculation` provides a simple scientific calculator.  The filter finds text enclosed between `{@...@}` tags on a single line and evaluates the contents using [https://mathjs.org/](https://mathjs.org/). For example, `The answer to \(1+1={@1+1@}\).` displays the answer as 2. The enclosed text is also collected as a block and available to the `lastcalc` extractor.
 
     [[filter type="calculation" /]]
 
-Note, the order of filters is important, and it is essential that the calculation filter is applied before the markdown filter.  That way the results of any calculation are inserted into text which is then processed by the markdown filter.  The _results_ of the calculation can then be captured by the `lastexpr` and `lastblock` extractors (see below).  Hence, you will typically need to use
-
-```
-[[ascii input="ans1"]]
-  [[filter type="calculation" /]]
-  [[filter type="markdown" transforms="latexwrap" /]]
-  [[extractor type="lastexpr" targetinput="ans2" /]]
-[[/ascii]]
-```
-
-Note, the calculation filter really does a search and replace on the text. It's therefore important for users (including students) to embed a calculation within a mathematics environment.  If you would like the result of a numerical calculation within a LaTeX inline expression then use
-
-    \( {@3*31@} \)
-
-or, if using the AsciiMath filter
-
-    `{@3*31@}`
-
-While just `{@3*31@}` will be replaced within the text (and probably looks OK as numbers within text), it won't be within a mathematics environment.  (Experienced castext users might not have noticed that when rendering castext server-side we auto-detect if a calculation is within a mathematics environment, and if not we ensure it's inline mathematics. This auto-detection does not happen here!)
+See the [Filter: calculations](Filter_calculations.md) documentation for full details.
 
 ### Filter developer notes
 
