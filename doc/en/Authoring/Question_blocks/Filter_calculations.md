@@ -12,7 +12,7 @@ Note, the order of filters is important, and it is essential that the calculatio
 ```
 [[ascii input="ans1"]]
   [[filter type="calculation" /]]
-  [[filter type="markdown" transforms="aligneq" /]]
+  [[filter type="markdown-math" transforms="aligneq" /]]
   [[extractor type="lastexpr" targetinput="ans2" /]]
 [[/ascii]]
 ```

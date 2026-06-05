@@ -1333,8 +1333,13 @@
              },
              {
              "file":"Authoring.md",
-             "title":"Authoring a free text input - STACK Documentation",
+             "title":"Authoring a free text input question - STACK Documentation",
              "description":"How to use free-text input authoring an automatically asssessed STACK question."
+             },
+             {
+             "file":"Calculation.md",
+             "title":"Authoring a free text input question with optional calculation - STACK Documentation",
+             "description":"How to use free-text input question allowing students to include calculations."
              }
              ]
          },

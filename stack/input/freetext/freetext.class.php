@@ -91,8 +91,8 @@ class stack_freetext_input extends stack_string_input {
             }
         }
 
-        // TO-DO: sort out size of text area.
-        $attributes['rows'] = 5;
+        preg_match_all('/\R/', $value, $matches);
+        $attributes['rows'] = max(5, count($matches[0])+3);
         $attributes['cols'] = $this->parameters['boxWidth'];
 
         if ($readonly) {

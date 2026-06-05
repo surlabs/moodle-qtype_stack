@@ -5,6 +5,7 @@ This input allows you to type in free text, e.g. your complete working or mathem
 1. You can type markdown text.
 2. You can type AsciiMath between backticks for mathematics: <code>`...`</code>
 3. You can include LaTeX between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.
+4. Sometimes, but not always, you will be able to include calculations between <code>{@...@}</code>.  Rather than reaching for an external calculator, the software will replace your requested calculation with the answer.
 
 ## Markdown
 
@@ -316,4 +317,14 @@ Note, you can also use `{...}` for curly braces and `abs(x)` for \(|x|\).
 ## LaTeX
 
 LaTeX is a software system for typesetting documents.  We support the mathematics environments between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.  This leaves dollars `$` for currency.
+
+
+## Calculations
+
+When activated in a particular question, calculations between <code>{@...@}</code> will be automaticall completed for you, rather than reaching for an external calculator.
+
+1. Type simple expressions using brackets for function arguments.
+2. Note angles are always in radians.  E.g. try <code>{@cos(pi)@}</code> for example.
+3. Answers are given as floating point numbers, and you should choose the precision needed.  E.g. <code>{@round(cos(2),3)@}</code>
+
 
