@@ -5864,7 +5864,7 @@ ta2:4*sqrt(2*x^2+1)+1;
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-[[filter type="markdown" transforms="latexwrap" /]]
+[[filter type="markdown" transforms="aligneq" /]]
 [[extractor targetinput="ans2" type="finalfunction"/]]
 [[extractor targetinput="ans3" type="lastexpr"/]]
 [[extractor targetinput="ans4" type="regexmatch" regex="^f\\\\(0\\\\)\\\\s*=\\\\s*"/]]

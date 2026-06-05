@@ -15,7 +15,7 @@ import findtextindex from './findtextindex.js';
  * @returns {string[]} array whose first element is \[\begin{align*}, last element
  *   is \end{align*}\], and whose interior lines are the formatted content rows.
  */
-export default function latexwrap(lines, rule) {
+export default function aligneq(lines, rule) {
     switch (rule) {
         case 'asciimath_block':
         case 'math_block':

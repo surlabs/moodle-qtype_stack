@@ -17,8 +17,8 @@ describe('markdown filter', () => {
     });
 
     test('applies transforms from op.transforms', () => {
-        // latexwrap and boldfilter are in the transformLib, but we just check no error is thrown
-        const html = markdown('`f(x) = x^2`', null, { transforms: 'latexwrap,boldfilter' });
+        // aligneq and boldfilter are in the transformLib, but we just check no error is thrown
+        const html = markdown('`f(x) = x^2`', null, { transforms: 'aligneq,boldfilter' });
         expect(typeof html).toBe('string');
     });
 
@@ -49,10 +49,10 @@ describe('markdown filter', () => {
         const isolatedMarkdown = markdownModule.default || markdownModule;
 
         const collector = { blocks: [] };
-        isolatedMarkdown('plain', collector, { transforms: 'latexwrap, boldfilter' });
+        isolatedMarkdown('plain', collector, { transforms: 'aligneq, boldfilter' });
 
         expect(capturedState).not.toBeNull();
-        expect(capturedState.transforms).toEqual(['latexwrap', 'boldfilter']);
+        expect(capturedState.transforms).toEqual(['aligneq', 'boldfilter']);
         expect(capturedState.collector).toBe(collector);
     });
 
@@ -72,9 +72,9 @@ describe('markdown filter', () => {
 
         const collector = { blocks: [] };
 
-        isolatedMarkdown('plain', collector, { transforms: 'latexwrap' });
+        isolatedMarkdown('plain', collector, { transforms: 'aligneq' });
         expect(capturedState).not.toBeNull();
-        expect(capturedState.transforms).toEqual(['latexwrap']);
+        expect(capturedState.transforms).toEqual(['aligneq']);
         expect(capturedState.collector).toBe(collector);
 
         isolatedMarkdown('plain', null, { transforms: '' });

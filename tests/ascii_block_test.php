@@ -77,7 +77,7 @@ final class ascii_block_test extends qtype_stack_testcase {
         stack_cas_castext2_iframe::register_counter('///IFRAME_COUNT///');
 
         $raw = '[[ascii input="ans1"]]'
-            . '[[filter type="markdown" transforms="latexwrap,boldfilter"]][[/filter]]'
+            . '[[filter type="markdown" transforms="aligneq,boldfilter"]][[/filter]]'
             . '[[extractor targetinput="ans2" type="lastexpr"]][[/extractor]]'
             . '[[/ascii]]';
         $expected = '<div style="width:100%;height:400px;" id="stack-iframe-holder-1"></div>';
@@ -107,7 +107,7 @@ final class ascii_block_test extends qtype_stack_testcase {
         $strings = $this->get_string_items($compiled);
         $joined = implode("\n", $strings);
         $this->assertStringContainsString('stack_js.request_access_to_input("ans1",true)', $joined);
-        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"latexwrap"}]);}';
+        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"aligneq"}]);}';
         $this->assertStringContainsString($expectedlinkcode, $joined);
         $this->assertStringContainsString(
             'id="asciiContainerRow" style="width:calc(100% - 20px);height:calc(400px - 30px);"',
@@ -118,7 +118,7 @@ final class ascii_block_test extends qtype_stack_testcase {
     public function test_ascii_compile_uses_child_filter_and_extractor_operations(): void {
         $filter = new \stack_cas_castext2_filter([
             'type' => 'markdown',
-            'transforms' => 'latexwrap',
+            'transforms' => 'aligneq',
             'display' => 'true',
         ]);
         $extractor = new \stack_cas_castext2_extractor([
@@ -141,14 +141,14 @@ final class ascii_block_test extends qtype_stack_testcase {
         $joined = implode("\n", $strings);
         $this->assertStringContainsString('stack_js.request_access_to_input("ans1",true)', $joined);
         $this->assertStringContainsString('stack_js.request_access_to_input("ans2")', $joined);
-        $expectedlinkcode = '{init(inputIds,[{"type":"markdown","transforms":"latexwrap","display":"true","operation":"filter"}' .
+        $expectedlinkcode = '{init(inputIds,[{"type":"markdown","transforms":"aligneq","display":"true","operation":"filter"}' .
             ',{"type":"lastexpr","targetinput":"ans2","operation":"extractor"}]);}';
         $this->assertStringContainsString($expectedlinkcode, $joined);
         $this->assertStringContainsString(
             'id="asciiContainerRow" style="width:calc(80% - 20px);height:calc(300px - 30px);"',
             $joined
         );
-        $this->assertStringNotContainsString('"transforms":"latexwrap,boldfilter"', $joined);
+        $this->assertStringNotContainsString('"transforms":"aligneq,boldfilter"', $joined);
     }
 
     public function test_ascii_requires_input_param(): void {

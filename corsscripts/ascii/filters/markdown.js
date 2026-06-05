@@ -1,7 +1,7 @@
 // Markdown filter — creates a single markdownit instance with the full transformLib.
 // Called by stackascii.js as: filter(rawText, blockCollector, op)
 // where op is the [[filter]] block's parameter object, e.g.
-//   { operation: 'filter', type: 'markdown', transforms: 'latexwrap,boldfilter' }
+//   { operation: 'filter', type: 'markdown', transforms: 'aligneq,boldfilter' }
 //
 // The transformLib is the authoritative registry for named transforms.
 // To add a new transform:
@@ -19,7 +19,7 @@ import * as mdItPluginTex from '../markdownitextensions/tex.js';
 
 import asciimath from '../markdownittransforms/005_asciimath.js';
 import boldfilter from '../markdownittransforms/020_boldfilter.js';
-import latexwrap from '../markdownittransforms/010_latexwrap.js';
+import aligneq from '../markdownittransforms/010_aligneq.js';
 import minwrap from '../markdownittransforms/015_minwrap.js';
 
 /**
@@ -31,7 +31,7 @@ import minwrap from '../markdownittransforms/015_minwrap.js';
 const transformLib = {
     asciimath,
     boldfilter,
-    latexwrap,
+    aligneq,
     minwrap
 };
 
@@ -59,12 +59,12 @@ const converter = markdownit({ html: true })
  * @param {string}      text          - the raw student input to render.
  * @param {Object|null} blockCollector - { blocks: [] } collector for extractors, or null.
  * @param {Object}      op            - the [[filter]] block parameter object;
- *   op.transforms is a comma-separated list of transform names (e.g. 'latexwrap,boldfilter').
+ *   op.transforms is a comma-separated list of transform names (e.g. 'aligneq,boldfilter').
  * @returns {string} rendered HTML string.
  */
 export default function markdown(text, blockCollector, op) {
-    // Split op.transforms (e.g. 'latexwrap, boldfilter') into an ordered array of
-    // trimmed, non-empty names (['latexwrap', 'boldfilter']) that applyTransforms
+    // Split op.transforms (e.g. 'aligneq, boldfilter') into an ordered array of
+    // trimmed, non-empty names (['aligneq', 'boldfilter']) that applyTransforms
     // iterates over when processing each block.
     state.transforms = (op.transforms || '')
         .split(',')

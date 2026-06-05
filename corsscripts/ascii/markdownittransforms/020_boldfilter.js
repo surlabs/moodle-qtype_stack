@@ -1,5 +1,5 @@
-// Must be applied after latexwrap (use filters: "latexwrap,boldfilter").
-// latexwrap inserts & alignment tokens by scanning for = etc. at brace depth 0;
+// Must be applied after aligneq (use filters: "aligneq,boldfilter").
+// aligneq inserts & alignment tokens by scanning for = etc. at brace depth 0;
 // any bold wrapper applied before it hides those tokens inside {}, breaking alignment.
 // \boldsymbol is used (not \textbf) because \textbf is text-mode and breaks on
 // math content such as \displaystyle which AMparseMath inserts.
@@ -13,7 +13,7 @@ export default function boldfilter(lines, rule) {
             break;
     }
     // lines[0] = '\[\begin{align*}', lines[-1] = '\end{align*}\]'
-    // latexwrap appends \\ (the LaTeX row-break) directly onto the last content
+    // aligneq appends \\ (the LaTeX row-break) directly onto the last content
     // column (e.g. "after\\"), so splitting on & gives ["", " ", " before", "after\\"].
     // We must strip the trailing \\ before wrapping in \boldsymbol, then restore it,
     // otherwise \boldsymbol{after\\} swallows the row-break and output collapses to one line.

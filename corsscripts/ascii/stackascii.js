@@ -54,7 +54,7 @@ const extractorlib = { finalfunction, lastexpr, lastblock, lastcalc, regexmatch,
  *   in the same order as the [[extractor]] blocks.
  * @param {Object[]} operations - ordered array of operation objects compiled from
  *   [[filter]] and [[extractor]] child blocks, e.g.
- *   [{ operation:'filter',    type:'markdown', transforms:'latexwrap' },
+ *   [{ operation:'filter',    type:'markdown', transforms:'aligneq' },
  *    { operation:'extractor', type:'lastexpr', targetinput:'ans2'     }]
  */
 export default function init(inputIds, operations) {

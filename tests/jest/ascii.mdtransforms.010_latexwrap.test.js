@@ -1,15 +1,15 @@
-import latexwrap from '../../corsscripts/ascii/markdownittransforms/010_latexwrap.js';
+import aligneq from '../../corsscripts/ascii/markdownittransforms/010_aligneq.js';
 // TODO These tests essentially define what the function currently does. Is the behaviour correct?
-describe('latexwrap transform', () => {
+describe('aligneq transform', () => {
     test('returns only wrappers for empty input', () => {
-        expect(latexwrap([])).toEqual([
+        expect(aligneq([])).toEqual([
             '\\[\\begin{align*}',
             '\\end{align*}\\]'
         ]);
     });
 
     test('wraps a simple relation line into align blocks', () => {
-        expect(latexwrap(['x = y'])).toEqual([
+        expect(aligneq(['x = y'])).toEqual([
             '\\[\\begin{align*}',
             '& & x &= y\\\\',
             '\\end{align*}\\]'
@@ -17,7 +17,7 @@ describe('latexwrap transform', () => {
     });
 
     test('places leading implication text in the first column', () => {
-        expect(latexwrap(['\\Rightarrow x = y'])).toEqual([
+        expect(aligneq(['\\Rightarrow x = y'])).toEqual([
             '\\[\\begin{align*}',
             '\\Rightarrow & &x &= y\\\\',
             '\\end{align*}\\]'
@@ -25,7 +25,7 @@ describe('latexwrap transform', () => {
     });
 
     test('moves \text content into the fourth column when not excluded', () => {
-        expect(latexwrap(['a = b \\text{then} c'])).toEqual([
+        expect(aligneq(['a = b \\text{then} c'])).toEqual([
             '\\[\\begin{align*}',
             '& & a &= b & &\\text{then} c\\\\',
             '\\end{align*}\\]'
@@ -33,7 +33,7 @@ describe('latexwrap transform', () => {
     });
 
     test('does not treat excluded \text tokens as a split point', () => {
-        expect(latexwrap(['a = b \\text{or} c'])).toEqual([
+        expect(aligneq(['a = b \\text{or} c'])).toEqual([
             '\\[\\begin{align*}',
             '& & a &= b \\text{or} c\\\\',
             '\\end{align*}\\]'
@@ -41,7 +41,7 @@ describe('latexwrap transform', () => {
     });
 
     test('adds an ampersand when no relation token is found', () => {
-        expect(latexwrap(['plain content'])).toEqual([
+        expect(aligneq(['plain content'])).toEqual([
             '\\[\\begin{align*}',
             '& & plain content&\\\\',
             '\\end{align*}\\]'
@@ -49,7 +49,7 @@ describe('latexwrap transform', () => {
     });
 
     test('handles brace-delimited relation tokens only at top level', () => {
-        expect(latexwrap(['a = {b > c}'])).toEqual([
+        expect(aligneq(['a = {b > c}'])).toEqual([
             '\\[\\begin{align*}',
             '& & a &= {b > c}\\\\',
             '\\end{align*}\\]'
@@ -57,7 +57,7 @@ describe('latexwrap transform', () => {
     });
 
     test('handles relation token at index 0', () => {
-        expect(latexwrap(['= y'])).toEqual([
+        expect(aligneq(['= y'])).toEqual([
             '\\[\\begin{align*}',
             '& & &= y\\\\',
             '\\end{align*}\\]'
@@ -65,7 +65,7 @@ describe('latexwrap transform', () => {
     });
 
     test('splits at the first top-level relation token when multiple exist', () => {
-        expect(latexwrap(['a > b = c'])).toEqual([
+        expect(aligneq(['a > b = c'])).toEqual([
             '\\[\\begin{align*}',
             '& & a &> b = c\\\\',
             '\\end{align*}\\]'
@@ -73,7 +73,7 @@ describe('latexwrap transform', () => {
     });
 
     test('ignores excluded text token and splits at a later non-excluded text token', () => {
-        expect(latexwrap(['a = b \\text{or} c \\text{then} d'])).toEqual([
+        expect(aligneq(['a = b \\text{or} c \\text{then} d'])).toEqual([
             '\\[\\begin{align*}',
             '& & a &= b \\text{or} c & &\\text{then} d\\\\',
             '\\end{align*}\\]'
@@ -81,7 +81,7 @@ describe('latexwrap transform', () => {
     });
 
     test('ignores relation tokens inside \\lbrace...\\rbrace and splits at top-level relation', () => {
-        expect(latexwrap(['a \\lbrace b = c \\rbrace = d'])).toEqual([
+        expect(aligneq(['a \\lbrace b = c \\rbrace = d'])).toEqual([
             '\\[\\begin{align*}',
             '& & a \\lbrace b = c \\rbrace &= d\\\\',
             '\\end{align*}\\]'
@@ -89,7 +89,7 @@ describe('latexwrap transform', () => {
     });
 
     test('handles implication token with brace form', () => {
-        expect(latexwrap(['\\Rightarrow{x = y}'])).toEqual([
+        expect(aligneq(['\\Rightarrow{x = y}'])).toEqual([
             '\\[\\begin{align*}',
             '\\Rightarrow{& &x = y}&\\\\',
             '\\end{align*}\\]'
@@ -97,7 +97,7 @@ describe('latexwrap transform', () => {
     });
 
     test('handles complex multiline content in a single transform call', () => {
-        expect(latexwrap([
+        expect(aligneq([
             '\\Rightarrow x = y',
             'a = {b > c} \\text{then} d',
             'plain content',
@@ -114,12 +114,12 @@ describe('latexwrap transform', () => {
 
     test('returns lines unchanged when any line contains a skip environment', () => {
         const input = ['a = b', '\\begin{align} x &= y \\end{align}'];
-        expect(latexwrap(input)).toEqual(input);
+        expect(aligneq(input)).toEqual(input);
     });
 
     test('returns lines unchanged for starred skip environments', () => {
         const input = ['\\begin{equation*} x = y \\end{equation*}'];
-        expect(latexwrap(input)).toEqual(input);
+        expect(aligneq(input)).toEqual(input);
     });
 
     test('skips wrapping for every environment in the nonest list and its starred variant', () => {
@@ -130,8 +130,8 @@ describe('latexwrap transform', () => {
         for (const env of envs) {
             const plain = [`\\begin{${env}} a \\end{${env}}`];
             const starred = [`\\begin{${env}*} a \\end{${env}*}`];
-            expect(latexwrap(plain)).toEqual(plain);
-            expect(latexwrap(starred)).toEqual(starred);
+            expect(aligneq(plain)).toEqual(plain);
+            expect(aligneq(starred)).toEqual(starred);
         }
     });
 });

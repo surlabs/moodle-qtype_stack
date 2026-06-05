@@ -38,11 +38,11 @@ The question text uses pure LaTeX rather than unicode:
 <p>Prove that \(\forall n \in \mathbb{N}\), \(1+3+5+7+...+(2n−1) = n^2\)</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[filter type="markdown" transforms="latexwrap" /]]
+  [[filter type="markdown" transforms="aligneq" /]]
 [[/ascii]]
 ```
 
-Reference documentation is available for the linked [`[[ascii]]` block](../../Authoring/Question_blocks/ASCII.md) elsewhere.  This block provides more flexibility for options for free-text input than is available for general inputs.  In particular for (i) processing, (ii) displaying and (in later examples) (iii) extracting parts of the input for use in PRTs.  This example used a `[[filter type="markdown" transforms="latexwrap" /]]`.  This takes the free-text, processes it as markdown with mathematics and uses the `latexwrap` transformation to align multi-line mathematics on the first equals sign.
+Reference documentation is available for the linked [`[[ascii]]` block](../../Authoring/Question_blocks/ASCII.md) elsewhere.  This block provides more flexibility for options for free-text input than is available for general inputs.  In particular for (i) processing, (ii) displaying and (in later examples) (iii) extracting parts of the input for use in PRTs.  This example used a `[[filter type="markdown" transforms="aligneq" /]]`.  This takes the free-text, processes it as markdown with mathematics and uses the `aligneq` transformation to align multi-line mathematics on the first equals sign.
 
 Adjust the input settings:
 
@@ -98,7 +98,7 @@ The complete (html) question text is therefore
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[filter type="markdown" transforms="latexwrap" /]]
+  [[filter type="markdown" transforms="aligneq" /]]
   [[extractor targetinput="ans2" type="finalexpression"/]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
@@ -108,7 +108,7 @@ The complete (html) question text is therefore
 
 Notice, the `[[ascii]]` block takes an optional `[[filter]]` child block that controls how the student's text is processed and displayed, and one or more `[[extractor]]` child blocks that extract parts of the text and send them to other STACK inputs.
 
-The `[[filter]]` block specifies how the student's input is processed. Here `type="markdown"` processes the text as Markdown with AsciiMath support, and `transforms="latexwrap"` aligns multi-line mathematics in an `align*` environment.
+The `[[filter]]` block specifies how the student's input is processed. Here `type="markdown"` processes the text as Markdown with AsciiMath support, and `transforms="aligneq"` aligns multi-line mathematics in an `align*` environment.
 
 The `[[extractor]]` block specifies what to extract and where to send it. Here `type="finalexpression"` sends the last line of the last AsciiMath block to `ans2`. See [the ASCII block documentation](../../Authoring/Question_blocks/ASCII.md) for the full list of extractor types.
 

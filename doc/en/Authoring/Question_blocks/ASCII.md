@@ -11,11 +11,11 @@ The `[[ascii]]` castext block takes one or more optional `[[filter]]` child bloc
 
 ```
 [[ascii input="ans1"]]
-  [[filter type="markdown" transforms="latexwrap" /]]
+  [[filter type="markdown" transforms="aligneq" /]]
   [[extractor type="lastexpr" targetinput="ans2" /]]
 [[/ascii]]
 ```
-The student's text is run through a markdown filter first which applies normal markdown display formatting.  In this example we also apply a special STACK transformation (`latexwrap`) which translates and aligns AsciiMath surrounded by backticks.
+The student's text is run through a markdown filter first which applies normal markdown display formatting.  In this example we also apply a special STACK transformation (`aligneq`) which translates and aligns AsciiMath surrounded by backticks.
 
 Multiple `[[extractor]]` blocks may be used to extract answers from the block into multiple STACK inputs. Multiple `[[filter]]` blocks can also be used to translate the raw original input in different ways in succession. By default, the output of one filter is fed into the next filter as the 'raw' input. Extractors are supplied with the cumulative output of the filters so far and 'map' information from the most recent filter applied. For instance, the markdown filter supplies a list of all the identified occurrences of code and AsciiMath sections in the student's text (in order) and with both the initial contents given to the filter and the transformed output.
 
@@ -35,13 +35,13 @@ Functionality and styling can be customized through the use of block parameters.
 
 ## Filters
 
-Filters control how the student's text input is processed and displayed. If no `[[filter]]` block is provided, the default `markdown` filter with transform `latexwrap` is applied automatically by default.
+Filters control how the student's text input is processed and displayed. If no `[[filter]]` block is provided, the default `markdown` filter with transform `aligneq` is applied automatically by default.
 
 A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` block:
 
 ```
 [[ascii input="ans1"]]
-  [[filter type="markdown" transforms="latexwrap" /]]
+  [[filter type="markdown" transforms="aligneq" /]]
   [[extractor type="lastexpr" targetinput="ans2" /]]
 [[/ascii]]
 ```
@@ -51,7 +51,7 @@ A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` blo
 ### Filter block parameters
 
 1. `type` (required): the filter type. Currently available: `markdown`, `calculation`.
-2. `transforms` (for `markdown` type): a comma-separated list of transforms to apply. Available transforms: `latexwrap`, `boldfilter`.
+2. `transforms` (for `markdown` type): a comma-separated list of transforms to apply. Available transforms: `aligneq`, `boldfilter`.
 3. `reset`: if `"true"`, this filter operates on the original raw input rather than the output of any preceding filter(s).
 4. `display`: if `"true"`, the output of this filter is used as the final display and subsequent filters cannot modify the display.
 
@@ -70,7 +70,7 @@ The `markdown` filter processes the student's text as Markdown and renders mathe
 
 - **`asciimath_block`**: A backtick on its own line opens a multi-line AsciiMath block; another solitary backtick closes it. If the content is identified as LaTeX then no processing takes place.  Otherwise, each line of content is converted to LaTeX by `AMparseMath` and any configured transforms are applied.
 
-In the following example, the transform `latexwrap` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments.
+In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments.
 
 ```
   `
@@ -100,14 +100,14 @@ In the following example, the transform `latexwrap` is applied to line up equati
 
 Available transforms (specified via the `transforms` parameter):
 
-- `latexwrap`: Formats multiple-line mathematics (in `asciimath_block`) aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
+- `aligneq`: Formats multiple-line mathematics (in `asciimath_block`) aligned on the first `=` sign, or similar operators such as inequality. (Shown in math_block and asciimath_block examples above.) The lines of a LaTeX expression are arranged in a 3-column aligned layout:
   - col 1 – leading logical connective, such as implies/therefore symbol (if present, e.g. `=>`, `:.` (therefore) in AsciiMath)
   - col 2 – left-hand side up to (but not including) the relation symbol
   - col 3 – relation symbol and right-hand side
 
   A `\text{…}` that is not `\text{or}`, `\text{and}`, or `\text{if}` is pushed into a 4th column.
 
-- `boldfilter`: Changes each mathematical expression to bold. Must be applied after `latexwrap` (use `transforms="latexwrap,boldfilter"`). This is a temporary addition for testing purposes.
+- `boldfilter`: Changes each mathematical expression to bold. Must be applied after `aligneq` (use `transforms="aligneq,boldfilter"`). This is a temporary addition for testing purposes.
 
 #### `calculation` and `cas` filters
 

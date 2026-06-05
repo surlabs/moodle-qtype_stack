@@ -3,7 +3,7 @@
 // markdownit instance created in markdown.js.
 //
 // To change how a token type is rendered, edit this file.
-// To change the behaviour of a named transform (latexwrap, boldfilter, …),
+// To change the behaviour of a named transform (aligneq, boldfilter, …),
 // edit the corresponding file in markdownittransforms/, then run: npm run build
 //
 // The `state` object is defined in markdown.js and passed in via options.state.
