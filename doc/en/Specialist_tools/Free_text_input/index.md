@@ -18,6 +18,7 @@ The processing and display of free text inputs is rather flexible and is control
 The default is for students to use unicode text in markdown format, extended by AsciiMath.
 
 * [Authoring free-text questions](Authoring.md)
+* [Authoring free-text questions with extractors](Extractors.md)
 * [Authoring free-text questions with calculation](Calculation.md)
 
 ### Help for students

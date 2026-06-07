@@ -1340,6 +1340,11 @@
              "file":"Calculation.md",
              "title":"Authoring a free text input question with optional calculation - STACK Documentation",
              "description":"How to use free-text input question allowing students to include calculations."
+             },
+             {
+             "file":"Extractors.md",
+             "title":"Authoring free-text questions with extractors - STACK Documentation",
+             "description":"How to use regex to extract answer from free-text input questions."
              }
              ]
          },
