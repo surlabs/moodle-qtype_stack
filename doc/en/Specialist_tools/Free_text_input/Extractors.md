@@ -2,11 +2,13 @@
 
 This page discusses a free-text question with extractors.
 
+## Questions with a single extractor and multiple standard STACK inputs
+
 This is a complex question which can be loaded from 
 
     Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_with_extractors.xml
 
-This page contains only notes, and we recommend you load this question.
+This page contains only notes, and we recommend you load this question and work through it.
 
 ### Design
 
@@ -66,3 +68,44 @@ but the validation tag will be visible if students make a syntax error.
 ### Teacher's answer
 
 The teacher's answer for `ans1` is also written as castext within Maxima, in a very similar style to the syntax hint. 
+
+## Questions with a multiple extractors and multiple standard STACK inputs
+
+This is a complex question which can be loaded from 
+
+    Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_with_multiple_extractors.xml
+
+This page contains only notes, and we recommend you load this question and work through it.
+
+### Design
+
+This question extracts two independent answers, \(a=?\) and \(b=?\) from the student's working.  Students still have to fill in the final answer, as would be the case with a classic STACK question.
+
+This combination is a pragmatic middle ground between trying to extract all answers with regex, and having students fill in forms.
+
+### Extractors
+
+This is the complete question text:
+
+```
+<p>You have a parabola of the form \(f(x)=a\,x^2+b\) which satisfies \(f({@x1@})={@f1@}\) and \(f'({@x2@})={@f2@}\).</p>
+<p>Work line by line below, find the values of \(a\) and \(b\) and hence the formula for \(f\).  Justifying your answer fully.</p>
+<p>[[input:ans1]] [[validation:ans1]]</p>
+[[ascii input="ans1"]]
+  [[extractor type="regexmatch" targetinput="saa" regex="^\\s*a\\s*=\\s*" /]]
+  [[extractor type="regexmatch" targetinput="sab" regex="^\\s*b\\s*=\\s*" /]]
+[[/ascii]]
+<p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
+<p style="display:none">[[input:saa]]</p>
+<p>\(a=\)[[validation:saa]]</p>
+<p style="display:none">[[input:sab]]</p>
+<p>\(b=\)[[validation:sab]]</p>
+<p>\(f(x)=\) [[input:saf]][[validation:saf]]</p>
+```
+
+Notes.
+
+1. The inputs `saa` and `sab` are hidden with `<p style="display:none">`, however validation information is available via compact validation so students can see their answers are correctly extracted.
+2. Students still have to fill in the final answer, as would be the case with a classic STACK question.  This _could_ be extracted automatically with a further `extractor` block within the `ascii` block in the question text.
+
+In this example the PRT is minimal, and could be improved for partial credit.

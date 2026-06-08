@@ -9,14 +9,16 @@ This document gives an example question using this feature.  See the [filter cal
 Notice in the teacher's answer `ta1` they use calculations.  Of course, this is simple, but it is just an example.
 
 ```
-ta1:"The consecutive even numbers are `2n` and `2n+2`.  Their difference is 2
+ta1:"The consecutive even numbers are `n` and `n+2`.  Their difference is 2
 `
-2n + (2n+2) = 45*2
-4n + 2 = {@45*2@}
+n + (n+2) = 45*2
+2n + 2 = {@45*2@}
+2n = {@(45*2)-2@}
 n = {@((45*2)-2)/2@}
 `
-So we want `2n` which is `{@(45*2)-2@}`.";
-ta2:45*2-2;
+Note this is an even number.
+";
+ta2:(45*2-2)/2;
 ```
 
 ### Question text
@@ -54,11 +56,16 @@ Input `ans1` holds the free-text.
 
 Input `ans2` holds the final answer.
 
-* Change input `ans2` from the algebraic (default) to numerical.
+* No special changes for `ans2`.
 
 ### PRT
 
-Set up the PRT to compare `ans2` with `ta2`.  Algebraic equivalence is fine in this simple example.
+Students might enter a number, e.g. `44` or an equation `n=44`, so to accommodate both define the following in the feedback variables.
+
+    sa2:if equationp(ans2) then rhs(ans2) else ans2
+
+Set up the PRT to compare `sa2` with `ta2`.  Algebraic equivalence is fine in this simple example.
+
 
 The PRT could be improved to check for common mistakes, and add feedback.
 
