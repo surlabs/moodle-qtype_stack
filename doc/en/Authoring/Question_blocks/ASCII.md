@@ -124,7 +124,7 @@ This processes the text as (plain) markdown, without the mathematical extensions
 Note that the following are equivalent
 
     [[filter type="markdown" transforms="asciimath,minwrap" /]]
-    [[filter type="markdown-maths" /]]
+    [[filter type="markdown-math" /]]
 
 The default behaviour when no filter is present is
 

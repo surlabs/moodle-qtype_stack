@@ -21,7 +21,7 @@ export default function lastexpr(raw, blocks) {
         }
     }
 
-    // Fallback: send the final non-empty line when blocks are unavailable are unavailable or return nothing.
+    // Fallback: send the final non-empty line when blocks are unavailable or return nothing.
     const lines = raw.split(/\r?\n/);
     for (let i = lines.length - 1; i >= 0; i--) {
         const trimmed = lines[i].trim();

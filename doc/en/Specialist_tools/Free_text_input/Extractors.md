@@ -50,7 +50,7 @@ Note the ASCII block has an extractor
 ```
 [input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[extractor type="regexmatch" targetinput="scp" regex="^\s*Characteristic polynomial\s*=\s*`?([^`\r\n]+)`?\s*$" /]]
+  [[extractor type="regexmatch" targetinput="scp" regex="^\\s*Characteristic polynomial\\s*=\\s*" /]]
 [[/ascii]]
 ```
 
