@@ -41,4 +41,4 @@ Feature: Test input of correct answers on freetext inputs.
     And I check the input "ans4" is '5 => c = 1'
     And I check the input "ans5" is '{"matches":["f(x) = 4sqrt(2x^2+1)+c","f(x) = 4sqrt(2x^2+1)+1"]}'
     # MathJax 3 will have rendered, MathJax 2 probably won't. Moodle 5 gives us the flattened plain text. Sigh...
-    And I check the value of iframe element "asciiContainerRow" contains one of '\begin{align*}\n& & \displaystyle{f{{\left({x}\right)}}}&={4}\sqrt{{{2}{x}^{{2}}+{1}}}+{c}\\\n& & \displaystyle{f{{\left({0}\right)}}}&={5}\Rightarrow{c}={1}\\\n& & \displaystyle{f{{\left({x}\right)}}}&={4}\sqrt{{{2}{x}^{{2}}+{1}}}+{1}\\\n\end{align*}\n' or '𝑓⁡(𝑥)=4⁢√2⁢𝑥2+1+1' or 'f(x)=42x2+1+1'
+    And I check the value of iframe element "asciiContainerRow" contains one of '\begin{align*}\n& & f(x)  & = 4sqrt(2x^2+1)+c\\\n& & f(0)  & = 5 => c = 1\\\n& & f(x)  & = 4sqrt(2x^2+1)+1\\\n\end{align*}\n' or '𝑓⁡(𝑥)=4⁢𝑠⁢𝑞⁢𝑟⁢𝑡⁢(2⁢𝑥2+1)+1' or 'f(x)=4sqrt(2x2+1)+1'
