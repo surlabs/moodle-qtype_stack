@@ -89,7 +89,7 @@ In the following example, the transform `aligneq` is applied to line up equation
   ```
 ![Math_inline display](../../../content/math_inline.png)
 
-- **`math_block`**: Display LaTeX delimited by `\[...\]` is passed through and any configured transforms are applied.  Note, while our code ignores `$$...$$` as LaTeX delimeters, your local MathJax settings might pick this up and display the contents as mathematics.  In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments
+- **`math_block`**: Display LaTeX delimited by `\[...\]` is passed through and any configured transforms are applied.  Note, while our code ignores `$$...$$` as LaTeX delimiters, your local MathJax settings might pick this up and display the contents as mathematics.  In the following example, the transform `aligneq` is applied to line up equations on the `=` sign by using LaTeX `begin{align*}` environments
 
   ```
   \[
@@ -109,7 +109,7 @@ Available transforms (specified via the `transforms` parameter):
 
   A `\text{…}` that is not `\text{or}`, `\text{and}`, or `\text{if}` is pushed into a 4th column.
 
-There are two internal transformations: `asciimath` and `minwrap`.  The `asciimath` transformation actually parses each expression/line from AsciiMath to LaTeX.  The `minwrap` transformation automatically adds LaTeX mathematics delimieters, e.g. `\(...\)` for inline and `\[...\]` if they are needed (noting some LaTeX maths do not need these), typically at the end of the chain of transformations.  
+There are two internal transformations: `asciimath` and `minwrap`.  The `asciimath` transformation actually parses each expression/line from AsciiMath to LaTeX.  The `minwrap` transformation automatically adds LaTeX mathematics delimiters, e.g. `\(...\)` for inline and `\[...\]` if they are needed (noting some LaTeX maths do not need these), typically at the end of the chain of transformations.  
 
 While you are free to specify these transformations, the `markdown-math` filter ensures they are used, typically at the start and end.  For full control you can specify these transformations using the `markdown` filter below.  (In the future, other transformations may need to come before `asciimath`, for example).
 
@@ -117,7 +117,7 @@ While you are free to specify these transformations, the `markdown-math` filter 
 
 #### `markdown` filter
 
-This proceses the text as (plain) markdown, without the mathematical extensions above.  You can add any of the transforms as arguments, but the following will treat the text as markdown, without processing any of the AsciiMath (as is done by `markdown-math`
+This processes the text as (plain) markdown, without the mathematical extensions above.  You can add any of the transforms as arguments, but the following will treat the text as markdown, without processing any of the AsciiMath (as is done by `markdown-math`
 
     [[filter type="markdown" /]]
 

@@ -86,7 +86,7 @@ This answer satisfies the original domain constraint.
 ta2:x=1;
 ```
 
-This contains the original equation to solve `eq1` in Maxima syntax, `ta1` a string contining the whole answer, and `ta2` the final answer (in Maxima syntax).
+This contains the original equation to solve `eq1` in Maxima syntax, `ta1` a string containing the whole answer, and `ta2` the final answer (in Maxima syntax).
 
 This question needs two inputs `ans1` and `ans2`, with an `[[ascii]]` block linking `ans1` to `ans2`.
 

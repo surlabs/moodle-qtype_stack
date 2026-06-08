@@ -321,7 +321,7 @@ LaTeX is a software system for typesetting documents.  We support the mathematic
 
 ## Calculations
 
-When activated in a particular question, calculations between <code>{@...@}</code> will be automaticall completed for you, rather than reaching for an external calculator.
+When activated in a particular question, calculations between <code>{@...@}</code> will be automatically completed for you, rather than reaching for an external calculator.
 
 1. Type simple expressions using brackets for function arguments.
 2. Note angles are always in radians.  E.g. try <code>{@cos(pi)@}</code> for example.
