@@ -19,7 +19,7 @@ The free-text input default extra option sets `manualgraded:true`.
 
 There really is no way to mix automatic and manually grading within a question. Therefore, if you want automatic and manual marking you have two options.
 
-1. Use separate questions.  If you need to serparate out parts to automatic and manually graded parts then you can consider [variant matching](../STACK_question_admin/Deploying_matched_variants.md) to ensure random parts have the same seed.
+1. Use separate questions.  If you need to separate out parts to automatic and manually graded parts then you can consider [variant matching](../STACK_question_admin/Deploying_matched_variants.md) to ensure random parts have the same seed.
 2. Manual grade, taking into account some automatic marks when you manually grade.
 
 Once a student has completed the quiz, navigate to 
@@ -38,4 +38,4 @@ Note, questions which "Requires grading" really do need human input (manually gr
 
 An example manual graded question is given in
 
-    samplequestions/stacklibrary/Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_manually_graded_mathematical_proof.xml
+    samplequestions/stacklibrary/Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_manually_graded_mathematical_proof.xml 

@@ -19,7 +19,7 @@ This combination is a pragmatic middle ground between trying to extract all answ
 
 ### Syntax hint as castext
 
-To pre-fill in the "syntac hint" in the free-text input you need to do two things.
+To pre-fill in the "syntax hint" in the free-text input you need to do two things.
 
 First create a maxima variable as a `castext` string
 
@@ -40,7 +40,7 @@ Characteristic polynomial =
 This contains
 
 1. the matrix in the question, but by using `args(M)` we get AsciiMath form `M = [[8,-6,9],[12,-10,12],[0,0,-1]]` rather than maxima syntax `M = matrix([8,-6,9],[12,-10,12],[0,0,-1])`.  Note how we use castext within Maxima here, and we embed variables with the `{#...#}` form, so they are without LaTeX symbols.
-2. the syntax hint contains the promprt for students to ensure the regex has a reasonable target: `Characteristic polynomial = `
+2. the syntax hint contains the prompt for students to ensure the regex has a reasonable target: `Characteristic polynomial = `
 3. the input `ans1` has syntax hint as castext `{@sh1@}` which displays the castext without `"`s.
 
 ### Extractor
@@ -65,4 +65,4 @@ but the validation tag will be visible if students make a syntax error.
 
 ### Teacher's answer
 
-The teacher's answer for `ans1` is also written as castext within Maxima, in a very similar style to the syntax hint.
+The teacher's answer for `ans1` is also written as castext within Maxima, in a very similar style to the syntax hint. 

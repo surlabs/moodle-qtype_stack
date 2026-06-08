@@ -37,10 +37,10 @@ For example, `The answer to \(1+1={@1+1@}\).` displays the answer as 2. The encl
 
 ### `cas` filter
 
-The maths.js library is extensive, and includes many CAS functions.  The `cas` filter provides full acess to this library, e.g. try the following calculation.
+The maths.js library is extensive, and includes many CAS functions.  The `cas` filter provides full access to this library, e.g. try the following calculation.
 
     `{@derivative("sin(2*x^3)", "x")@}`
 
 (Note the use of backticks to indicate the result of the calculation should be processed by AsciiMath.)
 
-This filter is not intended to be used by students.
+This filter is not intended to be used by students. 
