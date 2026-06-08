@@ -1868,6 +1868,7 @@ class stack_answertest_test_data {
         ['Diff', 'x', '3*x/root(3*x^2+2)', '3*x/sqrt(3*x^2+2)', 1, 'ATDiff_true.', ''],
         ['Diff', 'x', '3*x/\'root(3*x^2+2)', '3*x/sqrt(3*x^2+2)', 1, 'ATDiff_true.', ''],
         ['Diff', 'x', '\'root(2*x/10+1)', 'sqrt((2*x+10)/10)', 1, 'ATDiff_true.', ''],
+        ['Diff', 'x', 'e^(sqrt(x-2))/(2*sqrt(x-2))', 'e^(sqrt(x)-2)/(2*sqrt(x))', 0, '', ''],
 
         ['Int', '', '1/0', '1', -1, 'STACKERROR_OPTION.', ''],
         ['Int', 'x', '1/0', '1', -1, 'ATInt_STACKERROR_SAns.', ''],

@@ -1,106 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
+<!-- question: 73718  -->
   <question type="stack">
     <name>
-      <text>2.6.1.6 Find eq of circles</text>
+      <text>Circles given centres (from HELM: 17.1.1.4 Write the equation of the circle JSXgraph)</text>
     </name>
-    <questiontext format="html">
-      <text><![CDATA[<p class="HELM_exercise">Exercise</p>
-<p>Write down the equations of each of the following circles for which the centre C and radius R are given:</p>
-
-<ol class="HELM_parts">
-    <li>
-        <p>\( C({@x1@}, {@y1@}), \, R= {@r1@} :\) [[input:ans1]] [[validation:ans1]] [[feedback:prt1]]</p>
-    </li>
-
-    <li>
-        <p>\( C({@x2@}, {@y2@}), \, R= {@r2@} :\) [[input:ans2]] [[validation:ans2]] [[feedback:prt2]]</p>
-    </li>
-
-    <li>
-        <p>\( C({@x3@}, {@y3@}), \, R= {@r3@} :\) [[input:ans3]] [[validation:ans3]] [[feedback:prt3]]</p>
-    </li>
-
-    <li>
-        <p>\( C({@x4@}, {@y4@}), \, R= {@r4@} :\) [[input:ans4]] [[validation:ans4]] [[feedback:prt4]]</p>
-    </li>
-
-</ol>]]></text>
+    <questiontext format="plain_text">
+      <text><![CDATA[Write down the equations of the three circles (A, B, C) below: 
+[[jsxgraph]]
+  // boundingbox:[left, top, right, bottom]
+  var board = JXG.JSXGraph.initBoard(divid, {boundingbox: [-7, 7, 7, -7], axis: true, showCopyright: false});
+  var graph = board.create('curve',
+                       [function(t){ return {#c1[1]#}+{#r1#}*Math.cos(t);},
+                        function(t){ return {#c1[2]#}+{#r1#}*Math.sin(t);},
+                        0, 2*Math.PI]
+                    );
+  var graph2 = board.create('curve',
+                       [function(t){ return {#c2[1]#}+{#r2#}*Math.cos(t);},
+                        function(t){ return {#c2[2]#}+{#r2#}*Math.sin(t);},
+                        0, 2*Math.PI]
+                    );
+  var graph3 = board.create('curve',
+                       [function(t){ return {#c3[1]#}+{#r3#}*Math.cos(t);},
+                        function(t){ return {#c3[2]#}+{#r3#}*Math.sin(t);},
+                        0, 2*Math.PI]
+                    );
+  var p = board.create('point',[{#c1[1]#}, {#c1[2]#} ], {name:'A', size: 3}
+										);
+  var p2 = board.create('point',[{#c2[1]#}, {#c2[2]#} ], {name:'B', size: 3}
+										);
+  var p3 = board.create('point',[{#c3[1]#}, {#c3[2]#} ], {name:'C', size: 3}
+										);
+[[/jsxgraph]]
+<p>Circle A has equation : [[input:ans1]] [[validation:ans1]]</p>
+[[feedback:prt1]]
+<p>Circle B has equation :&nbsp;[[input:ans2]] [[validation:ans2]]</p>
+[[feedback:prt2]]
+<p>Circle C has equation :&nbsp;[[input:ans3]] [[validation:ans3]]</p>
+[[feedback:prt3]]]]></text>
     </questiontext>
     <generalfeedback format="html">
-      <text><![CDATA[<ol class="HELM_parts">
-    <li>
-        <p>\( C({@x1@}, {@y1@}), \, R= {@r1@} \)</p>
-        <p>\( x_0 = {@x1@}, \,\, y_0={@y1@}, \quad R^2= {@r1^2@}\) so the circle's equation is:</p>
-        <p>{@ta1@}</p>
-    </li>
-
-    <li>
-        <p>\( C({@x2@}, {@y2@}), \, R= {@r2@} \)</p>
-        <p>\( x_0 = {@x2@}, \,\, y_0={@y2@}, \quad R^2= {@r2^2@}\) so the circle's equation is:</p>
-        <p>{@ta2@}</p>
-    </li>
-
-    <li>
-        <p>\( C({@x3@}, {@y3@}), \, R= {@r3@} \)</p>
-        <p>\( x_0 = {@x3@}, \,\, y_0={@y3@}, \quad R^2= {@r3^2@}\) so the circle's equation is:</p>
-        <p>{@ta3@}</p>
-    </li>
-
-    <li>
-        <p>\( C({@x4@}, {@y4@}), \, R= {@r4@} \)</p>
-        <p>\( x_0 = {@x4@}, \,\, y_0={@y4@}, \quad R^2= {@r4^2@}\) so the circle's equation is:</p>
-        <p>{@ta4@}</p>
-    </li>
-
-</ol>]]></text>
+      <text><![CDATA[<p>By the key point, the equation of a circle with centre at \((\alpha,\beta)\) and radius \(r\) is \((x-\alpha)^2+(y-\beta)^2 = r^2\).</p>
+<p>Circle A has centre \(({@c1[1]@},{@c1[2]@})\), and radius \({@r1@}\), hence A has equation:</p>
+<p>\[{@ta1@}.\]</p>
+<p>Circle B has centre \(({@c2[1]@},{@c2[2]@})\), and radius \({@r2@}\), hence B has equation:</p>
+<p>\[{@ta2@}.\]</p>
+<p>Circle C has centre \(({@c3[1]@},{@c3[2]@})\), and radius \({@r3@}\), hence C has equation:</p>
+<p>\[{@ta3@}.\]</p>]]></text>
     </generalfeedback>
     <defaultgrade>1</defaultgrade>
     <penalty>0.1</penalty>
     <hidden>0</hidden>
-    <idnumber/>
+    <idnumber></idnumber>
     <stackversion>
-      <text>2021120900</text>
+      <text>2026042200</text>
     </stackversion>
     <questionvariables>
       <text>ordergreat(x,y);
+/* Radius and centre of circles */
+r1:rand([1,2,3]);
+c1:[rand_with_step(-3,3,1),rand_with_step(-3,3,1)];
+r2:rand([1,2,3]);
+c2:[rand_with_step(-3,3,1),rand_with_step(-3,3,1)];
+r3:rand([1,2,3]);
+c3:[0,0]
+if c1[1] = c2[1] then c2[1]:c2[1]+1;
+if c2[1] = c3[1] then c3[1]:c3[1]+1;
+if c1[1] = c3[1] then c1[1]:-c1[1]-1;
 
-/* coordinates of the centers*/
-x1: 0;
-y1: rand(4)+2;
-x2: -y1;
-y2: 0;
-x3: -(rand(3)+2);
-y3: rand_with_prohib(3,6,[y1]);
-x4: 1;
-y4:1;
-
-/*radious of the cirles*/
-r1: rand(3)+2;
-r2: rand_with_prohib(3,7,[r1]);
-r3: rand_with_prohib(3,8,[r1,r2]);
-r4: rand([sqrt(3), sqrt(5), sqrt(7)]);
-
-ta1: (x-x1)^2+(y-y1)^2 = r1^2;
-ta2: (x-x2)^2+(y-y2)^2 = r2^2;
-ta3: (x-x3)^2+(y-y3)^2 = r3^2;
-ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
+/* Circle equations */
+ta1:(x-c1[1])^2+(y-c1[2])^2 = r1^2;
+ta2: (x-c2[1])^2+(y-c2[2])^2=r2^2;
+ta3: (x-c3[1])^2+(y-c3[2])^2=r3^2;</text>
     </questionvariables>
     <specificfeedback format="html">
-      <text/>
+      <text></text>
     </specificfeedback>
     <questionnote format="moodle_auto_format">
-      <text>\[ C({@x1@}, {@y1@}), \, R= {@r1@} :{@ta1@} \]
-\[ C({@x2@}, {@y2@}), \, R= {@r2@} :{@ta2@} \]
-\[ C({@x3@}, {@y3@}), \, R= {@r3@} :{@ta3@} \]
-\[ C({@x4@}, {@y4@}), \, R= {@r4@} :{@ta4@} \]</text>
+      <text>Circles: \[{@ta1@}, \quad {@ta2@}, \quad {@ta3@}\]</text>
     </questionnote>
     <questiondescription format="moodle_auto_format">
-      <text/>
+      <text></text>
     </questiondescription>
     <questionsimplify>1</questionsimplify>
     <assumepositive>0</assumepositive>
     <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<p><i class="fa fa-check"></i> Correct answer, well done.</p>]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<p><i class="fa fa-adjust"></i> Your answer is partially correct.</p>]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<p><i class="fa fa-times"></i> Incorrect answer.</p>]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
     <scientificnotation>*10</scientificnotation>
     <multiplicationsign>dot</multiplicationsign>
     <sqrtsign>1</sqrtsign>
@@ -109,7 +103,7 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
     <logicsymbol>lang</logicsymbol>
     <matrixparens>[</matrixparens>
     <isbroken>0</isbroken>
-    <variantsselectionseed/>
+    <variantsselectionseed></variantsselectionseed>
     <input>
       <name>ans1</name>
       <type>algebraic</type>
@@ -117,16 +111,16 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
       <boxsize>15</boxsize>
       <strictsyntax>1</strictsyntax>
       <insertstars>0</insertstars>
-      <syntaxhint/>
+      <syntaxhint></syntaxhint>
       <syntaxattribute>0</syntaxattribute>
-      <forbidwords/>
-      <allowwords/>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
       <forbidfloat>1</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
       <mustverify>1</mustverify>
       <showvalidation>3</showvalidation>
-      <options/>
+      <options></options>
     </input>
     <input>
       <name>ans2</name>
@@ -135,16 +129,16 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
       <boxsize>15</boxsize>
       <strictsyntax>1</strictsyntax>
       <insertstars>0</insertstars>
-      <syntaxhint/>
+      <syntaxhint></syntaxhint>
       <syntaxattribute>0</syntaxattribute>
-      <forbidwords/>
-      <allowwords/>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
       <forbidfloat>1</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
       <mustverify>1</mustverify>
       <showvalidation>3</showvalidation>
-      <options/>
+      <options></options>
     </input>
     <input>
       <name>ans3</name>
@@ -153,34 +147,16 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
       <boxsize>15</boxsize>
       <strictsyntax>1</strictsyntax>
       <insertstars>0</insertstars>
-      <syntaxhint/>
+      <syntaxhint></syntaxhint>
       <syntaxattribute>0</syntaxattribute>
-      <forbidwords/>
-      <allowwords/>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
       <forbidfloat>1</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
       <mustverify>1</mustverify>
       <showvalidation>3</showvalidation>
-      <options/>
-    </input>
-    <input>
-      <name>ans4</name>
-      <type>algebraic</type>
-      <tans>ta4</tans>
-      <boxsize>15</boxsize>
-      <strictsyntax>1</strictsyntax>
-      <insertstars>0</insertstars>
-      <syntaxhint/>
-      <syntaxattribute>0</syntaxattribute>
-      <forbidwords/>
-      <allowwords/>
-      <forbidfloat>1</forbidfloat>
-      <requirelowestterms>0</requirelowestterms>
-      <checkanswertype>0</checkanswertype>
-      <mustverify>1</mustverify>
-      <showvalidation>3</showvalidation>
-      <options/>
+      <options></options>
     </input>
     <prt>
       <name>prt1</name>
@@ -188,31 +164,31 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
       <autosimplify>1</autosimplify>
       <feedbackstyle>1</feedbackstyle>
       <feedbackvariables>
-        <text/>
+        <text></text>
       </feedbackvariables>
       <node>
         <name>0</name>
-        <description/>
+        <description></description>
         <answertest>AlgEquiv</answertest>
         <sans>ans1</sans>
         <tans>ta1</tans>
-        <testoptions/>
+        <testoptions></testoptions>
         <quiet>0</quiet>
         <truescoremode>=</truescoremode>
-        <truescore>1.0000000</truescore>
-        <truepenalty/>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
         <truenextnode>-1</truenextnode>
         <trueanswernote>prt1-1-T</trueanswernote>
         <truefeedback format="html">
-          <text/>
+          <text></text>
         </truefeedback>
         <falsescoremode>=</falsescoremode>
-        <falsescore>0.0000000</falsescore>
-        <falsepenalty/>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
         <falsenextnode>-1</falsenextnode>
         <falseanswernote>prt1-1-F</falseanswernote>
         <falsefeedback format="html">
-          <text/>
+          <text></text>
         </falsefeedback>
       </node>
     </prt>
@@ -222,31 +198,31 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
       <autosimplify>1</autosimplify>
       <feedbackstyle>1</feedbackstyle>
       <feedbackvariables>
-        <text/>
+        <text></text>
       </feedbackvariables>
       <node>
         <name>0</name>
-        <description/>
+        <description></description>
         <answertest>AlgEquiv</answertest>
         <sans>ans2</sans>
         <tans>ta2</tans>
-        <testoptions/>
+        <testoptions></testoptions>
         <quiet>0</quiet>
         <truescoremode>=</truescoremode>
-        <truescore>1.0000000</truescore>
-        <truepenalty/>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
         <truenextnode>-1</truenextnode>
         <trueanswernote>prt2-1-T</trueanswernote>
         <truefeedback format="html">
-          <text/>
+          <text></text>
         </truefeedback>
         <falsescoremode>=</falsescoremode>
-        <falsescore>0.0000000</falsescore>
-        <falsepenalty/>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
         <falsenextnode>-1</falsenextnode>
         <falseanswernote>prt2-1-F</falseanswernote>
         <falsefeedback format="html">
-          <text/>
+          <text></text>
         </falsefeedback>
       </node>
     </prt>
@@ -256,81 +232,47 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
       <autosimplify>1</autosimplify>
       <feedbackstyle>1</feedbackstyle>
       <feedbackvariables>
-        <text/>
+        <text></text>
       </feedbackvariables>
       <node>
         <name>0</name>
-        <description/>
+        <description></description>
         <answertest>AlgEquiv</answertest>
         <sans>ans3</sans>
         <tans>ta3</tans>
-        <testoptions/>
+        <testoptions></testoptions>
         <quiet>0</quiet>
         <truescoremode>=</truescoremode>
-        <truescore>1.0000000</truescore>
-        <truepenalty/>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
         <truenextnode>-1</truenextnode>
         <trueanswernote>prt3-1-T</trueanswernote>
         <truefeedback format="html">
-          <text/>
+          <text></text>
         </truefeedback>
         <falsescoremode>=</falsescoremode>
-        <falsescore>0.0000000</falsescore>
-        <falsepenalty/>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
         <falsenextnode>-1</falsenextnode>
         <falseanswernote>prt3-1-F</falseanswernote>
         <falsefeedback format="html">
-          <text/>
+          <text></text>
         </falsefeedback>
       </node>
     </prt>
-    <prt>
-      <name>prt4</name>
-      <value>1.0000000</value>
-      <autosimplify>1</autosimplify>
-      <feedbackstyle>1</feedbackstyle>
-      <feedbackvariables>
-        <text/>
-      </feedbackvariables>
-      <node>
-        <name>0</name>
-        <description/>
-        <answertest>AlgEquiv</answertest>
-        <sans>ans4</sans>
-        <tans>ta4</tans>
-        <testoptions/>
-        <quiet>0</quiet>
-        <truescoremode>=</truescoremode>
-        <truescore>1.0000000</truescore>
-        <truepenalty/>
-        <truenextnode>-1</truenextnode>
-        <trueanswernote>prt4-1-T</trueanswernote>
-        <truefeedback format="html">
-          <text/>
-        </truefeedback>
-        <falsescoremode>=</falsescoremode>
-        <falsescore>0.0000000</falsescore>
-        <falsepenalty/>
-        <falsenextnode>-1</falsenextnode>
-        <falseanswernote>prt4-1-F</falseanswernote>
-        <falsefeedback format="html">
-          <text/>
-        </falsefeedback>
-      </node>
-    </prt>
-    <deployedseed>457660347</deployedseed>
-    <deployedseed>476307771</deployedseed>
-    <deployedseed>1122917215</deployedseed>
-    <deployedseed>423321857</deployedseed>
-    <deployedseed>233769500</deployedseed>
-    <deployedseed>1757947652</deployedseed>
-    <deployedseed>2126528656</deployedseed>
-    <deployedseed>1569346333</deployedseed>
-    <deployedseed>1685165074</deployedseed>
-    <deployedseed>516010581</deployedseed>
+    <deployedseed>1315826130</deployedseed>
+    <deployedseed>1842687018</deployedseed>
+    <deployedseed>570113989</deployedseed>
+    <deployedseed>1180957095</deployedseed>
+    <deployedseed>78398024</deployedseed>
+    <deployedseed>869165003</deployedseed>
+    <deployedseed>1305902378</deployedseed>
+    <deployedseed>267408557</deployedseed>
+    <deployedseed>139460461</deployedseed>
+    <deployedseed>190232262</deployedseed>
     <qtest>
       <testcase>1</testcase>
-      <description/>
+      <description></description>
       <testinput>
         <name>ans1</name>
         <value>ta1</value>
@@ -343,10 +285,6 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
         <name>ans3</name>
         <value>ta3</value>
       </testinput>
-      <testinput>
-        <name>ans4</name>
-        <value>ta4</value>
-      </testinput>
       <expected>
         <name>prt1</name>
         <expectedscore>1.0000000</expectedscore>
@@ -364,32 +302,22 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
         <expectedscore>1.0000000</expectedscore>
         <expectedpenalty>0.0000000</expectedpenalty>
         <expectedanswernote>prt3-1-T</expectedanswernote>
-      </expected>
-      <expected>
-        <name>prt4</name>
-        <expectedscore>1.0000000</expectedscore>
-        <expectedpenalty>0.0000000</expectedpenalty>
-        <expectedanswernote>prt4-1-T</expectedanswernote>
       </expected>
     </qtest>
     <qtest>
       <testcase>2</testcase>
-      <description/>
+      <description></description>
       <testinput>
         <name>ans1</name>
-        <value>ev(ta1+1,simp)</value>
+        <value>expand((x-c1[1])^2)+expand((y-c1[2])^2) = r1^2</value>
       </testinput>
       <testinput>
         <name>ans2</name>
-        <value>ev(ta2+1,simp)</value>
+        <value>expand(ta2)</value>
       </testinput>
       <testinput>
         <name>ans3</name>
-        <value>ev(ta3+1,simp)</value>
-      </testinput>
-      <testinput>
-        <name>ans4</name>
-        <value>ev(ta4+1,simp)</value>
+        <value>expand(ta3)</value>
       </testinput>
       <expected>
         <name>prt1</name>
@@ -409,12 +337,41 @@ ta4: (x-x4)^2+(y-y4)^2 = r4^2;</text>
         <expectedpenalty>0.0000000</expectedpenalty>
         <expectedanswernote>prt3-1-T</expectedanswernote>
       </expected>
+    </qtest>
+    <qtest>
+      <testcase>3</testcase>
+      <description></description>
+      <testinput>
+        <name>ans1</name>
+        <value>0=0</value>
+      </testinput>
+      <testinput>
+        <name>ans2</name>
+        <value>0=0</value>
+      </testinput>
+      <testinput>
+        <name>ans3</name>
+        <value>0=0</value>
+      </testinput>
       <expected>
-        <name>prt4</name>
-        <expectedscore>1.0000000</expectedscore>
-        <expectedpenalty>0.0000000</expectedpenalty>
-        <expectedanswernote>prt4-1-T</expectedanswernote>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt1-1-F</expectedanswernote>
+      </expected>
+      <expected>
+        <name>prt2</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt2-1-F</expectedanswernote>
+      </expected>
+      <expected>
+        <name>prt3</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt3-1-F</expectedanswernote>
       </expected>
     </qtest>
   </question>
+
 </quiz>

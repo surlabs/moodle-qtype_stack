@@ -45,9 +45,10 @@ define([], function () {
 
         // Prevent page refresh loading old version.
         const url = new URL(location);
+        url.searchParams.delete('deployfeedback');
+        url.searchParams.delete('deployfeedbackerr');
         if (url.searchParams.get('historic')) {
             url.searchParams.delete('historic');
-            history.replaceState(null, null, url);
         } else {
             // Page reload will not reset dropdown. We have to do it manually.
             var options = document.querySelectorAll('.version-dropdown-option');
@@ -55,7 +56,7 @@ define([], function () {
                 options[i].selected = options[i].defaultSelected;
             }
         }
-
+        history.replaceState(null, null, url);
         // Add simple client-side sorting for the first two columns.
         const variantsTable = document.getElementById('deployed-variants-table');
         if (!variantsTable) {
