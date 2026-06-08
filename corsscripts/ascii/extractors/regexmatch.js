@@ -30,10 +30,9 @@ export default function regexmatch(raw, blocks, operation) {
                 }
             }
         }
-        return 'ERROR';
     }
 
-    // Fallback: raw-text parsing when blocks are unavailable.
+    // Fallback: raw-text parsing when blocks are unavailable or return nothing.
     const lines = raw.split('\n');
     lines.reverse();
     for (const line of lines) {

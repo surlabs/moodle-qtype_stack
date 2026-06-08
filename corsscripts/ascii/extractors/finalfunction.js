@@ -24,10 +24,9 @@ export default function finalfunction(raw, blocks) {
                 }
             }
         }
-        return 'ERROR';
     }
 
-    // Fallback: raw-text parsing when blocks are unavailable.
+    // Fallback: raw-text parsing when blocks are unavailable are unavailable or return nothing.
     const lines = raw.split('\n');
     lines.reverse();
     for (const line of lines) {

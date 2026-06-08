@@ -5,6 +5,7 @@
 import math from '../mathjs.min.js';
 export default function cas(text, blockCollector) {
     if (blockCollector) {
+        blockCollector.isHTML = false;
         blockCollector.blocks = [];
     }
 
