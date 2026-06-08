@@ -58,11 +58,21 @@ import init from '../../corsscripts/ascii/stackascii.js';
 describe('stackascii init', () => {
     function createElement(id, value = '') {
         const listeners = {};
+        const classes = new Set();
         return {
             id,
             value,
             innerHTML: '',
             listeners,
+            classList: {
+                add: jest.fn((className) => {
+                    classes.add(className);
+                }),
+                remove: jest.fn((className) => {
+                    classes.delete(className);
+                }),
+                contains: jest.fn((className) => classes.has(className))
+            },
             addEventListener: jest.fn((eventName, handler) => {
                 listeners[eventName] = handler;
             }),
@@ -143,14 +153,14 @@ describe('stackascii init', () => {
 
         init(['markdownInput', 'answer1', 'answer2'], operations);
 
-        expect(mockMarkdown).toHaveBeenCalledWith('alpha', expect.any(Object), operations[0]);
-        expect(mockCalculation).toHaveBeenCalledWith('alpha', expect.any(Object), operations[1]);
-        expect(mockLastexpr).toHaveBeenCalledWith('alpha', [
-            { type: 'markdown', raw: 'alpha' },
-            { type: 'calculation', raw: 'alpha' }
+        expect(mockMarkdown).toHaveBeenCalledWith('  alpha  ', expect.any(Object), operations[0]);
+        expect(mockCalculation).toHaveBeenCalledWith('  alpha  ', expect.any(Object), operations[1]);
+        expect(mockLastexpr).toHaveBeenCalledWith('  alpha  ', [
+            { type: 'markdown', raw: '  alpha  ' },
+            { type: 'calculation', raw: '  alpha  ' }
         ], operations[2]);
-        expect(env.output.innerHTML).toBe('MD:alpha');
-        expect(env.answers[0].value).toBe('EXTRACT:alpha:markdown|calculation');
+        expect(env.output.innerHTML).toBe('MD:  alpha  ');
+        expect(env.answers[0].value).toBe('EXTRACT:  alpha  :markdown|calculation');
         expect(env.answers[0].dispatchEvent).toHaveBeenCalledWith({ type: 'change' });
         expect(global.MathJax.typesetPromise).toHaveBeenCalledWith([env.output]);
     });
@@ -178,18 +188,18 @@ describe('stackascii init', () => {
 
         init(['markdownInput', 'answer1', 'answer2'], operations);
 
-        expect(mockMarkdown).toHaveBeenCalledWith('alpha', expect.any(Object), operations[0]);
-        expect(mockLastexpr).toHaveBeenCalledWith('alpha', [
-            { type: 'markdown', raw: 'alpha' }
+        expect(mockMarkdown).toHaveBeenCalledWith('  alpha  ', expect.any(Object), operations[0]);
+        expect(mockLastexpr).toHaveBeenCalledWith('  alpha  ', [
+            { type: 'markdown', raw: '  alpha  ' }
         ], operations[1]);
-        expect(mockCalculation).toHaveBeenCalledWith('MD:alpha', expect.any(Object), operations[2]);
-        expect(mockLastcalc).toHaveBeenCalledWith('alpha', [
-            { type: 'calculation', raw: 'MD:alpha' }
+        expect(mockCalculation).toHaveBeenCalledWith('MD:  alpha  ', expect.any(Object), operations[2]);
+        expect(mockLastcalc).toHaveBeenCalledWith('  alpha  ', [
+            { type: 'calculation', raw: 'MD:  alpha  ' }
         ], operations[3]);
-        expect(env.output.innerHTML).toBe('CALC:MD:alpha');
-        expect(env.answers[0].value).toBe('EXTRACT:alpha:markdown');
+        expect(env.output.innerHTML).toBe('CALC:MD:  alpha  ');
+        expect(env.answers[0].value).toBe('EXTRACT:  alpha  :markdown');
         expect(env.answers[0].dispatchEvent).toHaveBeenCalledWith({ type: 'change' });
-        expect(env.answers[1].value).toBe('EXTRACTCALC:alpha:calculation');
+        expect(env.answers[1].value).toBe('EXTRACTCALC:  alpha  :calculation');
         expect(env.answers[1].dispatchEvent).toHaveBeenCalledWith({ type: 'change' });
         expect(global.MathJax.typesetPromise).toHaveBeenCalledWith([env.output]);
     });

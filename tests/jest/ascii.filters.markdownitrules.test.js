@@ -13,9 +13,12 @@ describe('markdownitrules filter', () => {
 
     // We'll mock the mdit and options objects to test the plugin registration and rule effects.
     function makeFakeMdit() {
+        const defaultCodeInline = jest.fn((tokens, idx) => `<code>${tokens[idx].content}</code>`);
         return {
             core: { ruler: { push: jest.fn() } },
-            renderer: { rules: {} },
+            renderer: { rules: { code_inline: defaultCodeInline } },
+            render: jest.fn((content) => `R(${content})`),
+            renderInline: jest.fn((content) => `RI(${content})`),
             block: { ruler: { before: jest.fn() } }
         };
     }
@@ -62,22 +65,19 @@ describe('markdownitrules filter', () => {
         expect(collector.blocks).toEqual([]);
     });
 
-    test('code_inline uses AMparseMath and pushes collector block', () => {
-        window.AMparseMath.mockImplementation((content) => `PARSED(${content})`);
+    test('code_inline delegates to original code renderer and pushes collector block', () => {
         const collector = { blocks: [] };
         const { mdit } = setup({ collector });
 
-        const rendered = mdit.renderer.rules.code_inline([{ content: 'x^2' }], 0);
+        const rendered = mdit.renderer.rules.code_inline([{ content: 'x^2' }], 0, {}, {}, {});
 
-        expect(window.AMparseMath).toHaveBeenCalledWith('x^2', true);
-        expect(rendered).toBe('\\(PARSED(x^2)\\)');
+        expect(rendered).toBe('<code>x^2</code>');
         expect(collector.blocks).toEqual([
-            { type: 'code_inline', raw: 'x^2', rendered: '\\(PARSED(x^2)\\)' }
+            { type: 'code_inline', raw: 'x^2', rendered: '<code>x^2</code>' }
         ]);
     });
 
     test('asciimath_block applies transforms in order and pushes collector block', () => {
-        window.AMparseMath.mockImplementation((content) => `P(${content})`);
         const t1 = jest.fn(lines => lines.map(line => `T1:${line}`));
         const t2 = jest.fn(lines => lines.map(line => `T2:${line}`));
         const collector = { blocks: [] };
@@ -90,30 +90,39 @@ describe('markdownitrules filter', () => {
         const raw = ' a  \n\n  b ';
         const rendered = mdit.renderer.rules.asciimath_block([{ content: raw }], 0);
 
-        expect(window.AMparseMath).toHaveBeenNthCalledWith(1, 'a', true);
-        expect(window.AMparseMath).toHaveBeenNthCalledWith(2, 'b', true);
-        expect(t1).toHaveBeenCalledWith(['P(a)', 'P(b)']);
-        expect(t2).toHaveBeenCalledWith(['T1:P(a)', 'T1:P(b)']);
-        expect(rendered).toBe('T2:T1:P(a)\nT2:T1:P(b)\n');
+        expect(t1).toHaveBeenCalledWith(['a', 'b'], 'asciimath_block');
+        expect(t2).toHaveBeenCalledWith(['T1:a', 'T1:b'], 'asciimath_block');
+        expect(rendered).toBe('T2:T1:a\nT2:T1:b\n');
         expect(collector.blocks).toEqual([
-            { type: 'asciimath_block', raw, rendered: 'T2:T1:P(a)\nT2:T1:P(b)\n' }
+            { type: 'asciimath_block', raw, rendered: 'T2:T1:a\nT2:T1:b\n' }
         ]);
     });
 
-    test('math_inline wraps raw content and does not call AMparseMath', () => {
+    test('math_inline wraps mdit.renderInline output and pushes collector block', () => {
         const collector = { blocks: [] };
         const { mdit } = setup({ collector });
 
         const rendered = mdit.renderer.rules.math_inline([{ content: 'x + 1' }], 0);
 
-        expect(window.AMparseMath).not.toHaveBeenCalled();
-        expect(rendered).toBe('\\(x + 1\\)');
+        expect(rendered).toBe('\\(RI(x + 1)\\)');
         expect(collector.blocks).toEqual([
-            { type: 'math_inline', raw: 'x + 1', rendered: '\\(x + 1\\)' }
+            { type: 'math_inline', raw: 'x + 1', rendered: '\\(RI(x + 1)\\)' }
         ]);
     });
 
-    test('math_block applies transforms without AMparseMath and pushes collector block', () => {
+    test('math_block wraps mdit.render output and pushes collector block', () => {
+        const collector = { blocks: [] };
+        const { mdit } = setup({ collector });
+
+        const rendered = mdit.renderer.rules.math_block([{ content: 'x + 1' }], 0);
+
+        expect(rendered).toBe('\\[R(x + 1)\\]');
+        expect(collector.blocks).toEqual([
+            { type: 'math_block', raw: 'x + 1', rendered: '\\[R(x + 1)\\]' }
+        ]);
+    });
+
+    test('math_block applies transforms and pushes collector block', () => {
         const t1 = jest.fn(lines => lines.map(line => line.toUpperCase()));
         const collector = { blocks: [] };
         const { mdit } = setup({
@@ -125,17 +134,16 @@ describe('markdownitrules filter', () => {
         const raw = ' a\n\n b ';
         const rendered = mdit.renderer.rules.math_block([{ content: raw }], 0);
 
-        expect(window.AMparseMath).not.toHaveBeenCalled();
-        expect(t1).toHaveBeenCalledWith(['a', 'b']);
+        expect(t1).toHaveBeenCalledWith(['a', 'b'], 'math_block');
         expect(rendered).toBe('A\nB\n');
         expect(collector.blocks).toEqual([
             { type: 'math_block', raw, rendered: 'A\nB\n' }
         ]);
     });
 
-    test('splitBlock trims lines and removes blank lines before rendering', () => {
-        window.AMparseMath.mockImplementation((content) => `P(${content})`);
-        const { mdit } = setup({ transforms: [], transformLib: {} });
+    test('splitBlock trims lines and removes blank lines before transforms', () => {
+        const pass = jest.fn(lines => lines);
+        const { mdit } = setup({ transforms: ['pass'], transformLib: { pass } });
 
         const asciiRaw = '  first  \r\n\r\n   second   \n   ';
         const mathRaw = '  left  \n\n   right   \n';
@@ -143,58 +151,43 @@ describe('markdownitrules filter', () => {
         const asciiRendered = mdit.renderer.rules.asciimath_block([{ content: asciiRaw }], 0);
         const mathRendered = mdit.renderer.rules.math_block([{ content: mathRaw }], 0);
 
-        expect(window.AMparseMath).toHaveBeenNthCalledWith(1, 'first', true);
-        expect(window.AMparseMath).toHaveBeenNthCalledWith(2, 'second', true);
-        expect(asciiRendered).toBe('P(first)\nP(second)\n');
+        expect(pass).toHaveBeenNthCalledWith(1, ['first', 'second'], 'asciimath_block');
+        expect(pass).toHaveBeenNthCalledWith(2, ['left', 'right'], 'math_block');
+        expect(asciiRendered).toBe('first\nsecond\n');
         expect(mathRendered).toBe('left\nright\n');
     });
 
     test('applyTransforms with no content still returns trailing newline', () => {
-        const { mdit } = setup({ transforms: [], transformLib: {} });
+        const pass = jest.fn(lines => lines);
+        const { mdit } = setup({ transforms: ['pass'], transformLib: { pass } });
 
         const rendered = mdit.renderer.rules.math_block([{ content: '   \n\n  ' }], 0);
 
+        expect(pass).toHaveBeenCalledWith([], 'math_block');
         expect(rendered).toBe('\n');
     });
 
-    test('code_inline treats content with a LaTeX control sequence as LaTeX and skips AMparseMath', () => {
+    test('code_inline with transforms uses transform pipeline and does not call original renderer', () => {
+        const up = jest.fn(lines => lines.map(line => line.toUpperCase()));
         const collector = { blocks: [] };
-        const { mdit } = setup({ collector });
+        const { mdit } = setup({ transforms: ['up'], transformLib: { up }, collector });
 
         const rendered = mdit.renderer.rules.code_inline([{ content: '\\frac{a}{b}' }], 0);
 
-        expect(window.AMparseMath).not.toHaveBeenCalled();
-        expect(rendered).toBe('\\(\\frac{a}{b}\\)');
+        expect(up).toHaveBeenCalledWith(['\\frac{a}{b}'], 'code_inline');
+        expect(rendered).toBe('\\FRAC{A}{B}\n');
         expect(collector.blocks).toEqual([
-            { type: 'code_inline', raw: '\\frac{a}{b}', rendered: '\\(\\frac{a}{b}\\)' }
+            { type: 'code_inline', raw: '\\frac{a}{b}', rendered: '\\FRAC{A}{B}\n' }
         ]);
     });
 
-    test('code_inline treats content with ^{ as LaTeX and skips AMparseMath', () => {
-        const { mdit } = setup();
+    test('code_inline with transforms passes rule name to transform', () => {
+        const spy = jest.fn(lines => lines);
+        const { mdit } = setup({ transforms: ['spy'], transformLib: { spy } });
 
         mdit.renderer.rules.code_inline([{ content: 'x^{2}' }], 0);
 
-        expect(window.AMparseMath).not.toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith(['x^{2}'], 'code_inline');
     });
 
-    test('asciimath_block wraps LaTeX content in \\[...\\] without calling AMparseMath or applying transforms', () => {
-        const t1 = jest.fn(lines => lines);
-        const collector = { blocks: [] };
-        const { mdit } = setup({
-            transforms: ['t1'],
-            transformLib: { t1 },
-            collector
-        });
-
-        const raw = '\\begin{matrix} a & b \\end{matrix}';
-        const rendered = mdit.renderer.rules.asciimath_block([{ content: raw }], 0);
-
-        expect(window.AMparseMath).not.toHaveBeenCalled();
-        expect(t1).not.toHaveBeenCalled();
-        expect(rendered).toBe('\\[\\begin{matrix} a & b \\end{matrix}\\]');
-        expect(collector.blocks).toEqual([
-            { type: 'asciimath_block', raw, rendered: '\\[\\begin{matrix} a & b \\end{matrix}\\]' }
-        ]);
-    });
 });
