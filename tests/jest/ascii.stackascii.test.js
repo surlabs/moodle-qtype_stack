@@ -1,12 +1,14 @@
 const mockMarkdown = jest.fn();
 const mockCalculation = jest.fn();
 const mockCas = jest.fn();
-const mockFinalfunction = jest.fn();
 const mockLastexpr = jest.fn();
 const mockLastblock = jest.fn();
 const mockLastcalc = jest.fn();
-const mockRegexmatch = jest.fn();
-const mockRegexall = jest.fn();
+const mockLastregexmatch = jest.fn();
+const mockLastregexremainder = jest.fn();
+const mockLaststringremainder = jest.fn();
+const mockRegexallmatch = jest.fn();
+const mockRegexallremainder = jest.fn();
 
 jest.mock('../../corsscripts/ascii/filters/markdown.js', () => ({
     __esModule: true,
@@ -23,16 +25,6 @@ jest.mock('../../corsscripts/ascii/filters/cas.js', () => ({
     default: (...args) => mockCas(...args)
 }));
 
-jest.mock('../../corsscripts/ascii/extractors/finalfunction.js', () => ({
-    __esModule: true,
-    default: (...args) => mockFinalfunction(...args)
-}));
-
-jest.mock('../../corsscripts/ascii/extractors/lastexpr.js', () => ({
-    __esModule: true,
-    default: (...args) => mockLastexpr(...args)
-}));
-
 jest.mock('../../corsscripts/ascii/extractors/lastblock.js', () => ({
     __esModule: true,
     default: (...args) => mockLastblock(...args)
@@ -43,14 +35,34 @@ jest.mock('../../corsscripts/ascii/extractors/lastcalc.js', () => ({
     default: (...args) => mockLastcalc(...args)
 }));
 
-jest.mock('../../corsscripts/ascii/extractors/regexmatch.js', () => ({
+jest.mock('../../corsscripts/ascii/extractors/lastexpr.js', () => ({
     __esModule: true,
-    default: (...args) => mockRegexmatch(...args)
+    default: (...args) => mockLastexpr(...args)
 }));
 
-jest.mock('../../corsscripts/ascii/extractors/regexall.js', () => ({
+jest.mock('../../corsscripts/ascii/extractors/lastregexmatch.js', () => ({
     __esModule: true,
-    default: (...args) => mockRegexall(...args)
+    default: (...args) => mockLastregexmatch(...args)
+}));
+
+jest.mock('../../corsscripts/ascii/extractors/lastregexremainder.js', () => ({
+    __esModule: true,
+    default: (...args) => mockLastregexremainder(...args)
+}));
+
+jest.mock('../../corsscripts/ascii/extractors/laststringremainder.js', () => ({
+    __esModule: true,
+    default: (...args) => mockLaststringremainder(...args)
+}));
+
+jest.mock('../../corsscripts/ascii/extractors/regexallmatch.js', () => ({
+    __esModule: true,
+    default: (...args) => mockRegexallmatch(...args)
+}));
+
+jest.mock('../../corsscripts/ascii/extractors/regexallremainder.js', () => ({
+    __esModule: true,
+    default: (...args) => mockRegexallremainder(...args)
 }));
 
 import init from '../../corsscripts/ascii/stackascii.js';
@@ -116,12 +128,14 @@ describe('stackascii init', () => {
         mockMarkdown.mockReset();
         mockCalculation.mockReset();
         mockCas.mockReset();
-        mockFinalfunction.mockReset();
         mockLastexpr.mockReset();
         mockLastblock.mockReset();
         mockLastcalc.mockReset();
-        mockRegexmatch.mockReset();
-        mockRegexall.mockReset();
+        mockLastregexmatch.mockReset();
+        mockLastregexremainder.mockReset();
+        mockLaststringremainder.mockReset();
+        mockRegexallmatch.mockReset();
+        mockRegexallremainder.mockReset();
     });
 
     afterEach(() => {
@@ -207,13 +221,13 @@ describe('stackascii init', () => {
     test('clears the answer input when an extractor returns ERROR', () => {
         const env = setupEnvironment('beta', 1);
 
-        mockFinalfunction.mockReturnValue('ERROR');
+        mockLaststringremainder.mockReturnValue('ERROR');
 
-        const operations = [{ operation: 'extractor', type: 'finalfunction' }];
+        const operations = [{ operation: 'extractor', type: 'laststringremainder' }];
 
         init(['markdownInput', 'answer1'], operations);
 
-        expect(mockFinalfunction).toHaveBeenCalledWith('beta', [], operations[0]);
+        expect(mockLaststringremainder).toHaveBeenCalledWith('beta', [], operations[0]);
         expect(env.answers[0].value).toBe('');
         expect(env.answers[0].dispatchEvent).not.toHaveBeenCalled();
         expect(env.output.innerHTML).toBe('beta');

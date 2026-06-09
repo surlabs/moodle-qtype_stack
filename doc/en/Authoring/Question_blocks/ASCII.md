@@ -17,7 +17,7 @@ The `[[ascii]]` castext block takes one or more optional `[[filter]]` child bloc
 ```
 The student's text is run through a markdown filter first which applies normal markdown display formatting.  In this example we also apply a special STACK transformation (`aligneq`) which translates and aligns AsciiMath surrounded by backticks.
 
-Multiple `[[extractor]]` blocks may be used to extract answers from the block into multiple STACK inputs. Multiple `[[filter]]` blocks can also be used to translate the raw original input in different ways in succession. By default, the output of one filter is fed into the next filter as the 'raw' input. Extractors are supplied with the cumulative output of the filters so far and 'map' information from the most recent filter applied. For instance, the markdown filter supplies a list of all the identified occurrences of code and AsciiMath sections in the student's text (in order) and with both the initial contents given to the filter and the transformed output.
+Multiple `[[extractor]]` blocks may be used to extract answers from the block into multiple STACK inputs. Multiple `[[filter]]` blocks can also be used to translate the raw original input in different ways in succession. By default, the output of one filter is fed into the next filter as the 'raw' input. Extractors are supplied with the raw input and 'map' information from the most recent filter applied. For instance, the markdown filter supplies a list of all the identified occurrences of code and AsciiMath sections in the student's text (in order) and with both the initial contents of the block given to the filter and the transformed output.
 
 Filters and extractors are applied in the order listed in the `[[ascii]]` block. Filters have the option to break the chain and return to processing the initial raw student input and/or to display the output of the current filter even if there are later filters in the chain (which will thus be used for creating input for extractors, not display).
 
@@ -50,8 +50,8 @@ A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` blo
 
 ### Filter block parameters
 
-1. `type` (required): the filter type. Currently available: `markdown`, `calculation`.
-2. `transforms` (for `markdown` type): a comma-separated list of transforms to apply. Available transforms: `aligneq`, `boldfilter`.
+1. `type` (required): the filter type. Currently available: `markdown`, `calculation`, `cas`.
+2. `transforms` (for `markdown` type): a comma-separated list of transforms to apply. Available transforms: `aligneq`, `asciimath`, `boldfilter`.
 3. `reset`: if `"true"`, this filter operates on the original raw input rather than the output of any preceding filter(s).
 4. `display`: if `"true"`, the output of this filter is used as the final display and subsequent filters cannot modify the display.
 
@@ -59,7 +59,7 @@ A filter is specified with a `[[filter]]` child block inside the `[[ascii]]` blo
 
 #### `markdown-math` filter
 
-This is the default behaviour.  You do not need to add `[[filter type="markdown-math" /]]` to your block.
+This is the default behaviour. If you do not specify a filter then `[[filter type="markdown-math" tansforms="aligneq"/]]` will be used.
 
 The `markdown-math` filter processes the student's text as markdown and renders mathematical content. The following rendering rules are applied to recognized token types:
 
@@ -159,7 +159,7 @@ Filters are defined in `corsscripts/ascii/filters`. This has been designed to ad
 
 ## Extractors
 
-The purpose of "extractors" is to identify parts of the student's text, extract this, and send it to another STACK input for automatic assessment. An extractor is specified with a self-closing `[[extractor]]` child block inside the `[[ascii]]` block. Multiple `[[extractor]]` blocks may be used to link to multiple STACK inputs.
+The purpose of "extractors" is to identify parts of the student's text, extract this, and send it to another STACK input for automatic assessment. An extractor is specified with a self-closed `[[extractor]]` child block inside the `[[ascii]]` block. Multiple `[[extractor]]` blocks may be used to link to multiple STACK inputs.
 
 ### Extractor block parameters
 
@@ -171,7 +171,7 @@ The purpose of "extractors" is to identify parts of the student's text, extract 
 
 #### `lastexpr`
 
-Returns the trimmed content of the last inline AsciiMath expression (delimited by backticks), or the last nonempty line of the last multi-line AsciiMath block, in document order. Falls back to the final nonempty line of the raw input when no blocks are present.
+Returns the trimmed content of the last inline AsciiMath expression (delimited by backticks), or the last nonempty line of the last multi-line AsciiMath block, in document order. Falls back to the final nonempty line of the raw input.
 
 ```
 [[extractor type="lastexpr" targetinput="ans2" /]]
@@ -204,7 +204,7 @@ Scans blocks bottom-up for the last expression matching `f(x) = <expr>` and retu
 
 #### `regexmatch`
 
-Scans blocks bottom-up for the last inline AsciiMath expression or last line of a multi-line block matching the given regular expression, and returns the expression with the matched expression removed. The `regex` parameter is required. The target input could be a Maxima input (e.g. algebraic) or STACK's string input.
+Scans the raw answer line by line from the end backwards, matching the given regular expression, and returns the expression with the matched expression removed. The `regex` parameter is required. The target input could be a Maxima input (e.g. algebraic) or STACK's string input.
 
 For example, to extract `<expr>` from a line such as `f(x) = <expr>`:
 

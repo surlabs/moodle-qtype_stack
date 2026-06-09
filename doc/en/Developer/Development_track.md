@@ -55,7 +55,7 @@ These include meta plugins like
 * Define block rules: https://mdit-plugins.github.io/field.html
 
 1. Support an option so that `#` can be used instead of backticks to delimit AsciiMath.
-2. Error messages for unknown filter/extractor names! (To help authors....)
+2. DONE: Error messages for unknown filter/extractor names! (To help authors....)
 3. Write an AsciiMath to Maxima parser to ensure the `lastblock` and `lastexpr` extractors create correct syntax for the input.  Note math.js already has the necessary _parser_ so de-pasting the ast creates by math.js is the first line of attack here.  See calculator.js filter for an example of traversing this tree.
 4. Add options to calculator blocks for degrees, and to support physics with scientific units (which math.js supports).
 

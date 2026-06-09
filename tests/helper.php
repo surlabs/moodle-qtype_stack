@@ -5864,11 +5864,17 @@ ta2:4*sqrt(2*x^2+1)+1;
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
+[[filter type="calculation" /]]
+[[extractor targetinput="ans9" type="lastcalc" /]]
 [[filter type="markdown" transforms="aligneq" /]]
-[[extractor targetinput="ans2" type="finalfunction"/]]
-[[extractor targetinput="ans3" type="lastexpr"/]]
-[[extractor targetinput="ans4" type="regexmatch" regex="^f\\\\(0\\\\)\\\\s*=\\\\s*"/]]
-[[extractor targetinput="ans5" type="regexall" regex="^f\\\\(x\\\\)"/]]
+[[extractor targetinput="ans2" type="lastregexremainder" regex="^f\\\\(x\\\\)\\\\s*=\\\\s*" /]]
+[[extractor targetinput="ans3" type="lastexpr" /]]
+[[extractor targetinput="ans4" type="lastregexmatch" regex="^f\\\\(0\\\\)\\\\s*=\\\\s*" /]]
+[[extractor targetinput="ans5" type="lastregexremainder" regex="^f\\\\(0\\\\)\\\\s*=\\\\s*" /]]
+[[extractor targetinput="ans6" type="laststringremainder" string="f(0) =" /]]
+[[extractor targetinput="ans7" type="regexallmatch" regex="^f\\\\(x\\\\)\\\\s*=\\\\s*" /]]
+[[extractor targetinput="ans8" type="regexallremainder" regex="^f\\\\(x\\\\)\\\\s*=\\\\s*" /]]
+[[extractor targetinput="ans10" type="lastblock" /]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
 <p style="display:none">[[input:ans2]]</p>
@@ -5878,7 +5884,17 @@ ta2:4*sqrt(2*x^2+1)+1;
 <p style="display:none">[[input:ans4]]</p>
 <p>[[validation:ans4]]</p>
 <p style="display:none">[[input:ans5]]</p>
-<p>[[validation:ans5]]</p>',
+<p>[[validation:ans5]]</p>
+<p style="display:none">[[input:ans6]]</p>
+<p>[[validation:ans6]]</p>
+<p style="display:none">[[input:ans7]]</p>
+<p>[[validation:ans7]]</p>
+<p style="display:none">[[input:ans8]]</p>
+<p>[[validation:ans8]]</p>
+<p style="display:none">[[input:ans9]]</p>
+<p>[[validation:ans9]]</p>
+<p style="display:none">[[input:ans10]]</p>
+<p>[[validation:ans10]]</p>',
             'format' => '1',
             'itemid' => 0,
         ];
@@ -5950,11 +5966,11 @@ ta2:4*sqrt(2*x^2+1)+1;
         $formform->ans3mustverify = '1';
         $formform->ans3showvalidation = '1';
         $formform->ans3options = '';
-        $formform->ans4type = 'algebraic';
-        $formform->ans4modelans = 'f(x)=ta2';
+        $formform->ans4type = 'string';
+        $formform->ans4modelans = '""';
         $formform->ans4boxsize = '15';
         $formform->ans4strictsyntax = '1';
-        $formform->ans4insertstars = '5';
+        $formform->ans4insertstars = '0';
         $formform->ans4syntaxhint = '';
         $formform->ans4syntaxattribute = '0';
         $formform->ans4forbidwords = '';
@@ -5980,6 +5996,81 @@ ta2:4*sqrt(2*x^2+1)+1;
         $formform->ans5mustverify = '0';
         $formform->ans5showvalidation = '0';
         $formform->ans5options = '';
+        $formform->ans6type = 'string';
+        $formform->ans6modelans = '""';
+        $formform->ans6boxsize = '15';
+        $formform->ans6strictsyntax = '1';
+        $formform->ans6insertstars = '0';
+        $formform->ans6syntaxhint = '';
+        $formform->ans6syntaxattribute = '0';
+        $formform->ans6forbidwords = '';
+        $formform->ans6allowwords = '';
+        $formform->ans6forbidfloat = '1';
+        $formform->ans6requirelowestterms = '0';
+        $formform->ans6checkanswertype = '0';
+        $formform->ans6mustverify = '0';
+        $formform->ans6showvalidation = '0';
+        $formform->ans6options = '';
+        $formform->ans7type = 'string';
+        $formform->ans7modelans = '""';
+        $formform->ans7boxsize = '15';
+        $formform->ans7strictsyntax = '1';
+        $formform->ans7insertstars = '0';
+        $formform->ans7syntaxhint = '';
+        $formform->ans7syntaxattribute = '0';
+        $formform->ans7forbidwords = '';
+        $formform->ans7allowwords = '';
+        $formform->ans7forbidfloat = '1';
+        $formform->ans7requirelowestterms = '0';
+        $formform->ans7checkanswertype = '0';
+        $formform->ans7mustverify = '0';
+        $formform->ans7showvalidation = '0';
+        $formform->ans7options = '';
+        $formform->ans8type = 'string';
+        $formform->ans8modelans = '""';
+        $formform->ans8boxsize = '15';
+        $formform->ans8strictsyntax = '1';
+        $formform->ans8insertstars = '0';
+        $formform->ans8syntaxhint = '';
+        $formform->ans8syntaxattribute = '0';
+        $formform->ans8forbidwords = '';
+        $formform->ans8allowwords = '';
+        $formform->ans8forbidfloat = '1';
+        $formform->ans8requirelowestterms = '0';
+        $formform->ans8checkanswertype = '0';
+        $formform->ans8mustverify = '0';
+        $formform->ans8showvalidation = '0';
+        $formform->ans8options = '';
+        $formform->ans9type = 'string';
+        $formform->ans9modelans = '""';
+        $formform->ans9boxsize = '15';
+        $formform->ans9strictsyntax = '1';
+        $formform->ans9insertstars = '0';
+        $formform->ans9syntaxhint = '';
+        $formform->ans9syntaxattribute = '0';
+        $formform->ans9forbidwords = '';
+        $formform->ans9allowwords = '';
+        $formform->ans9forbidfloat = '1';
+        $formform->ans9requirelowestterms = '0';
+        $formform->ans9checkanswertype = '0';
+        $formform->ans9mustverify = '0';
+        $formform->ans9showvalidation = '0';
+        $formform->ans9options = '';
+        $formform->ans10type = 'string';
+        $formform->ans10modelans = '""';
+        $formform->ans10boxsize = '15';
+        $formform->ans10strictsyntax = '1';
+        $formform->ans10insertstars = '0';
+        $formform->ans10syntaxhint = '';
+        $formform->ans10syntaxattribute = '0';
+        $formform->ans10forbidwords = '';
+        $formform->ans10allowwords = '';
+        $formform->ans10forbidfloat = '1';
+        $formform->ans10requirelowestterms = '0';
+        $formform->ans10checkanswertype = '0';
+        $formform->ans10mustverify = '0';
+        $formform->ans10showvalidation = '0';
+        $formform->ans10options = '';
         $formform->questionsimplify = '1';
         $formform->assumepositive = '';
         $formform->assumereal = '0';

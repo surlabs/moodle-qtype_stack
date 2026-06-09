@@ -29,12 +29,14 @@ require_once(__DIR__ . '/../../../utils.class.php');
 class stack_cas_castext2_extractor extends stack_cas_castext2_block {
     /** @var array valid extractor types. */
     public static $extractortypes = [
-        'finalfunction',
         'lastblock',
         'lastcalc',
         'lastexpr',
-        'regexall',
-        'regexmatch',
+        'lastregexmatch',
+        'lastregexremainder',
+        'laststringremainder',
+        'regexallmatch',
+        'regexallremainder',
     ];
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function

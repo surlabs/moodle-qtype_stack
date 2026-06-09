@@ -40,8 +40,8 @@ const transformLib = {
  * can serve calls with different transforms and collectors without being re-created.
  * @property {string[]}    transforms   - ordered array of transform names, derived from op.transforms.
  * @property {Object}      transformLib - map from name → transform function.
- * @property {Object|null} collector    - { blocks: [] } object populated by the renderer rules,
- *   or null when no extractor blocks are present.
+ * @property {Object|null} collector    - { blocks: [], isHTML = false } object populated by the renderer rules.
+ *   null when not initialised by filter.
  */
 const state = { transforms: [], transformLib, collector: null };
 

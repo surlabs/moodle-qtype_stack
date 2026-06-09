@@ -35,14 +35,25 @@ import cas from './filters/cas.js';
 
 const filterlib = { markdown, calculation, cas };
 
-import finalfunction from './extractors/finalfunction.js';
-import lastexpr from './extractors/lastexpr.js';
 import lastblock from './extractors/lastblock.js';
 import lastcalc from './extractors/lastcalc.js';
-import regexmatch from './extractors/regexmatch.js';
-import regexall from './extractors/regexall.js';
+import lastexpr from './extractors/lastexpr.js';
+import lastregexmatch from './extractors/lastregexmatch.js';
+import lastregexremainder from './extractors/lastregexremainder.js';
+import laststringremainder from './extractors/laststringremainder.js';
+import regexallmatch from './extractors/regexallmatch.js';
+import regexallremainder from './extractors/regexallremainder.js';
 
-const extractorlib = { finalfunction, lastexpr, lastblock, lastcalc, regexmatch, regexall };
+const extractorlib = {
+    lastblock,
+    lastcalc,
+    lastexpr,
+    lastregexmatch,
+    lastregexremainder,
+    laststringremainder,
+    regexallmatch,
+    regexallremainder
+};
 
 /**
  * Initialise the ASCII block for one question instance.
@@ -63,7 +74,7 @@ export default function init(inputIds, operations) {
     const alloperations = operations;
     // blockCollector is populated by the active filter's renderer rules and then
     // read by each extractor.  It is reset at the start of every filter render pass.
-    const blockCollector = { blocks: [] };
+    const blockCollector = { blocks: [], isHTML: false };
 
     /**
      * Re-render the display and re-run all extractors from the current textarea value.

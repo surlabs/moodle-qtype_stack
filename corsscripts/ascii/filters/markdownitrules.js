@@ -10,8 +10,8 @@
 // It carries three fields that are refreshed before every render pass:
 //   state.transforms   — ordered array of transform names to apply
 //   state.transformLib — map from name → transform function
-//   state.collector    — { blocks: [] } object populated here for use by extractors,
-//                        or null when no extractor blocks are present
+//   state.collector    — { blocks: [], isHTML: false } object populated here for use by extractors.
+//                        Null when not initialised.
 
 /**
  * Markdown-it plugin that registers custom renderer rules and a collector-reset
@@ -124,6 +124,7 @@ export default function markdownitrules(mdit, options) {
         let lines = splitBlock(code);
         for (const transform of state.transforms) {
             if (!state.transformLib[transform]) {
+                // This should already be prevented by filter.block.php.
                 throw new Error(`markdownitrules: unknown transform "${transform}"`);
             }
             lines = state.transformLib[transform](lines, rule);
