@@ -10,7 +10,7 @@
 <p>Show your complete working below.  Make sure your characteristic polynomial is on a line of its own, starting <code>Characteristic polynomial =</code>.</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-[[extractor type="regexmatch" targetinput="scp" regex="^\s*Characteristic polynomial\s*=\s*`?([^`\r\n]+)`?\s*$" /]]
+[[extractor type="regexmatch" targetinput="scp" regex="^\\s*Characteristic polynomial\\s*=\\s*" /]]
 [[/ascii]]
 <p style="display:none">[[input:scp]]</p>
 <p>[[validation:scp]]</p>
@@ -222,7 +222,7 @@ by inspection gives `{#args(transpose(matrix(ev1)))#}`
       <forbidfloat>0</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
-      <mustverify>0</mustverify>
+      <mustverify>1</mustverify>
       <showvalidation>1</showvalidation>
       <options></options>
     </input>

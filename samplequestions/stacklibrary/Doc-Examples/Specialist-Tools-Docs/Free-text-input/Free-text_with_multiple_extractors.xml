@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 1030  -->
+<!-- question: 1048  -->
   <question type="stack">
     <name>
-      <text>Free-text input with calculation.</text>
+      <text>Free-text input with multiple extractors</text>
     </name>
-    <questiontext format="moodle_auto_format">
-      <text><![CDATA[<p>Find the smaller of two consecutive even numbers such that their sum is \(45\) times there difference.</p>
-<p>Work line by line below, justifying your answer fully.</p>
+    <questiontext format="html">
+      <text><![CDATA[<p>You have a parabola of the form \(f(x)=a\,x^2+b\) which satisfies \(f({@x1@})={@f1@}\) and \(f'({@x2@})={@f2@}\).</p>
+<p>Work line by line below, find the values of \(a\) and \(b\) and hence the formula for \(f\).  Justifying your answer fully.</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[filter type="calculation" /]]
-  [[filter type="markdown-math" transforms="aligneq" /]]
-  [[extractor targetinput="ans2" type="lastexpr"/]]
+  [[extractor type="regexmatch" targetinput="saa" regex="^\\s*a\\s*=\\s*" /]]
+  [[extractor type="regexmatch" targetinput="sab" regex="^\\s*b\\s*=\\s*" /]]
 [[/ascii]]
-<p>[[commonstring key="free_text_calc"/]]</p>
-<p style="display:none">[[input:ans2]]</p>
-<p>[[validation:ans2]]</p>]]></text>
+<p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
+<p style="display:none">[[input:saa]]</p>
+<p>\(a=\)[[validation:saa]]</p>
+<p style="display:none">[[input:sab]]</p>
+<p>\(b=\)[[validation:sab]]</p>
+<p>\(f(x)=\) [[input:saf]][[validation:saf]]</p>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
       <text></text>
     </generalfeedback>
-    <defaultgrade>1</defaultgrade>
+    <defaultgrade>3</defaultgrade>
     <penalty>0.1</penalty>
     <hidden>0</hidden>
     <idnumber></idnumber>
@@ -29,16 +31,32 @@
       <text>2026042402</text>
     </stackversion>
     <questionvariables>
-      <text><![CDATA[ta1:"The consecutive even numbers are `n` and `n+2`.  Their difference is 2
+      <text><![CDATA[tansa:3;
+tansb:7;
+taf:tansa*x^2+tansb;
+df:diff(taf,x);
+x1:2;
+f1:ev(taf,x=x1)
+x2:-2;
+f2:ev(df,x=x2);
+
+ta1:castext("If `f({#x1#})={#f1#}` then `{#x1^2*a#}+b={#f1#}`.
+
+If `f'({#x2#})={#f2#}` then 
 `
-n + (n+2) = 45*2
-2n + 2 = {@45*2@}
-2n = {@(45*2)-2@}
-n = {@((45*2)-2)/2@}
+f'(x)=2 a x
+f'({#x2#})=2 a * ({#x2#}) = {#f2#}
+{#2*x2#}a={#f2#}
+a={#f2/(2*x2)#}
 `
-Note this is an even number.
-";
-ta2:(45*2-2)/2;]]></text>
+Now using this value for `a` we have
+`
+{#x1^2*a#}+b={#f1#}
+{#x1^2*f2/(2*x2)#}+b={#f1#}
+b={#tansb#}
+`
+Hence `f(x)={#taf#}`.");
+]]></text>
     </questionvariables>
     <specificfeedback format="html">
       <text>[[feedback:prt1]]</text>
@@ -87,12 +105,12 @@ ta2:(45*2-2)/2;]]></text>
       <checkanswertype>0</checkanswertype>
       <mustverify>0</mustverify>
       <showvalidation>0</showvalidation>
-      <options>monospace:true, manualgraded:false</options>
+      <options>monospace,manualgraded:false</options>
     </input>
     <input>
-      <name>ans2</name>
+      <name>saa</name>
       <type>algebraic</type>
-      <tans>ta2</tans>
+      <tans>tansa</tans>
       <boxsize>15</boxsize>
       <strictsyntax>1</strictsyntax>
       <insertstars>0</insertstars>
@@ -104,7 +122,43 @@ ta2:(45*2-2)/2;]]></text>
       <requirelowestterms>0</requirelowestterms>
       <checkanswertype>0</checkanswertype>
       <mustverify>1</mustverify>
-      <showvalidation>2</showvalidation>
+      <showvalidation>3</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>sab</name>
+      <type>algebraic</type>
+      <tans>tansb</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options></options>
+    </input>
+    <input>
+      <name>saf</name>
+      <type>algebraic</type>
+      <tans>taf</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>7</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
       <options></options>
     </input>
     <prt>
@@ -113,14 +167,14 @@ ta2:(45*2-2)/2;]]></text>
       <autosimplify>1</autosimplify>
       <feedbackstyle>1</feedbackstyle>
       <feedbackvariables>
-        <text>sa2:if equationp(ans2) then rhs(ans2) else ans2</text>
+        <text></text>
       </feedbackvariables>
       <node>
         <name>0</name>
         <description></description>
         <answertest>AlgEquiv</answertest>
-        <sans>sa2</sans>
-        <tans>ta2</tans>
+        <sans>saf</sans>
+        <tans>taf</tans>
         <testoptions></testoptions>
         <quiet>0</quiet>
         <truescoremode>=</truescoremode>
@@ -134,33 +188,8 @@ ta2:(45*2-2)/2;]]></text>
         <falsescoremode>=</falsescoremode>
         <falsescore>0</falsescore>
         <falsepenalty></falsepenalty>
-        <falsenextnode>1</falsenextnode>
-        <falseanswernote>prt1-1-F</falseanswernote>
-        <falsefeedback format="html">
-          <text></text>
-        </falsefeedback>
-      </node>
-      <node>
-        <name>1</name>
-        <description>Student enters n+2, not n</description>
-        <answertest>AlgEquiv</answertest>
-        <sans>ans2</sans>
-        <tans>ta2+2</tans>
-        <testoptions></testoptions>
-        <quiet>0</quiet>
-        <truescoremode>+</truescoremode>
-        <truescore>0.5</truescore>
-        <truepenalty></truepenalty>
-        <truenextnode>-1</truenextnode>
-        <trueanswernote>prt1-2-T</trueanswernote>
-        <truefeedback format="html">
-          <text>You needed to type in \(n\) not \(n+2\)!</text>
-        </truefeedback>
-        <falsescoremode>-</falsescoremode>
-        <falsescore>0</falsescore>
-        <falsepenalty></falsepenalty>
         <falsenextnode>-1</falsenextnode>
-        <falseanswernote>prt1-2-F</falseanswernote>
+        <falseanswernote>prt1-1-F</falseanswernote>
         <falsefeedback format="html">
           <text></text>
         </falsefeedback>
@@ -174,44 +203,16 @@ ta2:(45*2-2)/2;]]></text>
         <value>ta1</value>
       </testinput>
       <testinput>
-        <name>ans2</name>
-        <value>ta2</value>
-      </testinput>
-      <expected>
-        <name>prt1</name>
-        <expectedscore>1.0000000</expectedscore>
-        <expectedpenalty>0.0000000</expectedpenalty>
-        <expectedanswernote>[ prt1-1-T ]</expectedanswernote>
-      </expected>
-    </qtest>
-    <qtest>
-      <testcase>2</testcase>
-      <description>Student enters n, not 2n</description>
-      <testinput>
-        <name>ans1</name>
-        <value></value>
+        <name>saa</name>
+        <value>tansa</value>
       </testinput>
       <testinput>
-        <name>ans2</name>
-        <value>ev(ta2+2,simp)</value>
-      </testinput>
-      <expected>
-        <name>prt1</name>
-        <expectedscore>0.5000000</expectedscore>
-        <expectedpenalty></expectedpenalty>
-        <expectedanswernote>[ prt1-1-F | prt1-2-T ]</expectedanswernote>
-      </expected>
-    </qtest>
-    <qtest>
-      <testcase>3</testcase>
-      <description></description>
-      <testinput>
-        <name>ans1</name>
-        <value></value>
+        <name>sab</name>
+        <value>tansb</value>
       </testinput>
       <testinput>
-        <name>ans2</name>
-        <value>n=ans2</value>
+        <name>saf</name>
+        <value>taf</value>
       </testinput>
       <expected>
         <name>prt1</name>
@@ -221,4 +222,5 @@ ta2:(45*2-2)/2;]]></text>
       </expected>
     </qtest>
   </question>
+
 </quiz>
