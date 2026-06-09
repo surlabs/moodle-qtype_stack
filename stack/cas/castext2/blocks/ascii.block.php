@@ -57,6 +57,12 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $operations = [];
         // Is the markdown (maths) default filter needed?
         $filterneeded = true;
+        $suppliedtext = [];
+        $opt2 = [];
+        if ($options !== null) {
+            $opt2 = array_merge([], $options);
+        }
+        $opt2['in iframe'] = true;
         foreach ($this->children as $child) {
             if (is_a($child, 'stack_cas_castext2_extractor')) {
                 $options = $child->params;
@@ -75,9 +81,11 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                     }
                     $options['transforms'] = $this->set_markdown_filter_defaults($transforms);
                 }
-                // In this case don't add in any filters at all (even the default below).
-                if ($options['type'] != 'plain') {
-                    $operations[] = $options;
+                $operations[] = $options;
+            } else {
+                $c = $child->compile(castext2_parser_utils::RAWFORMAT, $opt2);
+                if ($c !== null) {
+                    $suppliedtext[] = $c;
                 }
             }
         }
@@ -146,6 +154,9 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
 
         $r->items[] = new MP_String($linkcode);
         $r->items[] = new MP_String("\n</script>");
+        $r->items[] = new MP_String('<textarea id="asciiSuppliedText" style="display:none;">');
+        $r->items = array_merge($r->items, $suppliedtext);
+        $r->items[] = new MP_String('</textarea>');
 
         $r->items[] = new MP_String('<div class="container row asciimath" id="asciiContainerRow" style="' . $astyle . '"></div>');
 
@@ -269,11 +280,6 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         ) {
             $valid    = false;
             $err[] = stack_string('stackBlock_ascii_underdefined_dimension');
-        }
-
-        if (!array_key_exists('input', $this->params)) {
-            $valid    = false;
-            $err[] = stack_string('stackBlock_ascii_input_required');
         }
 
         // Check that only valid parameters are passed to block header.

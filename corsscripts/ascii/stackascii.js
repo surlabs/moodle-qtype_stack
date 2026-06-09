@@ -29,11 +29,12 @@
 // ASCIIMathTeXImg.js is loaded as a plain <script> tag by the PHP (sloppy mode).
 // It sets window.AMparseMath before init() is called.
 
-import markdown from './filters/markdown.js';
 import calculation from './filters/calculation.js';
 import cas from './filters/cas.js';
+import markdown from './filters/markdown.js';
+import plain from './filters/plain.js';
 
-const filterlib = { markdown, calculation, cas };
+const filterlib = { calculation, cas, markdown, plain };
 
 import lastblock from './extractors/lastblock.js';
 import lastcalc from './extractors/lastcalc.js';
@@ -69,7 +70,8 @@ const extractorlib = {
  *    { operation:'extractor', type:'lastexpr', targetinput:'ans2'     }]
  */
 export default function init(inputIds, operations) {
-    const markdownContainerId = inputIds[0];
+    const markdownContainerId = inputIds.length ? inputIds[0] : null;
+    const suppliedText = document.getElementById('asciiSuppliedText').innerHTML;
     // inputIds[1..N] correspond to each extractor's target answer input in order.
     const alloperations = operations;
     // blockCollector is populated by the active filter's renderer rules and then
@@ -81,7 +83,12 @@ export default function init(inputIds, operations) {
      * Called on every `change` event (debounced) and once immediately on load.
      */
     function renderMath() {
-        const raw = document.getElementById(markdownContainerId).value;
+        let raw = '';
+        if (markdownContainerId) {
+            raw = document.getElementById(markdownContainerId).value;
+        } else {
+            raw = suppliedText;
+        }
         const output = document.getElementById('asciiContainerRow');
 
         let processedOutput = raw;
@@ -149,12 +156,13 @@ export default function init(inputIds, operations) {
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, 'asciiContainerRow']); // MathJax 2
         }
     }
-
-    // Debounce rendering so rapid keystrokes don't trigger multiple MathJax typesets.
-    let debounceTimer;
-    document.getElementById(markdownContainerId).addEventListener('change', () => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(renderMath, 100); // debounce 100ms
-    });
+    if (markdownContainerId) {
+        // Debounce rendering so rapid keystrokes don't trigger multiple MathJax typesets.
+        let debounceTimer;
+        document.getElementById(markdownContainerId).addEventListener('change', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(renderMath, 100); // debounce 100ms
+        });
+    }
     renderMath(); // initial render on load
 }

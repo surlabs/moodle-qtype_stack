@@ -1047,7 +1047,6 @@ $string['stackBlock_ascii_height_num']  = 'The numeric portion of the height of 
 $string['stackBlock_ascii_length_num']  = 'The numeric value of length must be a positive integer and must not contain any extra chars or numerical types.';
 $string['stackBlock_ascii_underdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one must define either width or height of the lists.';
 $string['stackBlock_ascii_overdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one should only define width or height not both.';
-$string['stackBlock_ascii_input_required'] = 'You must define the input for the ASCII block to use.';
 $string['stackBlock_ascii_answer_format'] = 'The answer attribute of the ASCII block must be in the format \"[ans1,extractor,filter],[ans2,extractor,filter],...\".';
 $string['stackBlock_ascii_unknown_param'] = 'Unknown parameter \'{$a}\' for the ASCII block.';
 $string['stackBlock_ascii_param'] = 'Valid parameters are: {$a->param}.';

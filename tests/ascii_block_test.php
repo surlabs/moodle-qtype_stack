@@ -187,15 +187,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertStringNotContainsString('"transforms":"aligneq,boldfilter"', $joined);
     }
 
-    public function test_ascii_requires_input_param(): void {
-        $raw = '[[ascii]][[/ascii]]';
-
-        $at1 = castext2_evaluatable::make_from_source($raw, 'test-case');
-
-        $this->assertFalse($at1->get_valid());
-        $this->assertEquals(stack_string('stackBlock_ascii_input_required'), $at1->get_errors());
-    }
-
     public function test_ascii_validate_width_unit_and_number(): void {
         $valid = '[[ascii input="ans1" width="500px"]][[/ascii]]';
         $invalidunit = '[[ascii input="ans1" width="500bad"]][[/ascii]]';
@@ -205,7 +196,6 @@ final class ascii_block_test extends qtype_stack_testcase {
         $this->assertTrue($atvalid->get_valid());
 
         $atunit = castext2_evaluatable::make_from_source($invalidunit, 'test-case');
-        $session = new stack_cas_session2([$atunit]);
         $this->assertFalse($atunit->get_valid());
         $this->assertEquals(stack_string('stackBlock_ascii_width'), $atunit->get_errors());
 
