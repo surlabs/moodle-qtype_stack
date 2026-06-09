@@ -35,6 +35,25 @@ Returns the trimmed content of the last `calculation` block (i.e. text enclosed 
 ```
 [[extractor type="lastcalc" targetinput="ans2" /]]
 ```
+## Simple match extractors
+
+These match a line containing a text string, and are designed to reduce the need to write full regular expressions.
+
+The `match` parameter is required.
+
+#### `lastmatch`
+
+* Scans the raw answer line by line from the end backwards.
+* Line must contain the given `match` expression.
+* Spaces within the `match` expression are replaced by `\s` regex pattern.
+* Returns the trimmed line, without the `match`, and without any backticks (if any) around the expression.
+
+For example, to extract `<expr>` from a line such as `f(x) = <expr>`:
+
+```
+[[extractor type="lastmatch" targetinput="ans2" match="f(x) =" /]]
+```
+
 ## Regex extractors
 
 For regular expression extractors, the `regex` parameter is required. 
