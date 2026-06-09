@@ -1,7 +1,7 @@
 // Extractor: laststringremainder
 // [[extractor targetinput="ans2" type="laststringremainder" string="Answer =" /]]
 // Searches for a trimmed line (with or without backslashes) matching the given string.
-// Returns the remainder of the line stripped of backslashes and leadin/trailing spaces.
+// Returns the remainder of the line stripped of backslashes and leading/trailing spaces.
 // Scans lines in reverse order.
 export default function laststringremainder(raw, blocks, operation) {
     if (!operation || !operation.string) {

@@ -10,7 +10,7 @@
 <p>Show your complete working below.  Make sure your characteristic polynomial is on a line of its own, starting <code>Characteristic polynomial =</code>.</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-[[extractor type="regexmatch" targetinput="scp" regex="^\\s*Characteristic polynomial\\s*=\\s*" /]]
+[[extractor type="lastregexremainder" targetinput="scp" regex="^\\s*Characteristic polynomial\\s*=\\s*" /]]
 [[/ascii]]
 <p style="display:none">[[input:scp]]</p>
 <p>[[validation:scp]]</p>

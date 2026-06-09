@@ -11,7 +11,7 @@
 
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-[[extractor targetinput="ans2" type="finalfunction"/]]
+  [[extractor type="lastregexremainder" targetinput="ans2" regex="^f\\(x\\)\\s*=\\s*" /]]
 [[/ascii]]
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
 <p style="display:none">[[input:ans2]]</p>

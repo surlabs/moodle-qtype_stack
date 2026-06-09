@@ -485,6 +485,11 @@
                 "description":"Information on using the ASCII block in STACK."
                 },
                 {
+                "file":"ASCII_extractors.md",
+                "title":"ASCII Extractor Blocks - STACK Documentation",
+                "description":"Information on using the ASCII Extractor blocks in STACK."
+                },
+                {
                 "file":"Conditional_blocks.md",
                 "title":"Conditional Blocks - STACK Documentation",
                 "description":"Information on using conditional question blocks in STACK."
