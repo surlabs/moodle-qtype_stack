@@ -44,8 +44,9 @@ The `match` parameter is required.
 #### `lastmatch`
 
 * Scans the raw answer line by line from the end backwards.
-* Line must contain the given `match` expression.
-* Spaces within the `match` expression are replaced by `\s` regex pattern.
+* Whitespace is trimmed from the line, and any outer backticks are removed (hence it matches within mathematics, or outside).
+* Spaces within the `match` expression are replaced by `\s*` regex pattern.  Note, this is _zero or more_ whitespace.
+* The line must contain the given (modified) `match` expression.
 * Returns the trimmed line, without the `match`, and without any backticks (if any) around the expression.
 
 For example, to extract `<expr>` from a line such as `f(x) = <expr>`:
@@ -54,9 +55,22 @@ For example, to extract `<expr>` from a line such as `f(x) = <expr>`:
 [[extractor type="lastmatch" targetinput="ans2" match="f(x) =" /]]
 ```
 
+Using this extractor, the following lines will all return `x^2`
+
+    f(x)=x^2
+    f(x) = x^2
+    f(x)=`x^2`
+    f(x) = `x^2`
+    `f(x)=x^2`
+    `f(x) =x^2`
+
+Note, by design the matching is expected to be on a line of its own. Hence this will _not_ match
+
+    hence `f(x)=x^2`.
+
 ## Regex extractors
 
-For regular expression extractors, the `regex` parameter is required. 
+For regular expression extractors, the `regex` parameter is required.
 
 For example, to extract `<expr>` from a line such as `f(x) = <expr>`:
 
@@ -106,8 +120,13 @@ If this is assigned to input `ans2`, then you can create a Maxima list of the ma
 * Returns a JSON object `{"matches": [...]}` as a string. The target input should be a string or JSON input. (Choose JSON for better debugging.)
 * The regex itself is removed from the matches.
 
-### Extractor developer notes
+## Extractor developer notes
 
-Extractors are defined in `corsscripts/ascii/extractors`. (In the future we may add more flexible functionality, linking arbitrary extractors to multiple inputs.)
+Extractors are defined in `corsscripts/ascii/extractors`. (
 
-In the future we may also support a `bespoke` extractor enabling users to write JS code into the extractor block for use in that question directly.  Please contact the developers for ideas of extractor use-cases.
+In the future we may add 
+
+* more flexible functionality, linking arbitrary extractors to multiple inputs.)
+* support for a `bespoke` extractor enabling users to write JS code into the extractor block for use in that question directly.
+
+Please contact the developers for ideas of extractor use-cases.

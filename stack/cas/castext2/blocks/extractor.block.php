@@ -32,6 +32,7 @@ class stack_cas_castext2_extractor extends stack_cas_castext2_block {
         'lastblock',
         'lastcalc',
         'lastexpr',
+        'lastmatch',
         'lastregexmatch',
         'lastregexremainder',
         'laststringremainder',

@@ -92,8 +92,8 @@ This is the complete question text:
 <p>Work line by line below, find the values of \(a\) and \(b\) and hence the formula for \(f\).  Justifying your answer fully.</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[extractor type="lastregexremainder" targetinput="saa" regex="^\\s*a\\s*=\\s*" /]]
-  [[extractor type="lastregexremainder" targetinput="sab" regex="^\\s*b\\s*=\\s*" /]]
+  [[extractor type="lastmatch" targetinput="saa" match="a =" /]]
+  [[extractor type="lastmatch" targetinput="sab" match="b =" /]]
 [[/ascii]]
 <p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
 <p style="display:none">[[input:saa]]</p>
@@ -106,6 +106,7 @@ This is the complete question text:
 Notes.
 
 1. The inputs `saa` and `sab` are hidden with `<p style="display:none">`, however validation information is available via compact validation so students can see their answers are correctly extracted.
-2. Students still have to fill in the final answer, as would be the case with a classic STACK question.  This _could_ be extracted automatically with a further `extractor` block within the `ascii` block in the question text.
+2. Note the use of the simpler `lastmatch` extractor, rather than a regular expression.
+3. Students still have to fill in the final answer, as would be the case with a classic STACK question.  This _could_ be extracted automatically with a further `extractor` block within the `ascii` block in the question text.
 
 In this example the PRT is minimal, and could be improved for partial credit.
