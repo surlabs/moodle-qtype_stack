@@ -92,8 +92,8 @@ This is the complete question text:
 <p>Work line by line below, find the values of \(a\) and \(b\) and hence the formula for \(f\).  Justifying your answer fully.</p>
 <p>[[input:ans1]] [[validation:ans1]]</p>
 [[ascii input="ans1"]]
-  [[extractor type="regexmatch" targetinput="saa" regex="^\\s*a\\s*=\\s*" /]]
-  [[extractor type="regexmatch" targetinput="sab" regex="^\\s*b\\s*=\\s*" /]]
+  [[extractor type="lastregexremainder" targetinput="saa" regex="^\\s*a\\s*=\\s*" /]]
+  [[extractor type="lastregexremainder" targetinput="sab" regex="^\\s*b\\s*=\\s*" /]]
 [[/ascii]]
 <p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
 <p style="display:none">[[input:saa]]</p>
