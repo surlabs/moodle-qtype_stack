@@ -13,6 +13,18 @@ describe('calculation filter', () => {
         expect(calculation('A: {@2+@}, B: {@3*3@}')).toBe('A: 2+, B: 9');
     });
 
+    test('falls back to raw content when validate blocks a function in calculation', () => {
+        expect(calculation('A: {@derivative("x^2", "x")@}, B: {@3*3@}')).toBe('A: derivative("x^2", "x"), B: 9');
+    });
+
+    test('falls back to raw content when validate blocks an operator in calculation', () => {
+        expect(calculation('A: {@2 > 1@}, B: {@3*3@}')).toBe('A: 2 > 1, B: 9');
+    });
+
+    test('falls back to raw content when validate blocks a node type in calculation', () => {
+        expect(calculation('A: {@x = 2@}, B: {@3*3@}')).toBe('A: x = 2, B: 9');
+    });
+
     test('does not throw for malformed content ending at a single @}', () => {
         expect(calculation('A: {@2+3, B: {@4+1@}')).toBe('A: 2+3, B: {@4+1');
     });

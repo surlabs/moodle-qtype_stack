@@ -29,4 +29,12 @@ describe('cas filter', () => {
             { type: 'calculation', raw: '7-4', rendered: '3' }
         ]);
     });
+
+    test('manages a node type that calculation filter rejects', () => {
+        expect(cas('A: {@x = 2@}, B: {@3*3@}')).toBe('A: 2, B: 9');
+    });
+
+    test('manages an operator that calculation filter rejects', () => {
+        expect(cas('A: {@2 > 1@}, B: {@3*3@}')).toBe('A: true, B: 9');
+    });
 });
