@@ -16,10 +16,10 @@ import markdownitrules from './markdownitrules.js';
 // tex.js uses named CJS exports (exports.tex = ...) — import the whole namespace.
 import * as mdItPluginTex from '../markdownitextensions/tex.js';
 
-import asciimath from '../markdownittransforms/005_asciimath.js';
-import boldfilter from '../markdownittransforms/020_boldfilter.js';
-import aligneq from '../markdownittransforms/010_aligneq.js';
-import minwrap from '../markdownittransforms/015_minwrap.js';
+import asciimath from '../markdownittransforms/100_asciimath.js';
+import aligneq from '../markdownittransforms/200_aligneq.js';
+import boldfilter from '../markdownittransforms/250_boldfilter.js';
+import minwrap from '../markdownittransforms/900_minwrap.js';
 
 /**
  * Registry maps the transform name strings used in the [[filter]] block's `transforms`

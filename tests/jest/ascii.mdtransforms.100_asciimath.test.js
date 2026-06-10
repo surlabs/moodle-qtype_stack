@@ -1,4 +1,4 @@
-import asciimath from '../../corsscripts/ascii/markdownittransforms/005_asciimath.js';
+import asciimath from '../../corsscripts/ascii/markdownittransforms/100_asciimath.js';
 
 describe('asciimath transform', () => {
     beforeEach(() => {

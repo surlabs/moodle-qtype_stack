@@ -1,4 +1,4 @@
-import aligneq from '../../corsscripts/ascii/markdownittransforms/010_aligneq.js';
+import aligneq from '../../corsscripts/ascii/markdownittransforms/200_aligneq.js';
 
 describe('aligneq transform', () => {
     test('returns empty array for empty input', () => {

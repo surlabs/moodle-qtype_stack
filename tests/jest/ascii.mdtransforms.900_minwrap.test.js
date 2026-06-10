@@ -1,4 +1,4 @@
-import minwrap from '../../corsscripts/ascii/markdownittransforms/015_minwrap.js';
+import minwrap from '../../corsscripts/ascii/markdownittransforms/900_minwrap.js';
 
 describe('minwrap transform', () => {
     test('returns empty string, rather than empty math environment, for empty input', () => {

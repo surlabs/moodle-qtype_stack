@@ -1,4 +1,4 @@
-import boldfilter from '../../corsscripts/ascii/markdownittransforms/020_boldfilter.js';
+import boldfilter from '../../corsscripts/ascii/markdownittransforms/250_boldfilter.js';
 
 describe('boldfilter transform', () => {
     test('leaves wrapper lines unchanged', () => {
@@ -42,6 +42,24 @@ describe('boldfilter transform', () => {
         expect(boldfilter(lines)).toEqual([
             '\\[\\begin{align*}',
             '& &   & &\\boldsymbol{value}',
+            '\\end{align*}\\]'
+        ]);
+    });
+
+    test('does not split ampersands inside brace groups', () => {
+        const lines = ['\\[\\begin{align*}', '& & x = \\text{A & B}\\\\', '\\end{align*}\\]'];
+        expect(boldfilter(lines)).toEqual([
+            '\\[\\begin{align*}',
+            '& &\\boldsymbol{x = \\text{A & B}}\\\\',
+            '\\end{align*}\\]'
+        ]);
+    });
+
+    test('does not split ampersands inside nested array environments', () => {
+        const lines = ['\\[\\begin{align*}', '& & M & = \\begin{array}{cc}a&b\\\\c&d\\end{array}\\\\', '\\end{align*}\\]'];
+        expect(boldfilter(lines)).toEqual([
+            '\\[\\begin{align*}',
+            '& &\\boldsymbol{M}&\\boldsymbol{= \\begin{array}{cc}a&b\\\\c&d\\end{array}}\\\\',
             '\\end{align*}\\]'
         ]);
     });

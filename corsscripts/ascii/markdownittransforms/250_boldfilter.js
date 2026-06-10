@@ -20,7 +20,7 @@ export default function boldfilter(lines, rule) {
     const rowBreak = '\\\\'; // two actual backslash chars = LaTeX \\
     return lines.map((line, i) => {
         if (i === 0 || i === lines.length - 1) return line;
-        return line.split('&').map(col => {
+        return splitTopLevelAmpersands(line).map(col => {
             let trimmed = col.trim();
             if (trimmed === '') return col;
             // Strip trailing \\ so it is never inside \boldsymbol{}.
@@ -42,4 +42,61 @@ export default function boldfilter(lines, rule) {
             return bold + trailingBreak;
         }).join('&');
     });
+}
+
+/**
+ * Split a LaTeX align row by top-level '&' only.
+ * This avoids breaking brace groups such as \text{A & B} into invalid fragments.
+ *
+ * @param {string} line
+ * @returns {string[]}
+ */
+function splitTopLevelAmpersands(line) {
+    const cols = [];
+    let start = 0;
+    let depth = 0;
+    const envStack = [];
+    for (let i = 0; i < line.length; i++) {
+        if (line.startsWith('\\begin{', i)) {
+            const end = line.indexOf('}', i + '\\begin{'.length);
+            if (end !== -1) {
+                envStack.push(line.slice(i + '\\begin{'.length, end));
+                i = end;
+                continue;
+            }
+        }
+        if (line.startsWith('\\end{', i)) {
+            const end = line.indexOf('}', i + '\\end{'.length);
+            if (end !== -1) {
+                const envName = line.slice(i + '\\end{'.length, end);
+                const top = envStack[envStack.length - 1];
+                if (top === envName) {
+                    envStack.pop();
+                } else {
+                    const idx = envStack.lastIndexOf(envName);
+                    if (idx !== -1) {
+                        envStack.splice(idx, 1);
+                    }
+                }
+                i = end;
+                continue;
+            }
+        }
+        const ch = line[i];
+        const prev = i > 0 ? line[i - 1] : '';
+        if (ch === '{' && prev !== '\\') {
+            depth++;
+            continue;
+        }
+        if (ch === '}' && prev !== '\\') {
+            depth = Math.max(0, depth - 1);
+            continue;
+        }
+        if (ch === '&' && prev !== '\\' && depth === 0 && envStack.length === 0) {
+            cols.push(line.slice(start, i));
+            start = i + 1;
+        }
+    }
+    cols.push(line.slice(start));
+    return cols;
 }
