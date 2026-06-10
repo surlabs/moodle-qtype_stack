@@ -10,7 +10,6 @@
 //   3. Document it in doc/en/Authoring/Question_blocks/ASCII.md.
 
 import markdownit from '../markdownit.js';
-import markdownitSub from '../markdownitextensions/sub.js';
 import asciimathBlock from '../markdownitextensions/asciimathblock.js';
 import markdownitrules from './markdownitrules.js';
 
@@ -47,7 +46,6 @@ const state = { transforms: [], transformLib, collector: null };
 
 // mdItPluginTex.tex must come before markdownitrules.
 const converter = markdownit({ html: true })
-    .use(markdownitSub)
     .use(mdItPluginTex.tex, { render: (content) => content, delimiters: 'brackets' })
     .use(asciimathBlock)
     .use(markdownitrules, { state });
