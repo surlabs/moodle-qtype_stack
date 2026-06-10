@@ -115,6 +115,22 @@ final class ascii_block_test extends qtype_stack_testcase {
         );
     }
 
+    public function test_ascii_compile_without_input_parameter_uses_empty_input_requests(): void {
+        $block = new \stack_cas_castext2_ascii([], []);
+        $compiled = $block->compile(null, []);
+
+        $this->assertInstanceOf(\MP_List::class, $compiled);
+
+        $strings = $this->get_string_items($compiled);
+        $joined = implode("\n", $strings);
+        $this->assertStringContainsString('Promise.all([])', $joined);
+        $this->assertStringNotContainsString('stack_js.request_access_to_input(', $joined);
+        $this->assertStringContainsString('<textarea id="asciiSuppliedText" style="display:none;">', $joined);
+        $this->assertStringContainsString('</textarea>', $joined);
+        $expectedlinkcode = '{init(inputIds,[{"operation":"filter","type":"markdown","transforms":"asciimath,aligneq,minwrap"}]);}';
+        $this->assertStringContainsString($expectedlinkcode, $joined);
+    }
+
     public function test_ascii_compile_uses_child_filter_and_extractor_operations(): void {
         $filter = new \stack_cas_castext2_filter([
             'type' => 'markdown',

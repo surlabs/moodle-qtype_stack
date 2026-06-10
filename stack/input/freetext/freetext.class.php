@@ -101,6 +101,7 @@ class stack_freetext_input extends stack_string_input {
 
         // Metadata for JS users.
         $attributes['data-stack-input-type'] = 'freetext';
+        $attributes['maxlength'] = '4096';
 
         return html_writer::tag('textarea', htmlspecialchars($value, ENT_COMPAT), $attributes);
     }

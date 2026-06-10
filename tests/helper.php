@@ -98,6 +98,7 @@ final class qtype_stack_test_helper extends question_test_helper {
             'equiv_input_compact',
             'equiv_input',
             'freetext_input',
+            'freetext_input_ascii_no_input',
             'matrix_input',
             'varmatrix_input',
             'matrix_multi_input',
@@ -6231,6 +6232,48 @@ ta2:4*sqrt(2*x^2+1)+1;
         ];
         $formform->prt3trueanswernote[0] = 'prt3-1-T';
         $formform->prt3truenextnode[0] = '-1';
+        return $formform;
+    }
+
+    /**
+     * Make the data what would be received from the editing form for Freetext input question
+     * where [[ascii]] has no input and displays teacher answer markdown.
+     *
+     * @return stdClass the data that would be returned by $form->get_data();
+     */
+    public static function get_stack_question_form_data_freetext_input_ascii_no_input() {
+        $formform = self::get_stack_question_form_data_freetext_input();
+        $formform->name = 'Freetext (ASCII no input)';
+        $formform->questiontext = [
+            'text' => '<p> Let \(f\'(x)= {@fx@}\). Given that \(f(0)={@y0@}\), find \(f(x)\).</p>
+<p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
+
+<p>[[input:ans1]] [[validation:ans1]]</p>
+[[ascii]]
+{@ta1@}
+[[/ascii]]
+<p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
+<p style="display:none">[[input:ans2]]</p>
+<p>[[validation:ans2]]</p>
+<p style="display:none">[[input:ans3]]</p>
+<p>[[validation:ans3]]</p>
+<p style="display:none">[[input:ans4]]</p>
+<p>[[validation:ans4]]</p>
+<p style="display:none">[[input:ans5]]</p>
+<p>[[validation:ans5]]</p>
+<p style="display:none">[[input:ans6]]</p>
+<p>[[validation:ans6]]</p>
+<p style="display:none">[[input:ans7]]</p>
+<p>[[validation:ans7]]</p>
+<p style="display:none">[[input:ans8]]</p>
+<p>[[validation:ans8]]</p>
+<p style="display:none">[[input:ans9]]</p>
+<p>[[validation:ans9]]</p>
+<p style="display:none">[[input:ans10]]</p>
+<p>[[validation:ans10]]</p>',
+            'format' => '1',
+            'itemid' => 0,
+        ];
         return $formform;
     }
 
