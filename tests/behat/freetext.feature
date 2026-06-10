@@ -21,6 +21,7 @@ Feature: Test input of correct answers on freetext inputs.
     And the following "questions" exist:
       | questioncategory | qtype | name                                     | template               |
       | Test questions   | stack | Freetext                                 | freetext_input         |
+      | Test questions   | stack | Freetext (ASCII no input)                | freetext_input_ascii_no_input |
 
   Scenario: Test Freetext input
 
@@ -49,3 +50,9 @@ Feature: Test input of correct answers on freetext inputs.
     And I check the input "ans10" is 'f(x) = 4sqrt(2x^2+1)+1'
     # MathJax 3 will have rendered, MathJax 2 probably won't. Moodle 5 gives us the flattened plain text. Sigh...
     And I check the value of iframe element "asciiContainerRow" contains one of '\begin{align*}\n& & f(x)  & = 4sqrt(2x^2+1)+c\\\n& & f(0)  & = 5 => c = 1\\\n& & f(x)  & = 4sqrt(2x^2+1)+1\\\n\end{align*}\n' or '𝑓⁡(𝑥)=4⁢𝑠⁢𝑞⁢𝑟⁢𝑡⁢(2⁢𝑥2+1)+1' or 'f(x)=4sqrt(2x2+1)+1'
+
+  Scenario: Test Freetext input with ASCII block teacher answer markdown and no input
+
+    When I am on the "Freetext (ASCII no input)" "core_question > preview" page logged in as teacher
+    # MathJax 3 will have rendered, MathJax 2 probably won't. Moodle 5 gives us the flattened plain text. Sigh...
+    Then I check the value of iframe element "asciiContainerRow" contains one of '4sqrt(2x^2+1)' or '4⁢𝑠⁢𝑞⁢𝑟⁢𝑡⁢(2⁢𝑥2+1)' or '4⁢√2⁢𝑥2+1 +1'4⁢√2⁢𝑥2+1 +1
