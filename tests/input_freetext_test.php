@@ -48,7 +48,7 @@ final class input_freetext_test extends qtype_stack_testcase {
         $this->assertEquals(
             '<textarea class="freetextinput" name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
             'spellcheck="false" rows="5" cols="80" data-stack-input-type="freetext">' .
-            '</textarea><div class="clearfix"></div>',
+            '</textarea>',
             $el->render(
                 new stack_input_state(stack_input::VALID, [], '', '', '', '', ''),
                 'stack1__ans1',
@@ -64,7 +64,7 @@ final class input_freetext_test extends qtype_stack_testcase {
         $this->assertEquals(
             '<textarea class="freetextinput" name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
             'spellcheck="false" rows="5" cols="80" data-stack-input-type="freetext">' .
-            '000</textarea><div class="clearfix"></div>',
+            '000</textarea>',
             $el->render(
                 new stack_input_state(stack_input::VALID, ['000'], '', '', '', '', ''),
                 'stack1__ans1',
@@ -84,7 +84,7 @@ final class input_freetext_test extends qtype_stack_testcase {
         $this->assertEquals(
             '<textarea class="freetextinput input-monospace" name="stack1__ans1" id="stack1__ans1" autocapitalize="none" ' .
             'spellcheck="false" rows="5" cols="80" data-stack-input-type="freetext">' .
-            '000</textarea><div class="clearfix"></div>',
+            '000</textarea>',
             $el->render(
                 new stack_input_state(stack_input::VALID, ['000'], '', '', '', '', ''),
                 'stack1__ans1',

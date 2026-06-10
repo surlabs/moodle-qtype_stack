@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 925  -->
+<!-- question: 1082  -->
   <question type="stack">
     <name>
       <text>Free-text manually graded mathematical proof</text>
     </name>
     <questiontext format="html">
       <text><![CDATA[<p>Prove that \(\forall n \in \mathbb{N}\), \(1+3+5+7+...+(2n−1) = n^2\)</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]]
+[[validation:ans1]]
 [[ascii input="ans1"]]
-[[/ascii]]]]></text>
+[[/ascii]]
+</div>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
-      <text></text>
+      <text>[[ascii]]
+{@ta1@}
+[[/ascii]]</text>
     </generalfeedback>
     <defaultgrade>1</defaultgrade>
     <penalty>0.1</penalty>

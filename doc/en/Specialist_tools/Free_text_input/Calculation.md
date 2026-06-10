@@ -9,15 +9,15 @@ This document gives an example question using this feature.  See the [filter cal
 Notice in the teacher's answer `ta1` they use calculations.  Of course, this is simple, but it is just an example.
 
 ```
-ta1:"The consecutive even numbers are `n` and `n+2`.  Their difference is 2
+ta1:castext("The consecutive even numbers are `n` and `n+2`.  Their difference is 2
 `
 n + (n+2) = 45*2
-2n + 2 = {@45*2@}
-2n = {@(45*2)-2@}
-n = {@((45*2)-2)/2@}
+2n + 2 = {#45*2#}
+2n = {#(45*2)-2#}
+n = {#((45*2)-2)/2#}
 `
 Note this is an even number.
-";
+");
 ta2:(45*2-2)/2;
 ```
 
@@ -26,12 +26,14 @@ ta2:(45*2-2)/2;
 ```
 <p>Find the smaller of two consecutive even numbers such that their sum is \(45\) times there difference.</p>
 <p>Work line by line below, justifying your answer fully.</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
   [[filter type="calculation" /]]
   [[filter type="markdown-math" transforms="aligneq" /]]
   [[extractor targetinput="ans2" type="lastexpr"/]]
 [[/ascii]]
+</div>
 <p>[[commonstring key="free_text_calc"/]]</p>
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>
@@ -69,6 +71,13 @@ Set up the PRT to compare `sa2` with `ta2`.  Algebraic equivalence is fine in th
 
 The PRT could be improved to check for common mistakes, and add feedback.
 
+### General feedback
+
+You can use the value of `ta1` to create a worked solution in the general feedback, with a static version of the `[[ascii]]` block.
+
+    [[ascii]]{@ta1@}[[/ascii]]
+
 This question can also be loaded from 
 
     Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_with_calculation.xml
+

@@ -90,11 +90,13 @@ This is the complete question text:
 ```
 <p>You have a parabola of the form \(f(x)=a\,x^2+b\) which satisfies \(f({@x1@})={@f1@}\) and \(f'({@x2@})={@f2@}\).</p>
 <p>Work line by line below, find the values of \(a\) and \(b\) and hence the formula for \(f\).  Justifying your answer fully.</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
   [[extractor type="lastmatch" targetinput="saa" match="a =" /]]
   [[extractor type="lastmatch" targetinput="sab" match="b =" /]]
 [[/ascii]]
+</div>
 <p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
 <p style="display:none">[[input:saa]]</p>
 <p>\(a=\)[[validation:saa]]</p>
@@ -108,5 +110,6 @@ Notes.
 1. The inputs `saa` and `sab` are hidden with `<p style="display:none">`, however validation information is available via compact validation so students can see their answers are correctly extracted.
 2. Note the use of the simpler `lastmatch` extractor, rather than a regular expression.
 3. Students still have to fill in the final answer, as would be the case with a classic STACK question.  This _could_ be extracted automatically with a further `extractor` block within the `ascii` block in the question text.
+4. The input and `[[ascii]]` block are contained in the `<div class="free-text-container">` so they appear side by side.
 
 In this example the PRT is minimal, and could be improved for partial credit.

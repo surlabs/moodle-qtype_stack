@@ -34,3 +34,7 @@ or
 Help with how to embed calculations can be given by `[[commonstring key="free_text_calc"/]]` (Since teachers can't type `{@...@}` into the question text without it being treated as castext, `[[commonstring key="free_text_calc_min"/]]` is just `{@...@}`.)
 
 There is also [documentation for students](../../Students/Free_text.md).
+
+### CSS Style
+
+The free-text input and `[[ascii]]` block can be contained in the `<div class="free-text-container">` so they appear side by side.

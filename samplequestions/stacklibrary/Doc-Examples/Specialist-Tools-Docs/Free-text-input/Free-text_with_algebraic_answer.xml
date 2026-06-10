@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 930  -->
+<!-- question: 1084  -->
   <question type="stack">
     <name>
       <text>Free-text with final answer (algebra)</text>
@@ -8,16 +8,18 @@
     <questiontext format="moodle_auto_format">
       <text><![CDATA[<p> Solve {@eq1@}.</p>
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
   [[extractor targetinput="ans2" type="lastexpr"/]]
 [[/ascii]]
+</div>
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
-      <text></text>
+      <text>[[ascii]]{@ta1@}[[/ascii]]</text>
     </generalfeedback>
     <defaultgrade>2</defaultgrade>
     <penalty>0.1</penalty>

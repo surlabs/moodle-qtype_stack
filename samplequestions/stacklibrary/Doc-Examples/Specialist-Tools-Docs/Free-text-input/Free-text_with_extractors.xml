@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 1014  -->
+<!-- question: 1094  -->
   <question type="stack">
     <name>
       <text>Eigenvalues and vectors of 3*3 matrices (free-text)</text>
@@ -8,10 +8,12 @@
     <questiontext format="html">
       <text><![CDATA[<p>Find the characteristic polynomial of \[M={@M@}.\] Hence find the eigenvalues and corresponding eigenvectors.</p>
 <p>Show your complete working below.  Make sure your characteristic polynomial is on a line of its own, starting <code>Characteristic polynomial =</code>.</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
 [[extractor type="lastregexremainder" targetinput="scp" regex="^\\s*Characteristic polynomial\\s*=\\s*" /]]
 [[/ascii]]
+</div>
 <p style="display:none">[[input:scp]]</p>
 <p>[[validation:scp]]</p>
 <p>\(\lambda_1 = \) [[input:l1]] [[validation:l1]]<br>This has corresponding eigenvector&nbsp;[[input:sev1]] [[validation:sev1]]</p>
@@ -98,8 +100,7 @@ Finding one non-trivial solution to
 {#args(M1)#} [[x], [y], [z]] = [[0], [0], [0]]
 `
 by inspection gives `{#args(transpose(matrix(ev1)))#}`
-");
-]]></text>
+");]]></text>
     </questionvariables>
     <specificfeedback format="html">
       <text><![CDATA[<p>Overall: [[feedback:prt1]]</p>

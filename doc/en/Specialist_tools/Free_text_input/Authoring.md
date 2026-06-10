@@ -36,9 +36,12 @@ The question text uses pure LaTeX rather than unicode:
 
 ```
 <p>Prove that \(\forall n \in \mathbb{N}\), \(1+3+5+7+...+(2n−1) = n^2\)</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]]
+[[validation:ans1]]
 [[ascii input="ans1"]]
 [[/ascii]]
+</div>
 ```
 
 Reference documentation is available for the linked [`[[ascii]]` block](../../Authoring/Question_blocks/ASCII.md) elsewhere.  This block provides more flexibility for options for free-text input than is available for general inputs.  In particular for (i) processing, (ii) displaying and (in later examples) (iii) extracting parts of the input for use in PRTs.  This example uses the default markdown filter.  This takes the free-text, processes it as markdown with mathematics and uses the `aligneq` transformation to align multi-line mathematics on the first equals sign.
@@ -59,6 +62,7 @@ This question can also be loaded from
 
     Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_manually_graded_mathematical_proof.xml
 
+Note the use of style `<div class="free-text-container">...</div`.  This positions the input and ascii-block preview next to each other.
 
 # 2. Free-text answer linked to STACK input
 
@@ -95,10 +99,12 @@ The complete (html) question text is therefore
 ```
 <p> Solve {@eq1@}.</p>
 <p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
   [[extractor targetinput="ans2" type="lastexpr"/]]
 [[/ascii]]
+</div>
 <p>[[hint title="Input help"]][[commonstring key="free_text_fact"/]][[/hint]]</p>
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>

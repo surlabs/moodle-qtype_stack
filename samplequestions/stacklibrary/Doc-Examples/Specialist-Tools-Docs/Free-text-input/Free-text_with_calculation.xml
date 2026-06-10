@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 1030  -->
+<!-- question: 1088  -->
   <question type="stack">
     <name>
       <text>Free-text input with calculation.</text>
@@ -8,18 +8,20 @@
     <questiontext format="moodle_auto_format">
       <text><![CDATA[<p>Find the smaller of two consecutive even numbers such that their sum is \(45\) times there difference.</p>
 <p>Work line by line below, justifying your answer fully.</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
   [[filter type="calculation" /]]
   [[filter type="markdown-math" transforms="aligneq" /]]
   [[extractor targetinput="ans2" type="lastexpr"/]]
 [[/ascii]]
+</div>
 <p>[[commonstring key="free_text_calc"/]]</p>
 <p style="display:none">[[input:ans2]]</p>
 <p>[[validation:ans2]]</p>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
-      <text></text>
+      <text>[[ascii]]{@ta1@}[[/ascii]]</text>
     </generalfeedback>
     <defaultgrade>1</defaultgrade>
     <penalty>0.1</penalty>
@@ -29,15 +31,15 @@
       <text>2026042402</text>
     </stackversion>
     <questionvariables>
-      <text><![CDATA[ta1:"The consecutive even numbers are `n` and `n+2`.  Their difference is 2
+      <text><![CDATA[ta1:castext("The consecutive even numbers are `n` and `n+2`.  Their difference is 2
 `
 n + (n+2) = 45*2
-2n + 2 = {@45*2@}
-2n = {@(45*2)-2@}
-n = {@((45*2)-2)/2@}
+2n + 2 = {#45*2#}
+2n = {#(45*2)-2#}
+n = {#((45*2)-2)/2#}
 `
 Note this is an even number.
-";
+");
 ta2:(45*2-2)/2;]]></text>
     </questionvariables>
     <specificfeedback format="html">
@@ -221,4 +223,5 @@ ta2:(45*2-2)/2;]]></text>
       </expected>
     </qtest>
   </question>
+
 </quiz>

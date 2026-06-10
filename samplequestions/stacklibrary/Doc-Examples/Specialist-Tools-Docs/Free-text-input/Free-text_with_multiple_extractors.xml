@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quiz>
-<!-- question: 1048  -->
+<!-- question: 1092  -->
   <question type="stack">
     <name>
       <text>Free-text input with multiple extractors</text>
@@ -8,11 +8,13 @@
     <questiontext format="html">
       <text><![CDATA[<p>You have a parabola of the form \(f(x)=a\,x^2+b\) which satisfies \(f({@x1@})={@f1@}\) and \(f'({@x2@})={@f2@}\).</p>
 <p>Work line by line below, find the values of \(a\) and \(b\) and hence the formula for \(f\).  Justifying your answer fully.</p>
-<p>[[input:ans1]] [[validation:ans1]]</p>
+<div class="free-text-container">
+[[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
   [[extractor type="lastmatch" targetinput="saa" match="a =" /]]
   [[extractor type="lastmatch" targetinput="sab" match="b =" /]]
 [[/ascii]]
+</div>
 <p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
 <p style="display:none">[[input:saa]]</p>
 <p>\(a=\)[[validation:saa]]</p>
@@ -21,7 +23,7 @@
 <p>\(f(x)=\) [[input:saf]][[validation:saf]]</p>]]></text>
     </questiontext>
     <generalfeedback format="moodle_auto_format">
-      <text></text>
+      <text>[[ascii]]{@ta1@}[[/ascii]]</text>
     </generalfeedback>
     <defaultgrade>3</defaultgrade>
     <penalty>0.1</penalty>
@@ -55,8 +57,7 @@ Now using this value for `a` we have
 {#x1^2*f2/(2*x2)#}+b={#f1#}
 b={#tansb#}
 `
-Hence `f(x)={#taf#}`.");
-]]></text>
+Hence `f(x)={#taf#}`.");]]></text>
     </questionvariables>
     <specificfeedback format="html">
       <text>[[feedback:prt1]]</text>
