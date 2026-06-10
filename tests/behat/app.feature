@@ -702,12 +702,14 @@ Feature: Test input of correct answers on various inputs in the Moodle app.
     And I set the STACK input "ans1" to multiline in app:
     """
     words
+    {@2+3@}
     4+ 4
     `
     f(x) = 4sqrt(2x^2+1)+c
     f(0) = 5 => c = 1
     f(x) = 4sqrt(2x^2+1)+1
     `
+    `f(x) = 4sqrt(2x^2+1)+1`
     """
     And I wait until "Your last answer was interpreted as follows" "text" exists
     And I check the input "ans2" is '4sqrt(2x^2+1)+1'
