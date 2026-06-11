@@ -40,7 +40,7 @@ Returns the trimmed content of the last `calculation` block (i.e. text enclosed 
 
 These match a line containing a text string, and are designed to reduce the need to write full regular expressions.
 
-The `search` parameter is required, which is a simple string match.  No regex terms are supported, and there is no require ment to protect items within the string.  E.g. to search for a literal `f(x)=` you do not need to protect the brackets as you would when constructing a regular expression.
+The `search` parameter is required, which is a simple string match.  No regex terms are supported, and there is no requirement to protect items within the string.  E.g. to search for a literal `f(x)=` you do not need to protect the brackets as you would when constructing a regular expression.
 
 #### `laststringremainder`
 
@@ -150,15 +150,15 @@ Where
 * `<which>` refers to which match to return
   * `last` only return the last match
   * `all` return all matches
-  * `first` return the first occurance
-* `<what>` refers to the seach method
+  * `first` return the first occurrence
+* `<what>` refers to the search method
   * `block` look in maths blocks (return block or line of a block)
   * `calc` look in calculation blocks
-  * `expr`
-  * `string` match a string somewhere in the text
+  * `expr` take the last mathematical expression
+  * `string` match a literal string somewhere in the text
   * `regex` use a regular expression
 * `<how-much>` What do we return?
   * `match` the whole matching expression, typically the whole line, or maths block
   * `remainder` of the expression without the search string or regex
-* `<other>` gives other qualifiers to the searches.
+* `<other>` gives other qualifiers to the searches
   * `whitespace` search without whitespace, or with whitespace rules.
