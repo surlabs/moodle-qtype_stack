@@ -105,7 +105,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $existsuserwidth = array_key_exists('width', $xpars);
         $existsuserheight = array_key_exists('height', $xpars);
         $width = $existsuserwidth ? $xpars['width'] : "100%";
-        $height = $existsuserheight ? $xpars['height'] : "400px";
+        $height = $existsuserheight ? $xpars['height'] : "100vh";
         $xpars['width'] = $width;
         $xpars['height'] = $height;
 
@@ -216,7 +216,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Also that the references make sense.
         $valid  = true;
         $width  = array_key_exists('width', $this->params) ? $this->params['width'] : '100%';
-        $height = array_key_exists('height', $this->params) ? $this->params['height'] : '400px';
+        $height = array_key_exists('height', $this->params) ? $this->params['height'] : '100vh';
 
         // NOTE! List ordered by length. For the trimming logic.
         $validunits = [

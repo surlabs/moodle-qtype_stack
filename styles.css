@@ -1139,15 +1139,13 @@ table.HELM_table th:last-child {
     min-width: 0;
 }
 
-#source {
-    resize: vertical;
-    box-sizing: border-box;
+.free-text-container iframe {
+    min-height: 400px !important;
+    height: 100% !important;
 }
 
-.preview-pane iframe {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #ccc;
+#source {
+    resize: vertical;
     box-sizing: border-box;
 }
 
