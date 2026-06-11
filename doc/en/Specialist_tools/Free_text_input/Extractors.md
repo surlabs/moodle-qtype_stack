@@ -93,8 +93,8 @@ This is the complete question text:
 <div class="free-text-container">
 [[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
-  [[extractor type="lastmatch" targetinput="saa" match="a =" /]]
-  [[extractor type="lastmatch" targetinput="sab" match="b =" /]]
+  [[extractor type="laststringremainderwhitespace" targetinput="saa" search="a =" /]]
+  [[extractor type="laststringremainderwhitespace" targetinput="sab" search="b =" /]]
 [[/ascii]]
 </div>
 <p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
@@ -108,7 +108,7 @@ This is the complete question text:
 Notes.
 
 1. The inputs `saa` and `sab` are hidden with `<p style="display:none">`, however validation information is available via compact validation so students can see their answers are correctly extracted.
-2. Note the use of the simpler `lastmatch` extractor, rather than a regular expression.
+2. Note the use of the simpler `laststringremainderwhitespace` extractor, rather than a regular expression.
 3. Students still have to fill in the final answer, as would be the case with a classic STACK question.  This _could_ be extracted automatically with a further `extractor` block within the `ascii` block in the question text.
 4. The input and `[[ascii]]` block are contained in the `<div class="free-text-container">` so they appear side by side.
 
