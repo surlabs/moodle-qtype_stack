@@ -1438,7 +1438,9 @@ var result = {
 
                 // 2. Set the wrapper size.
                 element.style.width = msg.width;
-                element.style.height = msg.height;
+                if (!element.closest('.free-text-container')) {
+                    element.style.height = msg.height;
+                }
 
                 // 3. Reset the frame size.
                 IFRAMES[msg.src].style.width = '100%';
@@ -1589,7 +1591,18 @@ var result = {
             // This allows that div to contain some sort of loading
             // indicator until we plug in the frame.
             // Naturally the frame will then start to load itself.
-            document.getElementById(targetdivid).replaceChildren(frm);
+            const targetdiv = document.getElementById(targetdivid);
+            targetdiv.replaceChildren(frm);
+
+            // In side-by-side free-text layout, keep wrapper height driven by flex.
+            if (targetdiv.closest('.free-text-container')) {
+                // Preserve the configured holder height as a floor (e.g. 400px default
+                // or an author-defined smaller/larger value), then allow growth.
+                if (targetdiv.style.height) {
+                    targetdiv.style.minHeight = targetdiv.style.height;
+                }
+                targetdiv.style.height = 'auto';
+            }
             IFRAMES[iframeid] = frm;
         }
 

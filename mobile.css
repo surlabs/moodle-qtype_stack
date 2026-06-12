@@ -1119,6 +1119,40 @@ table.HELM_table th:last-child {
     unicode-bidi: plaintext;
 }
 
+/* Support for side by side style in free-text editors. */
+.free-text-container {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;  /* Make children same height. */
+}
+
+.free-text-container > * {
+    flex: 1;
+    min-width: 0;
+}
+
+.free-text-container iframe {
+    flex: 1 1 auto;
+    height: 100%;
+}
+
+.free-text-container [id^=stack-iframe-holder] {
+    height: auto;
+    display: flex;
+}
+
+#source {
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+/* Stack vertically on narrow screens */
+@media (max-width: 768px) {
+    .free-text-container {
+        flex-direction: column;
+    }
+}
+
 /* Trees: https://codepen.io/ross-angus/pen/jwxMjL
 Copyright (c) 2022 by Ross Angus (https://codepen.io/ross-angus/pen/jwxMjL)
 
