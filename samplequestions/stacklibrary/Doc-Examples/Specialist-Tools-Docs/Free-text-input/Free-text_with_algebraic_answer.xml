@@ -7,7 +7,7 @@
     </name>
     <questiontext format="moodle_auto_format">
       <text><![CDATA[<p> Solve {@eq1@}.</p>
-<p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(f(x)=...\).</p>
+<p>Work line by line below, justifying your answer fully.  Your last line should be your answer \(x=...\).</p>
 <div class="free-text-container">
 [[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]

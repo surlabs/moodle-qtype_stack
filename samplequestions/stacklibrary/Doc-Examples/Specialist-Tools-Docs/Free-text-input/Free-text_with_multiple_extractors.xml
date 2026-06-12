@@ -11,8 +11,8 @@
 <div class="free-text-container">
 [[input:ans1]] [[validation:ans1]]
 [[ascii input="ans1"]]
-  [[extractor type="lastmatch" targetinput="saa" match="a =" /]]
-  [[extractor type="lastmatch" targetinput="sab" match="b =" /]]
+  [[extractor type="laststringremainderwhitespace" targetinput="saa" search="a =" /]]
+  [[extractor type="laststringremainderwhitespace" targetinput="sab" search="b =" /]]
 [[/ascii]]
 </div>
 <p>Make sure your answer contains lines <code>a=?</code> and <code>b=?</code> for your values of the coefficients.</p>
