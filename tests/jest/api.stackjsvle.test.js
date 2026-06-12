@@ -1,18 +1,17 @@
 /** @jest-environment jsdom */
 
+const fs = require('fs');
 const path = require('path');
-const {loadAmdModule} = require('./loadAmdModule');
 
-function loadStackJsVleModule(eventsMock) {
-    const modulePath = path.resolve(__dirname, '../../amd/src/stackjsvle.js');
-    return loadAmdModule(modulePath, {
-        'core_filters/events': eventsMock,
-    });
+function loadApiStackJsVleModule() {
+    const modulePath = path.resolve(__dirname, '../../api/public/stackjsvle.js');
+    const source = fs.readFileSync(modulePath, 'utf8');
+    const wrapped = new Function(`${source}\nreturn {create_iframe, register_iframe};`);
+    return wrapped();
 }
 
-describe('amd/src/stackjsvle.js', () => {
+describe('api/public/stackjsvle.js', () => {
     let stackjsvle;
-    let eventsMock;
     let postMessageByFrame;
     let messageListener;
 
@@ -37,7 +36,7 @@ describe('amd/src/stackjsvle.js', () => {
         window.dispatchEvent(new MessageEvent('message', {data}));
     }
 
-    function getLatestResponse(iframeId) {
+    function latestResponse(iframeId) {
         const calls = postMessageByFrame[iframeId].mock.calls;
         return JSON.parse(calls[calls.length - 1][0]);
     }
@@ -49,12 +48,11 @@ describe('amd/src/stackjsvle.js', () => {
     }
 
     beforeEach(() => {
-        eventsMock = {notifyFilterContentUpdated: jest.fn()};
         const addEventListenerSpy = jest.spyOn(window, 'addEventListener');
-        stackjsvle = loadStackJsVleModule(eventsMock);
+        stackjsvle = loadApiStackJsVleModule();
         messageListener = addEventListenerSpy.mock.calls.find(([eventName]) => eventName === 'message')?.[1];
         addEventListenerSpy.mockRestore();
-        eventsMock.notifyFilterContentUpdated.mockReset();
+
         postMessageByFrame = {};
         if (!global.CSS) {
             global.CSS = {};
@@ -62,6 +60,7 @@ describe('amd/src/stackjsvle.js', () => {
         if (!global.CSS.escape) {
             global.CSS.escape = (value) => String(value).replace(/(["\\#.;:?+*~'!^$\[\]()=>|/@])/g, '\\$1');
         }
+
         document.body.innerHTML = `
             <div class="formulation" id="qform">
                 <div class="im-controls">
@@ -143,6 +142,34 @@ describe('amd/src/stackjsvle.js', () => {
         expect(iframe.title).toBe('Author frame');
     });
 
+    test('register_iframe attaches existing iframe for message handling', () => {
+        const manualTarget = document.createElement('div');
+        manualTarget.id = 'manual-target';
+        const manualFrame = document.createElement('iframe');
+        manualFrame.id = 'iframe-manual';
+        manualTarget.appendChild(manualFrame);
+        document.getElementById('qform').appendChild(manualTarget);
+
+        const postMessage = jest.fn();
+        Object.defineProperty(manualFrame, 'contentWindow', {
+            value: {postMessage},
+            configurable: true,
+        });
+
+        stackjsvle.register_iframe('iframe-manual');
+
+        sendMessage({
+            version: 'STACK-JS:1.5.0',
+            src: 'iframe-manual',
+            type: 'ping',
+        });
+
+        expect(postMessage).toHaveBeenCalledTimes(1);
+        const response = JSON.parse(postMessage.mock.calls[0][0]);
+        expect(response.type).toBe('ping');
+        expect(response.tgt).toBe('iframe-manual');
+    });
+
     test('change-content sanitises script/style/event attributes before insertion', () => {
         sendMessage({
             version: 'STACK-JS:1.5.0',
@@ -159,7 +186,6 @@ describe('amd/src/stackjsvle.js', () => {
         expect(target.innerHTML).not.toContain('<style');
         expect(target.innerHTML).not.toContain('onclick=');
         expect(target.innerHTML).not.toContain('javascript:');
-        expect(eventsMock.notifyFilterContentUpdated).toHaveBeenCalledWith(target);
     });
 
     test('register-input-listener returns initial value metadata for text input', () => {
@@ -194,7 +220,7 @@ describe('amd/src/stackjsvle.js', () => {
         expect(response.msg).toBe('Failed to connect to input: "fake"');
     });
 
-    test('register-input-listener tracks change events and notifies listeners', () => {
+    test('register-input-listener tracks change events and notifies all listeners', () => {
         sendMessage({
             version: 'STACK-JS:1.5.0',
             src: 'iframe-1',
@@ -212,8 +238,8 @@ describe('amd/src/stackjsvle.js', () => {
         input.value = 'new-value';
         input.dispatchEvent(new Event('change'));
 
-        const response1 = getLatestResponse('iframe-1');
-        const response2 = getLatestResponse('iframe-2');
+        const response1 = latestResponse('iframe-1');
+        const response2 = latestResponse('iframe-2');
         expect(response1.type).toBe('changed-input');
         expect(response1.name).toBe('mainchange');
         expect(response1.value).toBe('new-value');
@@ -261,6 +287,27 @@ describe('amd/src/stackjsvle.js', () => {
         expect(response.completed).toBe(false);
     });
 
+    test('track-validation-state forwards radio-group validation events', () => {
+        sendMessage({
+            version: 'STACK-JS:1.5.0',
+            src: 'iframe-1',
+            type: 'track-validation-state',
+            name: 'rad',
+        });
+
+        const radioAnswer = document.getElementById('radio-answer');
+        radioAnswer.dispatchEvent(new CustomEvent('stack-validation', {
+            bubbles: true,
+            detail: {valid: false, completed: true},
+        }));
+
+        const response = expectLatestResponse('iframe-1');
+        expect(response.type).toBe('validation-state');
+        expect(response.name).toBe('rad');
+        expect(response.valid).toBe(false);
+        expect(response.completed).toBe(true);
+    });
+
     test('changed-input updates element value and notifies other iframe listeners', () => {
         sendMessage({
             version: 'STACK-JS:1.5.0',
@@ -274,6 +321,8 @@ describe('amd/src/stackjsvle.js', () => {
             type: 'register-input-listener',
             name: 'mainchanged',
         });
+        postMessageByFrame['iframe-1'].mockClear();
+        postMessageByFrame['iframe-2'].mockClear();
 
         const input = document.getElementById('input_mainchanged');
         sendMessage({
@@ -285,13 +334,23 @@ describe('amd/src/stackjsvle.js', () => {
         });
 
         expect(input.value).toBe('from-frame');
-        const responseToOther = getLatestResponse('iframe-2');
+        const responseToOther = latestResponse('iframe-2');
         expect(responseToOther.type).toBe('changed-input');
         expect(responseToOther.name).toBe('mainchanged');
         expect(responseToOther.value).toBe('from-frame');
     });
 
-    test('clear-input empties textarea, radio and checkbox groups', () => {
+    test('clear-input empties select, textarea, radio and checkbox groups', () => {
+        const select = document.getElementById('input_sel');
+        select.value = 'A';
+        sendMessage({
+            version: 'STACK-JS:1.5.0',
+            src: 'iframe-1',
+            type: 'clear-input',
+            name: 'sel',
+        });
+        expect(select.value).toBe('');
+
         const textarea = document.getElementById('input_txt');
         textarea.value = 'some text';
         sendMessage({
@@ -348,7 +407,6 @@ describe('amd/src/stackjsvle.js', () => {
             set: 'show',
         });
         expect(target.style.display).toBe('block');
-        expect(eventsMock.notifyFilterContentUpdated).toHaveBeenCalledWith(target);
 
         const feedback = document.getElementById('feedback-target');
         feedback.innerHTML = '<strong>feedback</strong>';
@@ -364,7 +422,7 @@ describe('amd/src/stackjsvle.js', () => {
         expect(response.content).toBe('<strong>feedback</strong>');
     });
 
-    test('resize-frame updates wrapper dimensions and notifies filter updates', () => {
+    test('resize-frame updates wrapper and iframe dimensions', () => {
         const wrapper = document.getElementById('frame-target');
         const iframe = document.getElementById('iframe-1');
 
@@ -380,7 +438,6 @@ describe('amd/src/stackjsvle.js', () => {
         expect(wrapper.style.height).toBe('240px');
         expect(iframe.style.width).toBe('100%');
         expect(iframe.style.height).toBe('100%');
-        expect(eventsMock.notifyFilterContentUpdated).toHaveBeenCalledWith(wrapper);
     });
 
     test('ping and submit button handlers respond as expected', () => {
@@ -488,27 +545,6 @@ describe('amd/src/stackjsvle.js', () => {
         expect(globalResponse.type).toBe('initial-input');
         expect(globalResponse.name).toBe('otheronly');
         expect(globalResponse.value).toBe('other-question-value');
-    });
-
-    test('track-validation-state forwards radio-group validation events', () => {
-        sendMessage({
-            version: 'STACK-JS:1.5.0',
-            src: 'iframe-1',
-            type: 'track-validation-state',
-            name: 'rad',
-        });
-
-        const radioAnswer = document.getElementById('radio-answer');
-        radioAnswer.dispatchEvent(new CustomEvent('stack-validation', {
-            bubbles: true,
-            detail: {valid: false, completed: true},
-        }));
-
-        const response = expectLatestResponse('iframe-1');
-        expect(response.type).toBe('validation-state');
-        expect(response.name).toBe('rad');
-        expect(response.valid).toBe(false);
-        expect(response.completed).toBe(true);
     });
 
     test('ignores malformed, non-STACK, and unknown-source messages', () => {
