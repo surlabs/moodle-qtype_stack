@@ -95,11 +95,13 @@ describe('stackascii init', () => {
     function setupEnvironment(inputValue, answerCount = 1) {
         const markdownInput = createElement('markdownInput', inputValue);
         const output = createElement('asciiContainerRow');
+        const supplied = createElement('asciiSuppliedText');
         const answers = Array.from({ length: answerCount }, (_, index) => createElement(`answer${index + 1}`));
 
         const elements = {
             markdownInput,
-            asciiContainerRow: output
+            asciiContainerRow: output,
+            asciiSuppliedText: supplied
         };
         for (const answer of answers) {
             elements[answer.id] = answer;
