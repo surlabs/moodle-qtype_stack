@@ -1140,8 +1140,13 @@ table.HELM_table th:last-child {
 }
 
 .free-text-container iframe {
-    min-height: 400px !important;
-    height: 100% !important;
+    flex: 1 1 auto;
+    height: 100%;
+}
+
+.free-text-container [id^=stack-iframe-holder] {
+    height: auto;
+    display: flex;
 }
 
 #source {

@@ -5,7 +5,6 @@
     padding: 5px;
     margin-top: 10px;
     overflow: scroll;
-    min-height: 370px;
 }
 .plaintext {
     white-space: pre-line;

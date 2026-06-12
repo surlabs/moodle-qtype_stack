@@ -105,7 +105,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $existsuserwidth = array_key_exists('width', $xpars);
         $existsuserheight = array_key_exists('height', $xpars);
         $width = $existsuserwidth ? $xpars['width'] : "100%";
-        $height = $existsuserheight ? $xpars['height'] : "100vh";
+        $height = $existsuserheight ? $xpars['height'] : "400px";
         $xpars['width'] = $width;
         $xpars['height'] = $height;
 
@@ -131,12 +131,16 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
             new MP_String(json_encode(['href' => 'cors://ascii/stackascii.css'])),
         ]);
 
-        $astyle = "width:calc({$xpars['width']} - 20px);height:calc({$xpars['height']} - 30px);";
+        // Size from the iframe viewport so the display area tracks frame resizing.
+        // Keep a configured minimum so default 400px frames start at 370px content height.
+        $astyle = "width:calc({$xpars['width']} - 20px);height:calc(100vh - 30px);";
+        $astyle .= "min-height:calc({$xpars['height']} - 30px);";
         if (array_key_exists('aspect-ratio', $xpars)) {
             $aspectratio = $xpars['aspect-ratio'];
             // Unset the undefined dimension, if both are defined then we have a problem.
             if ($existsuserheight) {
-                $astyle = "height:calc({$xpars['height']} - 30px);aspect-ratio:$aspectratio;";
+                $astyle = "height:calc(100vh - 30px);aspect-ratio:$aspectratio;";
+                $astyle .= "min-height:calc({$xpars['height']} - 30px);";
             } else if ($existsuserwidth) {
                 $astyle = "width:calc({$xpars['width']} - 20px);aspect-ratio:$aspectratio;";
             }
@@ -216,7 +220,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         // Also that the references make sense.
         $valid  = true;
         $width  = array_key_exists('width', $this->params) ? $this->params['width'] : '100%';
-        $height = array_key_exists('height', $this->params) ? $this->params['height'] : '100vh';
+        $height = array_key_exists('height', $this->params) ? $this->params['height'] : '400px';
 
         // NOTE! List ordered by length. For the trimming logic.
         $validunits = [
