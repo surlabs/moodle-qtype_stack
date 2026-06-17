@@ -171,7 +171,7 @@ $initialdata->general->courseid = $courseid;
 $initialdata->general->cmid = $cmid;
 $initialdata->general->questionid = $questionid;
 $initialdata->general->seed = $seed;
-$initialdata->general->categoryname = $questioncategory ? $questioncategory->name : '';
+$initialdata->general->categoryname = $questioncategory ? $questioncategory->name ?? '' : '';
 $coursefordisplayid = $courseid;
 if (!$coursefordisplayid && $context->contextlevel == CONTEXT_COURSE) {
     $coursefordisplayid = $context->instanceid;
@@ -186,7 +186,7 @@ $initialdata->general->coursename = '';
 if ($coursefordisplayid) {
     $courserecord = $DB->get_record('course', ['id' => $coursefordisplayid], 'id,fullname');
     if ($courserecord) {
-        $initialdata->general->coursename = $courserecord->fullname;
+        $initialdata->general->coursename = $courserecord->fullname ?? '';
     }
 }
 $initialdata->general->hidetests = optional_param('hidetests', '', PARAM_INT);
