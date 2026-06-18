@@ -556,7 +556,7 @@ final class input_algebraic_test extends qtype_stack_testcase {
             $options,
             '7E9',
             new stack_cas_security(false, '', '', ['tans'])
-            );
+        );
         $this->assertEquals(stack_input::VALID, $state->status);
         $this->assertEquals('', $state->note);
         $this->assertEquals('', $state->errors);
@@ -564,7 +564,7 @@ final class input_algebraic_test extends qtype_stack_testcase {
         $this->assertEquals(
             '\[ 7 \times 10^{9} \]',
             $state->contentsdisplayed
-            );
+        );
     }
 
     public function test_validate_student_response_too_long(): void {
@@ -3422,11 +3422,11 @@ final class input_algebraic_test extends qtype_stack_testcase {
         $el = stack_input_factory::make('algebraic', 'sans1', 'm');
         $el->set_parameter('insertStars', 2);
         $state = $el->validate_student_response(
-            ['sans1' => '`x^2+3`'],
+            ['sans1' => '`x^2+3`'], // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
             $options,
             'x^2',
             new stack_cas_security()
-            );
+        );
         $this->assertEquals(stack_input::VALID, $state->status);
         $this->assertEquals('', $state->note);
         $this->assertEquals('', $state->errors);
@@ -3439,15 +3439,17 @@ final class input_algebraic_test extends qtype_stack_testcase {
         $el = stack_input_factory::make('algebraic', 'sans1', 'm');
         $el->set_parameter('insertStars', 2);
         $state = $el->validate_student_response(
-            ['sans1' => 'x^2+`3'],
+            ['sans1' => 'x^2+`3'], // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
             $options,
             'x^2',
             new stack_cas_security()
-            );
+        );
         $this->assertEquals(stack_input::INVALID, $state->status);
         $this->assertEquals('forbiddenChar_parserError', $state->note);
+        // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
         $this->assertEquals('CAS commands may not contain the following characters: `.', $state->errors);
         $this->assertEquals('', $state->contentsmodified);
+        // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
         $this->assertEquals('<span class="stacksyntaxexample">x^2+`3</span>', $state->contentsdisplayed);
         $this->assertEquals('', $state->lvars);
     }

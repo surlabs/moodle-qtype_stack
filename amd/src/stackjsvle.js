@@ -990,6 +990,7 @@ define([
                     targetdiv.style.minHeight = targetdiv.style.height;
                 }
                 targetdiv.style.height = 'auto';
+                frm.style.height = 'auto';
             }
             IFRAMES[iframeid] = frm;
         }

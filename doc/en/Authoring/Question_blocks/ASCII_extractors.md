@@ -112,8 +112,6 @@ Note, this means if you have capture groups within your search term any line whi
 [[extractor type="regexallmatch" targetinput="ans2" regex="fruit" /]]
 ```
 
-If the result is assigned to input `ans2`, you can create a Maxima list of the matched strings with:
-
 For example, if you have a regular expression which matches "fruit" within the student's answer (!), then the expected output will be in the form:
 
     "{\"matches\":[ \"Apple\", \"Banana\", \"Cherry\"]}";
@@ -130,11 +128,11 @@ If this is assigned to input `ans2`, then you can create a Maxima list of the ma
 
 ## Extractor developer notes
 
-Extractors are defined in `corsscripts/ascii/extractors`. (
+Extractors are defined in `corsscripts/ascii/extractors`. 
 
 In the future we may add 
 
-* more flexible functionality, linking arbitrary extractors to multiple inputs.)
+* more flexible functionality, linking arbitrary extractors to multiple inputs.
 * support for a `bespoke` extractor enabling users to write JS code into the extractor block for use in that question directly.
 
 Please contact the developers for ideas of extractor use-cases.
@@ -143,7 +141,7 @@ Please contact the developers for ideas of extractor use-cases.
 
 Extractors are named using the following (informal) conventions
 
-    <which>_<what>_<how-much>_<other>
+    <which><what><how-much><other>
 
 Where
 
@@ -152,9 +150,9 @@ Where
   * `all` return all matches
   * `first` return the first occurrence
 * `<what>` refers to the search method
-  * `block` look in maths blocks (return block or line of a block)
+  * `block` looks for asciimaths (both in-line and multiline blocks) and returns the whole thing
   * `calc` look in calculation blocks
-  * `expr` take the last mathematical expression
+  * `expr` looks for asciimaths (both in-line and multiline blocks) and returns the last line
   * `string` match a literal string somewhere in the text
   * `regex` use a regular expression
 * `<how-much>` What do we return?
