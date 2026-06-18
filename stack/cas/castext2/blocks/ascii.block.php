@@ -145,7 +145,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         $r->items[] = new MP_String("\nimport stack_js from '" . stack_cors_link('stackjsiframe.min.js') . "';\n");
         $r->items[] = new MP_String("\nimport init from '" . stack_cors_link('ascii/stackascii.bundle.js') . "';\n");
 
-        $answercalls = implode(',', array_map(function($item, $index) {
+        $answercalls = implode(',', array_map(function ($item, $index) {
             $extra = $index === 0 ? ',true' : '';
             return 'stack_js.request_access_to_input("' . $item . '"' . $extra . ')';
         }, $inputs, array_keys($inputs)));
@@ -163,8 +163,10 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
         return $r;
     }
 
-    /*
+    /**
      * Ensure the markdown filter transforms have the correct defaults.
+     * @param mixed $transforms
+     * @return string
      */
     private function set_markdown_filter_defaults($transforms) {
         // Sort out the default transforms.
@@ -296,7 +298,7 @@ class stack_cas_castext2_ascii extends stack_cas_castext2_block {
                 $valid    = false;
                 if ($valids === null) {
                     $valids = [
-                        'width', 'height', 'aspect-ratio', 'input', 'hidden'
+                        'width', 'height', 'aspect-ratio', 'input', 'hidden',
                     ];
                     $err[] = stack_string('stackBlock_ascii_param', [
                         'param' => implode(', ', $valids),

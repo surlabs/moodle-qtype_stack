@@ -92,7 +92,7 @@ class stack_freetext_input extends stack_string_input {
         }
 
         preg_match_all('/\R/', $value, $matches);
-        $attributes['rows'] = max(5, count($matches[0])+3);
+        $attributes['rows'] = max(5, count($matches[0]) + 3);
         $attributes['cols'] = $this->parameters['boxWidth'];
 
         if ($readonly) {
