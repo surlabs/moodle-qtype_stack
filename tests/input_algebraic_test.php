@@ -302,6 +302,17 @@ final class input_algebraic_test extends qtype_stack_testcase {
                 '<span class="stacksyntaxexamplehighlight">*</span>x' .
                 '<span class="stacksyntaxexamplehighlight">*</span>(1+x^2)</span>.</div></div>';
         $this->assertEquals($vr, $el->replace_validation_tags($state, 'sans1', '[[validation:sans1]]'));
+
+        $el->set_parameter('showValidation', 3);
+        $state = $el->validate_student_response(['sans1' => '2x(1+x^2)'], $options, 'x^2/(1+x^2)', new stack_cas_security());
+        $vr = '<span class="stackinputfeedback compact" id="sans1_val" aria-live="assertive">' .
+                '<span class="stacksyntaxexample">2x(1+x^2)</span>' .
+                '<input type="hidden" name="sans1_val" value="2x(1+x^2)" /><span class="alert alert-danger stackinputerror">' .
+                'This answer is invalid. You seem to be missing * characters. ' .
+                'Perhaps you meant to type <span class="stacksyntaxexample">2' .
+                '<span class="stacksyntaxexamplehighlight">*</span>x' .
+                '<span class="stacksyntaxexamplehighlight">*</span>(1+x^2)</span>.</span></span>';
+        $this->assertEquals($vr, $el->replace_validation_tags($state, 'sans1', '[[validation:sans1]]'));
     }
 
     public function test_validate_student_response_algebraic_3(): void {
