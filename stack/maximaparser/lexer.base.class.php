@@ -716,7 +716,12 @@ class stack_maxima_lexer_base {
      */
     public function eat_number(stack_maxima_lexer_token $token): stack_maxima_lexer_token {
         $numbermode = 'pre-dot';
-        $last = null;
+        $last = new stack_maxima_lexer_char(
+            mb_substr((string)$token->value, -1),
+            $token->endline,
+            $token->endcolumn,
+            $token->endchar - 1
+        );
         if ($token->value === '.') {
             $numbermode = 'post-dot';
 
