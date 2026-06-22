@@ -194,7 +194,11 @@ class RenderController {
                 );
             }
             foreach ($renderresponse->questionassets as $name => $file) {
-                $renderresponse->questionrender = str_replace($name, "{$baseurl}/plot.php/{$file}", $renderresponse->questionrender);
+                $renderresponse->questionrender = str_replace(
+                    $name,
+                    "{$baseurl}/plot.php/{$file}",
+                    $renderresponse->questionrender
+                );
                 $renderresponse->questionsamplesolutiontext = str_replace(
                     $name,
                     "{$baseurl}/plot.php/{$file}",

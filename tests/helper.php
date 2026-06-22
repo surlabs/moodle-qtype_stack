@@ -2377,7 +2377,7 @@ final class qtype_stack_test_helper extends question_test_helper {
             'ta1',
             null,
             ['boxWidth' => 25]
-            );
+        );
 
         $prt = new stdClass();
         $prt->name              = 'prt1';

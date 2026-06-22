@@ -737,7 +737,8 @@ class stack_inputvalidation_test_data {
         ],
     ];
 
-    protected static $rawdata_old = [
+    // phpcs:ignore moodle.Commenting.VariableComment.Missing
+    protected static $rawdataold = [
         [
             'union({3,7})', 'php_true', 'union({3,7})', 'cas_true',
             '\left \{3 , 7 \right \}', '', "",
@@ -755,7 +756,8 @@ class stack_inputvalidation_test_data {
         ['1/sin(+x)', 'php_true', '1/sin(+x)', 'cas_true', '\frac{1+}{\sin \left( x \right)}', '', ""],
     ];
 
-    protected static $rawdata_5_48_0 = [
+    // phpcs:ignore moodle.Commenting.VariableComment.Missing
+    protected static $rawdata5480 = [
         [
             'union({3,7})', 'php_true', 'union({3,7})', 'cas_true',
             '\bigcup \left(\left \{3 , 7 \right \}\right)', '', "",
@@ -863,12 +865,12 @@ class stack_inputvalidation_test_data {
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public static function get_raw_test_data_old() {
-        return self::$rawdata_old;
+        return self::$rawdataold;
     }
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
     public static function get_raw_test_data_5_48_0() {
-        return self::$rawdata_5_48_0;
+        return self::$rawdata5480;
     }
 
     // phpcs:ignore moodle.Commenting.MissingDocblock.Function
@@ -938,11 +940,11 @@ class stack_inputvalidation_test_data {
         }
         $versionused = get_config('qtype_stack', 'maximaversion');
         if ($versionused == 'default' || version_compare($versionused, '5.47.0') <= 0) {
-            foreach (self::$rawdata_old as $data) {
+            foreach (self::$rawdataold as $data) {
                 $tests[] = self::test_from_raw($data, 'typeless');
             }
         } else {
-            foreach (self::$rawdata_5_48_0 as $data) {
+            foreach (self::$rawdata5480 as $data) {
                 $tests[] = self::test_from_raw($data, 'typeless');
             }
         }
