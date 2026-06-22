@@ -267,6 +267,8 @@ var result = {
              * Called when the input contents changes. Will validate after TYPING_DELAY if nothing else happens.
              */
             function valueChanging() {
+                input.dispatchEvent(new CustomEvent('stack-validation', {
+                    detail: {inputname: name, completed: false, valid: null}}));
                 cancelTypingDelay();
                 showWaiting();
                 delayTimeoutHandle = setTimeout(valueChanged, TYPING_DELAY);
@@ -318,6 +320,8 @@ var result = {
                 })
                 .catch(function(response) {
                     showValidationFailure(response);
+                    input.dispatchEvent(new CustomEvent('stack-validation', {
+                        detail: {inputname: name, completed: true, valid: false}}));
                 });
                 showLoading();
             }
@@ -339,10 +343,14 @@ var result = {
             function validationReceived(response) {
                 if (response.status === 'invalid') {
                     showValidationFailure(response);
+                    input.dispatchEvent(new CustomEvent('stack-validation', {
+                        detail: {inputname: name, completed: true, valid: false}}));
                     return;
                 }
                 validationResults[response.input] = response;
                 showValidationResults();
+                input.dispatchEvent(new CustomEvent('stack-validation', {
+                    detail: {inputname: name, completed: true, valid: true}}));
             }
 
             /**
@@ -379,10 +387,6 @@ var result = {
                 lastValidatedValue = val;
                 var scriptCommands = [];
                 validationDiv.innerHTML = extractScripts(results.message, scriptCommands);
-                // Run script commands.
-                for (var i = 0; i < scriptCommands.length; i++) {
-                    eval(scriptCommands[i]);
-                }
                 removeAllClasses();
                 if (!results.message) {
                     validationDiv.classList.add('empty');
@@ -474,6 +478,10 @@ var result = {
             this.getValue = function() {
                 return input.value.replace(/^\s+|\s+$/g, '');
             };
+
+            this.dispatchEvent = function(event) {
+                input.dispatchEvent(event);
+            };
         }
 
         /**
@@ -503,6 +511,10 @@ var result = {
             this.getValue = function() {
                 return input.value.replace(/^\s+|\s+$/g, '');
             };
+
+            this.dispatchEvent = function(event) {
+                input.dispatchEvent(event);
+            };
         }
 
         /**
@@ -530,6 +542,10 @@ var result = {
                 var raw = textarea.value.replace(/^\s+|\s+$/g, '');
                 // Using <br> here is weird, but it gets sorted out at the PHP end.
                 return raw.split(/\s*[\r\n]\s*/).join('<br>');
+            };
+
+            this.dispatchEvent = function(event) {
+                textarea.dispatchEvent(event);
             };
         }
 
@@ -563,6 +579,13 @@ var result = {
             this.getValue = function() {
                 var selected = document.querySelector('#' + questionDivId + ' ion-radio-group[name^="' + prefix + name + '"]');
                 return selected.value;
+            };
+
+            this.dispatchEvent = function(event) {
+                var target = document.querySelector('#' + questionDivId + ' ion-radio-group[name^="' + prefix + name + '"]');
+                if (target) {
+                    target.dispatchEvent(event);
+                }
             };
         }
 
@@ -605,6 +628,13 @@ var result = {
                     return result.join(',');
                 } else {
                     return '';
+                }
+            };
+
+            this.dispatchEvent = function(event) {
+                var target = document.querySelector('#' + questionDivId + ' [name^="' + prefix + name + '_"]');
+                if (target) {
+                    target.dispatchEvent(event);
                 }
             };
         }
@@ -655,6 +685,10 @@ var result = {
                     values[bits[0]][bits[1]] = element.value.replace(/^\s+|\s+$/g, '');
                 });
                 return JSON.stringify(values);
+            };
+
+            this.dispatchEvent = function(event) {
+                container.dispatchEvent(event);
             };
         }
 
@@ -759,9 +793,9 @@ var result = {
         // Note the VLE specific include of logic.
 
         /* All the IFRAMES have unique identifiers that they give in their
-            * messages. But we only work with those that have been created by
-            * our logic and are found from this map.
-            */
+         * messages. But we only work with those that have been created by
+         * our logic and are found from this map.
+         */
         let IFRAMES = {};
 
         /* For event handling, lists of IFRAMES listening particular inputs.
@@ -777,6 +811,11 @@ var result = {
         /* A flag to disable certain things. */
         let DISABLE_CHANGES = false;
 
+        /* For validation state change events, lists of IFRAMES listening
+            * particular inputs.
+            */
+        let VALIDATION_STATE_EVENT = {};
+
         const abortController = new AbortController();
 
 
@@ -787,7 +826,6 @@ var result = {
          * If not found or exists outside the restricted area then returns `null`.
          *
          * @param {String} id the identifier of the element we want.
-         * @returns {null}
          */
         function vle_get_element(id) {
             /* In the case of Moodle we are happy as long as the element is inside
@@ -822,7 +860,7 @@ var result = {
          * @param {String} name the name of the input we want
          * @param {String} srciframe the identifier of the iframe wanting it
          * @param {boolean} outside do we expand the search beyound the src question?
-         * @returns {null}
+         * @returns {object|null}
          */
         // eslint-disable-next-line require-jsdoc, complexity
         function vle_get_input_element(name, srciframe, outside) {
@@ -937,7 +975,7 @@ var result = {
          * Will only return the button of the question containing that iframe.
          *
          * @param {String} srciframe the identifier of the iframe wanting it
-         * @returns {null}
+         * @returns {object|null}
          */
         function vle_get_submit_button(srciframe) {
             let initialcandidate = document.getElementById(srciframe);
@@ -1109,7 +1147,7 @@ var result = {
             let input = null;
 
             let response = {
-                version: 'STACK-JS:1.3.0'
+                version: 'STACK-JS:1.5.0'
             };
 
             switch (msg.type) {
@@ -1153,6 +1191,12 @@ var result = {
                 if (input.tagName.toLowerCase() === 'ion-radio-group') {
                     response['input-readonly'] = input.hasAttribute('disabled');
                     response.value = input.value;
+                }
+
+                // Transfer all data attributes of the input.
+                response['input-dataset'] = {};
+                for (var k in input.dataset) {
+                    response['input-dataset'][k] = input.dataset[k];
                 }
 
                 // 3. Add listener for changes of this input.
@@ -1221,6 +1265,44 @@ var result = {
                 //    and let it know the initial value.
                 if (!(msg.src in INPUTS[input.id])) {
                     IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+                }
+
+                break;
+            case 'track-validation-state':
+                // 1. Find the input.
+                input = vle_get_input_element(msg.name, msg.src, !msg['limit-to-question']);
+
+                if (input === null) {
+                    // Requested something that is not available.
+                    response.type = 'error';
+                    response.msg = 'Failed to connect to input: "' + msg.name + '"';
+                    response.tgt = msg.src;
+                    IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+                    return;
+                }
+
+                // 2. Add listener for validation state changes of this input.
+                if (input.id in VALIDATION_STATE_EVENT) {
+                    if (msg.src in VALIDATION_STATE_EVENT[input.id]) {
+                        // DO NOT BIND TWICE!
+                        return;
+                    }
+                    VALIDATION_STATE_EVENT[input.id].push(msg.src);
+                } else {
+                    VALIDATION_STATE_EVENT[input.id] = [msg.src];
+                    input.addEventListener('stack-validation', (e) => {
+                        let resp = {
+                            version: 'STACK-JS:1.5.0',
+                            type: 'validation-state',
+                            name: msg.name,
+                            valid: e.detail.valid,
+                            completed: e.detail.completed
+                        };
+                        for (let tgt of VALIDATION_STATE_EVENT[input.id]) {
+                            resp['tgt'] = tgt;
+                            IFRAMES[tgt].contentWindow.postMessage(JSON.stringify(resp), '*');
+                        }
+                    });
                 }
 
                 break;
@@ -1503,7 +1585,7 @@ var result = {
 
             @param {String} iframeid the id that the IFRAME has stored inside
                     it and uses for communication.
-            @param {String} content the full HTML content of that IFRAME.
+            @param {String} the full HTML content of that IFRAME.
             @param {String} targetdivid the id of the element (div) that will
                     hold the IFRAME.
             @param {String} title a descriptive name for the iframe.
