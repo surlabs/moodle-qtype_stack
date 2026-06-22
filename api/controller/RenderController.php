@@ -170,7 +170,7 @@ class RenderController {
                 );
                 $renderresponse->questionrender = str_replace(
                     "[[validation:{$tag}]]",
-                    "<span name='{$validationprefix}{$tag}'></span>",
+                    "<span name='{$validationprefix}{$tag}' class='stackinputfeedback empty'></span>",
                     $renderresponse->questionrender
                 );
             }
