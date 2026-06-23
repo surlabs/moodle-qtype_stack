@@ -282,7 +282,9 @@ class stack_maxima_lexer_decimal_comma extends stack_maxima_lexer_base {
             } else if ($c1->c === ',') {
                 if ($numbermode !== 'pre-dot') {
                     // No second dot nor dots in exponent.
-                    $token->set_end_position($last);
+                    if ($last !== null) {
+                        $token->set_end_position($last);
+                    }
                     $this->pushc($c1);
                     break;
                 } else {
@@ -293,7 +295,9 @@ class stack_maxima_lexer_decimal_comma extends stack_maxima_lexer_base {
             } else if ($c1->c === 'e' || $c1->c === 'E') {
                 if ($numbermode === 'exponent') {
                     // Not an exponent in exponent.
-                    $token->set_end_position($last);
+                    if ($last !== null) {
+                        $token->set_end_position($last);
+                    }
                     $this->pushc($c1);
                     break;
                 }
@@ -315,14 +319,18 @@ class stack_maxima_lexer_decimal_comma extends stack_maxima_lexer_base {
                         $this->pushc($c3);
                         $this->pushc($c2);
                         $this->pushc($c1);
-                        $token->set_end_position($last);
+                        if ($last !== null) {
+                            $token->set_end_position($last);
+                        }
                         break;
                     }
                 } else {
                     // Was not an exponent.
                     $this->pushc($c2);
                     $this->pushc($c1);
-                    $token->set_end_position($last);
+                    if ($last !== null) {
+                        $token->set_end_position($last);
+                    }
                     break;
                 }
             } else if (isset(self::$DIGITS[$c1->c])) {

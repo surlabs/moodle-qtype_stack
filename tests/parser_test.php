@@ -37,7 +37,7 @@ require_once(__DIR__ . '/../stack/maximaparser/parser.options.class.php');
  * Defines behaviour for parsing of certain special cases.
  * @group qtype_stack
  */
-final class parser_tests extends qtype_stack_testcase {
+final class parser_test extends qtype_stack_testcase {
     /**
      * Add description here.
      * @covers \qtype_stack\stack_parser_options
@@ -130,5 +130,21 @@ final class parser_tests extends qtype_stack_testcase {
         $this->assertEquals(count($parsed2->items[0]->internalcomments), 1);
         $this->assertTrue($parsed2->items[0]->internalcomments[0] instanceof MP_Comment);
         $this->assertEquals($parsed2->items[0]->internalcomments[0]->value, ' was 1 ');
+    }
+
+    /**
+     * Add description here.
+     * @covers \qtype_stack\stack_parser_options
+     */
+    public function test_non_exponent_e_after_integer_lexes_cleanly(): void {
+        $po = stack_parser_options::get_cas_config();
+        $lexer = $po->get_lexer('-2*ln(c(2e^-x-x))');
+
+        $tokens = [];
+        while (($token = $lexer->get_next_token()) !== null) {
+            $tokens[] = $token->value;
+        }
+
+        $this->assertSame(['-', 2, '*', 'ln', '(', 'c', '(', 2, 'e', '^', '-', 'x', '-', 'x', ')', ')'], $tokens);
     }
 }
