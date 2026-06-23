@@ -178,11 +178,6 @@ var result = {
         iframes = iframes ? iframes : [];
         const iframesArgs = [];
         let siteUrl = that.CoreSitesProvider.currentSite.siteUrl;
-        const mobileMathJaxIframeStyles =
-            '<style data-stack-mobile-mathjax="true">'
-            + '.MathJax,.MathJax *,'
-            + 'mjx-container,mjx-container *{font-weight:normal !important;}'
-            + '</style>';
         for (let iframe of iframes) {
             iframe = iframe.slice(25, -6);
             // Final parameter is optional but defaults to false. We need to set it explicitly to avoid broken JSON.
@@ -195,7 +190,7 @@ var result = {
             args[1] = args[1].replace(baseRef + 'sortable.min.css" rel="stylesheet">',
                 baseRef + 'sortable.min.css" rel="stylesheet">'
                 + '<link rel="stylesheet" href="' + baseRef + 'styles.css"></link>');
-            args[1] = args[1].replace('</head>', mobileMathJaxIframeStyles + '</head>');
+            args[1] = rewriteMathJax2ConfigForMobile(args[1]);
             // Scripts are now being loaded cross origin and Chrome complains.
             // It may just be a dev environment issue.
             args[1] = args[1].replace(/<img/g, '<img crossorigin=\'anonymous\'');
@@ -229,6 +224,15 @@ var result = {
             observer.observe(document.body, {childList: true, subtree: true});
         });
 
+        function rewriteMathJax2ConfigForMobile(content) {
+            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
+                return content;
+            }
+            return content.replace(
+                'config=TeX-AMS-MML_HTMLorMML',
+                'config=TeX-MML-AM_CHTML'
+            );
+        }
         // Mostly a cut and paste of input.js file with updates for multianswer.
         /**
          * Class constructor representing an input in a Stack question.
