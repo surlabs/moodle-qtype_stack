@@ -235,6 +235,31 @@ describe('mobile/stack.js', () => {
         expect(context.question.text).toContain('style="width: 13em;"');
     });
 
+    test('injects the mobile MathJax reset into iframe srcdoc', async() => {
+        const baseRef = 'https://example.test/question/type/stack/corsscripts/cors.php?name=';
+        const iframeHtml = '<!doctype html><html><head>'
+            + '<link href="' + baseRef + 'sortable.min.css" rel="stylesheet">'
+            + '</head><body><div class="MathJax">Frame</div></body></html>';
+        const context = buildContext({
+            question: {
+                html: buildQuestionHtml(),
+                scriptsCode: 'stackjsvle.create_iframe("iframe-1","' + iframeHtml.replace(/"/g, '\\"')
+                    + '","frame-target","Author frame",true,false);});;',
+            },
+        });
+        const mobileStack = loadMobileStack(context);
+
+        mobileStack.componentInit.call(context);
+        mountRenderedQuestion(context.question);
+        jest.runAllTimers();
+        await flushMicrotasks();
+
+        const iframe = document.getElementById('iframe-1');
+        expect(iframe.srcdoc).toContain('data-stack-mobile-mathjax="true"');
+        expect(iframe.srcdoc).toContain('font-weight:normal !important;');
+        expect(iframe.srcdoc).toContain(baseRef + 'styles.css');
+    });
+
     test('initialises instant validation from scriptsCode and hides submit button', async() => {
         const read = jest.fn().mockResolvedValue({
             status: 'valid',
