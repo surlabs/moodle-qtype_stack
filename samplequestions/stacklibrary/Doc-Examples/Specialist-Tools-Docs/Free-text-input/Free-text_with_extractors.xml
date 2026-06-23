@@ -222,7 +222,7 @@ by inspection gives `{#args(transpose(matrix(ev1)))#}`
       <allowwords></allowwords>
       <forbidfloat>0</forbidfloat>
       <requirelowestterms>0</requirelowestterms>
-      <checkanswertype>0</checkanswertype>
+      <checkanswertype>1</checkanswertype>
       <mustverify>1</mustverify>
       <showvalidation>1</showvalidation>
       <options></options>
