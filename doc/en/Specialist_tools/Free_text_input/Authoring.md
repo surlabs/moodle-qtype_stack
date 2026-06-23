@@ -44,6 +44,8 @@ The question text uses pure LaTeX rather than unicode:
 </div>
 ```
 
+Note the use of style `<div class="free-text-container">...</div`.  This positions the input and ascii-block preview next to each other.
+
 Reference documentation is available for the linked [`[[ascii]]` block](../../Authoring/Question_blocks/ASCII.md) elsewhere.  This block provides more flexibility for options for free-text input than is available for general inputs.  In particular for (i) processing, (ii) displaying and (in later examples) (iii) extracting parts of the input for use in PRTs.  This example uses the default `markdown-math` filter.  This takes the free-text, processes it as markdown with mathematics and uses the `aligneq` transformation to align multi-line mathematics on the first equals sign.
 
 Adjust the input settings:
@@ -61,8 +63,6 @@ This question will be [manually graded](../../Moodle/Semi-automatic_Marking.md).
 This question can also be loaded from 
 
     Doc-Examples/Specialist-Tools-Docs/Free-text-input/Free-text_manually_graded_mathematical_proof.xml
-
-Note the use of style `<div class="free-text-container">...</div`.  This positions the input and ascii-block preview next to each other.
 
 # 2. Free-text answer linked to STACK input
 
