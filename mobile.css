@@ -1177,6 +1177,16 @@ table.HELM_table th:last-child {
         flex-direction: column;
         width: 100%;
     }
+
+    .free-text-container > * {
+        flex: none;
+        width: 100%;
+    }
+
+    .free-text-container > textarea {
+        box-sizing: border-box;
+        width: 100%;
+    }
 }
 
 /* Trees: https://codepen.io/ross-angus/pen/jwxMjL
