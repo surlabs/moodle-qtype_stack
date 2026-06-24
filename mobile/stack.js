@@ -190,7 +190,10 @@ var result = {
             args[1] = args[1].replace(baseRef + 'sortable.min.css" rel="stylesheet">',
                 baseRef + 'sortable.min.css" rel="stylesheet">'
                 + '<link rel="stylesheet" href="' + baseRef + 'styles.css"></link>');
-            args[1] = rewriteMathJax2ConfigForMobile(args[1]);
+            args[1] = args[1].replace(
+                'config=TeX-AMS-MML_HTMLorMML',
+                'config=TeX-MML-AM_CHTML'
+            );
             // Scripts are now being loaded cross origin and Chrome complains.
             // It may just be a dev environment issue.
             args[1] = args[1].replace(/<img/g, '<img crossorigin=\'anonymous\'');
@@ -205,8 +208,12 @@ var result = {
             // moving between pages of a quiz, the data is loaded dynamically
             // and even using afterRender triggers before the div is available.
             // Sigh... Add this observer to set up validation ASAP.
+            const iframeTargetIds = iframesArgs.map((args) => args[2]);
             const observer = new MutationObserver(() => {
-                if (document.querySelector('#' + this.question.divId)) {
+                const questionDivReady = document.querySelector('#' + this.question.divId);
+                const iframeTargetsReady = iframeTargetIds.every((targetId) => document.getElementById(targetId));
+
+                if (questionDivReady && iframeTargetsReady) {
                     observer.disconnect();
                     for (const args of inputInits) {
                         initInputs(...args);
@@ -224,15 +231,6 @@ var result = {
             observer.observe(document.body, {childList: true, subtree: true});
         });
 
-        function rewriteMathJax2ConfigForMobile(content) {
-            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
-                return content;
-            }
-            return content.replace(
-                'config=TeX-AMS-MML_HTMLorMML',
-                'config=TeX-MML-AM_CHTML'
-            );
-        }
         // Mostly a cut and paste of input.js file with updates for multianswer.
         /**
          * Class constructor representing an input in a Stack question.
