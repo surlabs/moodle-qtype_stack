@@ -190,6 +190,7 @@ var result = {
             args[1] = args[1].replace(baseRef + 'sortable.min.css" rel="stylesheet">',
                 baseRef + 'sortable.min.css" rel="stylesheet">'
                 + '<link rel="stylesheet" href="' + baseRef + 'styles.css"></link>');
+            args[1] = rewriteMathJax2ConfigForMobile(args[1]);
             // Scripts are now being loaded cross origin and Chrome complains.
             // It may just be a dev environment issue.
             args[1] = args[1].replace(/<img/g, '<img crossorigin=\'anonymous\'');
@@ -223,6 +224,15 @@ var result = {
             observer.observe(document.body, {childList: true, subtree: true});
         });
 
+        function rewriteMathJax2ConfigForMobile(content) {
+            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
+                return content;
+            }
+            return content.replace(
+                'config=TeX-AMS-MML_HTMLorMML',
+                'config=TeX-MML-AM_CHTML'
+            );
+        }
         // Mostly a cut and paste of input.js file with updates for multianswer.
         /**
          * Class constructor representing an input in a Stack question.
@@ -403,7 +413,8 @@ var result = {
              * @param {Object} response The data that came back from the ajax validation call.
              */
             function showValidationFailure(response) {
-                lastValidatedValue = '';
+                // ISS1757 - Change from blank to null so validation updates when answer cleared.
+                lastValidatedValue = null;
                 // Reponse usually contains backtrace, debuginfo, errorcode, link, message and moreinfourl.
                 validationDiv.innerHTML = response.message;
                 removeAllClasses();
@@ -548,6 +559,34 @@ var result = {
                 textarea.dispatchEvent(event);
             };
         }
+
+    /**
+     * Input type for freetext inputs.
+     *
+     * @constructor
+     * @param {Object} freetext The input element wrapped in jquery.
+     */
+    function StackFreetextInput(freetext) {
+        /**
+         * Add the event handler to call when the user input changes.
+         *
+         * @param {Function} valueChanging the callback to call when we detect a value change.
+         */
+        this.addEventHandlers = function(valueChanging) {
+            freetext.addEventListener('input', valueChanging);
+        };
+
+        /**
+         * Get the current value of this input.
+         *
+         * @return {String}.
+         */
+        this.getValue = function() {
+            var raw = freetext.value.replace(/^\s+|\s+$/g, '');
+            // Using <br> here is weird, but it gets sorted out at the PHP end.
+            return raw.split(/\s*[\r\n]\s*/).join('<br>');
+        };
+    }
 
         /**
          * Input type for inputs that are a set of radio buttons.
@@ -763,7 +802,11 @@ var result = {
             var input = document.querySelector('#' + questionDivId + ' [name="' + prefix + name + '"]');
             if (input) {
                 if (input.nodeName === 'TEXTAREA') {
-                    return new StackTextareaInput(input);
+                    if (input.dataset.stackInputType === 'freetext') {
+                        return new StackFreetextInput(input);
+                    } else {
+                        return new StackTextareaInput(input);
+                    }
                 } else if (input.tagName === 'ION-RADIO-GROUP') {
                     return new StackRadioInput(questionDivId, prefix, name);
                 } else if (input.tagName === 'ION-SELECT') {
@@ -1177,7 +1220,11 @@ var result = {
                     response['input-readonly'] = input.hasAttribute('disabled');
                 } else if (input.nodeName.toLowerCase() === 'textarea') {
                     response.value = input.value;
-                    response['input-type'] = 'textarea';
+                    if (input.dataset.stackInputType === 'freetext') {
+                        response['input-type'] = 'freetext';
+                    } else {
+                        response['input-type'] = 'textarea';
+                    }
                     response['input-readonly'] = input.hasAttribute('disabled');
                 } else if (input.tagName.toLowerCase() === 'ion-checkbox') {
                     response.value = input.checked;
@@ -1483,7 +1530,9 @@ var result = {
 
                 // 2. Set the wrapper size.
                 element.style.width = msg.width;
-                element.style.height = msg.height;
+                if (!element.closest('.free-text-container')) {
+                    element.style.height = msg.height;
+                }
 
                 // 3. Reset the frame size.
                 IFRAMES[msg.src].style.width = '100%';
@@ -1634,7 +1683,19 @@ var result = {
             // This allows that div to contain some sort of loading
             // indicator until we plug in the frame.
             // Naturally the frame will then start to load itself.
-            document.getElementById(targetdivid).replaceChildren(frm);
+            const targetdiv = document.getElementById(targetdivid);
+            targetdiv.replaceChildren(frm);
+
+            // In side-by-side free-text layout, keep wrapper height driven by flex.
+            if (targetdiv.closest('.free-text-container')) {
+                // Preserve the configured holder height as a floor (e.g. 400px default
+                // or an author-defined smaller/larger value), then allow growth.
+                if (targetdiv.style.height) {
+                    targetdiv.style.minHeight = targetdiv.style.height;
+                }
+                targetdiv.style.height = 'auto';
+                frm.style.height = 'auto';
+            }
             IFRAMES[iframeid] = frm;
         }
 

@@ -274,13 +274,13 @@ describe('api/public/stackshared.js', () => {
         expect(document.getElementById('errors').innerText).toBe('');
         expect(document.getElementById('output').innerHTML).toContain('name="stackapi_val_alpha"');
         expect(document.getElementById('output').innerHTML).toContain("name=\"stackapi_fb_prt1\"");
-        expect(document.getElementById('output').innerHTML).toContain('/plots/plot-q.png');
+        expect(document.getElementById('output').innerHTML).toContain('/plot.php/plot-q.png');
         expect(document.getElementById('stackapi_qtext').style.display).toBe('block');
         expect(document.getElementById('stackapi_correct').style.display).toBe('block');
         expect(document.getElementById('needs-input').style.display).toBe('inline-block');
         expect(document.getElementById('generalfeedback').innerHTML).toContain('name="stackapi_fb_prt2"');
         expect(document.getElementById('stackapi_generalfeedback').style.display).toBe('block');
-        expect(document.getElementById('questionnote').innerHTML).toContain('/plots/plot-q.png');
+        expect(document.getElementById('questionnote').innerHTML).toContain('/plot.php/plot-q.png');
         expect(document.getElementById('stackapi_questionnote').style.display).toBe('block');
         expect(document.getElementById('formatcorrectresponse').innerHTML).toContain('\\[{x+1}\\]');
         expect(document.getElementById('formatcorrectresponse').innerHTML).toContain('line 1<br>line 2');
@@ -422,9 +422,9 @@ describe('api/public/stackshared.js', () => {
         expect(document.getElementById('response_summary').innerText).toBe('summary text');
         expect(document.getElementById('stackapi_summary').style.display).toBe('block');
         expect(document.getElementById('specificfeedback').innerHTML).toContain('name="stackapi_fb_prt1"');
-        expect(document.getElementById('specificfeedback').innerHTML).toContain('/plots/grading.png');
+        expect(document.getElementById('specificfeedback').innerHTML).toContain('/plot.php/grading.png');
         expect(document.getElementById('specificfeedback').classList.contains('feedback')).toBe(true);
-        expect(document.getElementsByName('stackapi_fb_prt1')[0].innerHTML).toContain('/plots/grading.png');
+        expect(document.getElementsByName('stackapi_fb_prt1')[0].innerHTML).toContain('/plot.php/grading.png');
         expect(document.getElementsByName('stackapi_fb_prt1')[0].innerHTML).toContain('Marks for this submission:');
         expect(document.getElementsByName('stackapi_fb_prt1')[0].innerHTML).toContain('0.80');
         expect(document.getElementsByName('stackapi_fb_prt1')[0].innerHTML).toContain('1.00');

@@ -186,12 +186,12 @@ require_login();
         </div>
         <h2 id="stackapi_score" style="display: none">Score: <span id="score"></span></h2>
         <div id="stackapi_summary" class="col-lg-10" style="display: none">
-          <h2><?php echo stack_string('api_response')?>:</h2>
+          <h2>Response summary:</h2>
           <div id="response_summary" class="feedback outcome"></div>
         </div>
         <div id="stackapi_correct" class="col-lg-10" style="display: none">
+          <h2>Correct response:</h2>
           <div class="noninfo">
-            <h2>Response summary:</h2>
             <div id="formatcorrectresponse" class="feedback outcome"></div>
           </div>
         </div>

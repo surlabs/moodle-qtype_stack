@@ -302,6 +302,17 @@ final class input_algebraic_test extends qtype_stack_testcase {
                 '<span class="stacksyntaxexamplehighlight">*</span>x' .
                 '<span class="stacksyntaxexamplehighlight">*</span>(1+x^2)</span>.</div></div>';
         $this->assertEquals($vr, $el->replace_validation_tags($state, 'sans1', '[[validation:sans1]]'));
+
+        $el->set_parameter('showValidation', 3);
+        $state = $el->validate_student_response(['sans1' => '2x(1+x^2)'], $options, 'x^2/(1+x^2)', new stack_cas_security());
+        $vr = '<span class="stackinputfeedback compact" id="sans1_val" aria-live="assertive">' .
+                '<span class="stacksyntaxexample">2x(1+x^2)</span>' .
+                '<input type="hidden" name="sans1_val" value="2x(1+x^2)" /><span class="alert alert-danger stackinputerror">' .
+                'This answer is invalid. You seem to be missing * characters. ' .
+                'Perhaps you meant to type <span class="stacksyntaxexample">2' .
+                '<span class="stacksyntaxexamplehighlight">*</span>x' .
+                '<span class="stacksyntaxexamplehighlight">*</span>(1+x^2)</span>.</span></span>';
+        $this->assertEquals($vr, $el->replace_validation_tags($state, 'sans1', '[[validation:sans1]]'));
     }
 
     public function test_validate_student_response_algebraic_3(): void {
@@ -3413,5 +3424,44 @@ final class input_algebraic_test extends qtype_stack_testcase {
         );
         $this->assertEquals('a = b < c', $state->contentsmodified);
         $this->assertEquals('<span class="stacksyntaxexample">a=b&lt;c</span>', $state->contentsdisplayed);
+    }
+
+    public function test_validate_student_asciimath(): void {
+
+        // Condone backtick delimiters to accept AsciiMath syntax.
+        $options = new stack_options();
+        $el = stack_input_factory::make('algebraic', 'sans1', 'm');
+        $el->set_parameter('insertStars', 2);
+        $state = $el->validate_student_response(
+            ['sans1' => '`x^2+3`'], // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
+            $options,
+            'x^2',
+            new stack_cas_security()
+        );
+        $this->assertEquals(stack_input::VALID, $state->status);
+        $this->assertEquals('', $state->note);
+        $this->assertEquals('', $state->errors);
+        $this->assertEquals('x^2+3', $state->contentsmodified);
+        $this->assertEquals('\[ x^2+3 \]', $state->contentsdisplayed);
+        $this->assertEquals('\( \left[ x \right]\) ', $state->lvars);
+
+        // Reject backticks elsewhere.
+        $options = new stack_options();
+        $el = stack_input_factory::make('algebraic', 'sans1', 'm');
+        $el->set_parameter('insertStars', 2);
+        $state = $el->validate_student_response(
+            ['sans1' => 'x^2+`3'], // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
+            $options,
+            'x^2',
+            new stack_cas_security()
+        );
+        $this->assertEquals(stack_input::INVALID, $state->status);
+        $this->assertEquals('forbiddenChar_parserError', $state->note);
+        // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
+        $this->assertEquals('CAS commands may not contain the following characters: `.', $state->errors);
+        $this->assertEquals('', $state->contentsmodified);
+        // phpcs:ignore moodle.Strings.ForbiddenStrings.Found
+        $this->assertEquals('<span class="stacksyntaxexample">x^2+`3</span>', $state->contentsdisplayed);
+        $this->assertEquals('', $state->lvars);
     }
 }

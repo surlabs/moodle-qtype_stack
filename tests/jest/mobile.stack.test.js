@@ -177,6 +177,7 @@ describe('mobile/stack.js', () => {
         jest.restoreAllMocks();
 
         global.CustomEvents = {notifyFilterContentUpdated: jest.fn()};
+        global.MathJax = {};
         if (!global.CSS) {
             global.CSS = {};
         }
@@ -233,6 +234,58 @@ describe('mobile/stack.js', () => {
         expect(context.question.text).toContain('validationerror');
         expect(context.question.text).toContain('hidden="true"');
         expect(context.question.text).toContain('style="width: 13em;"');
+    });
+
+    test('rewrites MathJax 2 iframe config to common HTML on mobile', async() => {
+        const baseRef = 'https://example.test/question/type/stack/corsscripts/cors.php?name=';
+        const iframeHtml = '<!doctype html><html><head>'
+            + '<link href="' + baseRef + 'sortable.min.css" rel="stylesheet">'
+            + '<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured"></script>'
+            + '</head><body><div class="MathJax">Frame</div></body></html>';
+        const context = buildContext({
+            question: {
+                html: buildQuestionHtml(),
+                scriptsCode: 'stackjsvle.create_iframe("iframe-1","' + iframeHtml.replace(/"/g, '\\"')
+                    + '","frame-target","Author frame",true,false);});;',
+            },
+        });
+        const mobileStack = loadMobileStack(context);
+
+        mobileStack.componentInit.call(context);
+        mountRenderedQuestion(context.question);
+        jest.runAllTimers();
+        await flushMicrotasks();
+
+        const iframe = document.getElementById('iframe-1');
+        expect(iframe.srcdoc).toContain(baseRef + 'styles.css');
+        expect(iframe.srcdoc).toContain('MathJax.js?config=TeX-MML-AM_CHTML&delayStartupUntil=configured');
+        expect(iframe.srcdoc).not.toContain('MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured');
+    });
+
+    test('does not rewrite iframe MathJax config when MathJax 3 is active', async() => {
+        const iframeHtml = '<!doctype html><html><head>'
+            + '<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>'
+            + '</head><body><div class="MathJax">Frame</div></body></html>';
+        global.MathJax = {
+            typesetPromise: jest.fn(),
+        };
+        const context = buildContext({
+            question: {
+                html: buildQuestionHtml(),
+                scriptsCode: 'stackjsvle.create_iframe("iframe-1","' + iframeHtml.replace(/"/g, '\\"')
+                    + '","frame-target","Author frame",true,false);});;',
+            },
+        });
+        const mobileStack = loadMobileStack(context);
+
+        mobileStack.componentInit.call(context);
+        mountRenderedQuestion(context.question);
+        jest.runAllTimers();
+        await flushMicrotasks();
+
+        const iframe = document.getElementById('iframe-1');
+        expect(iframe.srcdoc).toContain('MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+        expect(iframe.srcdoc).not.toContain('MathJax.js?config=TeX-MML-AM_CHTML');
     });
 
     test('initialises instant validation from scriptsCode and hides submit button', async() => {

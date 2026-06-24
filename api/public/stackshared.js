@@ -94,7 +94,10 @@ function send() {
                     const name = holder[1];
                     const input = inputs[name];
                     question = question.replace(`[[input:${name}]]`, input.render);
-                    question = question.replace(`[[validation:${name}]]`, `<span name='${validationPrefix + name}'></span>`);
+                    question = question.replace(
+                        `[[validation:${name}]]`,
+                        `<span name='${validationPrefix + name}' class='stackinputfeedback empty'></span>`
+                    );
                     if (input.samplesolutionrender && name !== 'remember') {
                         // Display render of answer and matching user input to produce the answer.
                         correctAnswers += `<p>A correct answer is: `;
@@ -231,9 +234,11 @@ function validate(element) {
                 const element = document.getElementsByName(`${validationPrefix + answerName}`)[0];
                 element.innerHTML = validationHTML;
                 if (validationHTML) {
+                    element.classList.remove('empty');
                     element.classList.add('validation');
                 } else {
                     element.classList.remove('validation');
+                    element.classList.add('empty');
                 }
                 createIframes(json.iframes);
                 MathJax.typesetPromise();

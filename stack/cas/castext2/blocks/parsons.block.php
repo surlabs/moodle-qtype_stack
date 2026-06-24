@@ -280,9 +280,9 @@ class stack_cas_castext2_parsons extends stack_cas_castext2_block {
         (Array.isArray(available_header) && available_header.length === 1 && typeof(available_header[0]) === "string")))
             {stack_js.display_error('
             . json_encode(
-                  stack_string('stackBlock_incorrect_available_header_type'),
-                  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-              )
+                stack_string('stackBlock_incorrect_available_header_type'),
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            )
             . ');}' . "\n";
         // Extract available header if it is an array containing a single string.
         $code .= 'if (Array.isArray(available_header)) {available_header = available_header[0]};' . "\n";
@@ -621,6 +621,7 @@ class stack_cas_castext2_parsons extends stack_cas_castext2_block {
                         'item-width', 'log', 'style',
                     ];
                     $err[] = stack_string('stackBlock_parsons_param', [
+                        'block' => "Parson's",
                         'param' => implode(', ', $valids),
                     ]);
                 }

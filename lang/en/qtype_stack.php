@@ -205,6 +205,7 @@ $string['inputtypejson'] = 'JSON';
 $string['inputtypenumerical'] = 'Numerical';
 $string['inputtypegeogebra'] = 'GeoGebra';
 $string['inputtypeparsons'] = 'Parsons';
+$string['inputtypefreetext'] = 'Free-text';
 $string['inputtypeparsons_incorrect_model_ans'] = 'The model answer field to the Parsons input is malformed. It should be one of the following: <ul> <li> <strong>Proof questions</strong>: a list of the form <code>[ta, proof_steps]</code> where <code>ta</code> is the correct answer variable and <code>proof_steps</code> is the variable containing all available proof steps.</li><li><strong>Grouping questions</strong> If the columns variable is set in the Parson\'s block, then an array of the form <code>[ta, steps, n]</code>, where <code>ta</code> is the correct answer variable, <code>steps</code> is the variable containing all available steps and <code>n</code> is the number of columns.</li> <li><strong>Grid questions</strong> If both the columns and row variables are set in the Parson\'s block, then an array of the form <code>[ta, steps, n, m]</code>, where <code>ta</code> is the correct answer variable, <code>steps</code> is the variable containing all available steps, <code>n</code> is the number of columns and <code>m</code> is the number of rows.</li>';
 $string['numericalinputmustnumber'] = 'This input expects a number.';
 $string['numericalinputvarsforbidden'] = 'This input expects a number, and so may not contain variables.';
@@ -418,6 +419,7 @@ $string['mustconfirm'] = 'You have changes to confirm.';
 $string['moodleerrors'] = 'You have errors related to Moodle\'s basic question setup.';
 $string['stackerrors'] = 'You have errors in your question.';
 $string['markedasbroken'] = 'The question has been marked as broken and will not be accessible to students.';
+$string['alwaysmanuallygrade'] = 'This question is always manually graded.';
 
 // Strings used by input elements.
 $string['studentinputtoolong'] = 'Your input is longer than permitted by STACK.';
@@ -1038,6 +1040,27 @@ $string['Illegal_illegal_power_of_ten_in_units']  = 'The value may not contain n
 $string['Illegal_input_form_units']               = 'This input expects a numerical value followed or multiplied by an expression defining an unit, e.g. <code>1.23*W/m^2</code>. Note that the unit required here may be something else.';
 $string['Illegal_x10'] = 'Your answer appears to use the character "x" as a multiplication sign.  Please use <code>*</code> for multiplication.';
 
+$string['stackBlock_ascii_width']       = 'The width of the ASCII block display area must use a known CSS-length unit.';
+$string['stackBlock_ascii_height']      = 'The height of the ASCII block display must use a known CSS-length unit.';
+$string['stackBlock_ascii_width_num']   = 'The numeric portion of the width of the ASCII block display must be a raw number and must not contain any extra chars.';
+$string['stackBlock_ascii_height_num']  = 'The numeric portion of the height of the ASCII block display must be a raw number and must not contain any extra chars.';
+$string['stackBlock_ascii_length_num']  = 'The numeric value of length must be a positive integer and must not contain any extra chars or numerical types.';
+$string['stackBlock_ascii_underdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one must define either width or height of the lists.';
+$string['stackBlock_ascii_overdefined_dimension'] = 'When defining aspect-ratio for the ASCII block display one should only define width or height not both.';
+$string['stackBlock_ascii_answer_format'] = 'The answer attribute of the ASCII block must be in the format \"[ans1,extractor,filter],[ans2,extractor,filter],...\".';
+$string['stackBlock_ascii_unknown_param'] = 'Unknown parameter \'{$a}\' for the ASCII block.';
+$string['stackBlock_ascii_param'] = 'Valid parameters are: {$a->param}.';
+
+$string['stackBlock_extractor_targetinput_required'] = 'You must define the targetinput for the extractor block to send the answer to.';
+$string['stackBlock_extractor_type_required'] = 'You must define the type of extractor you want to use.';
+$string['stackBlock_extractor_unknown_param'] = 'Unknown parameter \'{$a}\' for the extractor block.';
+$string['stackBlock_extractor_param'] = 'Valid parameters are: {$a->param}.';
+$string['stackBlock_extractor_unknown'] = 'Unknown type \'{$a->type}\' for the extractor block. Valid types are: \'{$a->extractors}\'';
+
+$string['stackBlock_filter_type_required'] = 'You must define the type of filter you want to use.';
+$string['stackBlock_filter_unknown'] = 'Unknown type \'{$a->type}\' for the filter block. Valid types are: \'{$a->filters}\'';
+$string['stackBlock_filter_trans_unknown'] = 'Unknown transform \'{$a->transforms}\' for the filter block. Valid transforms are: \'{$a->valid}\'';
+
 $string['stackBlock_jsxgraph_width']       = 'The width of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_height']      = 'The height of a JSXGraph must use a known CSS-length unit.';
 $string['stackBlock_jsxgraph_width_num']   = 'The numeric portion of the width of a JSXGraph must be a raw number and must not contain any extra chars.';
@@ -1060,7 +1083,7 @@ $string['stackBlock_parsons_overdefined_dimension'] = 'When defining aspect-rati
 $string['stackBlock_parsons_unknown_named_version'] = 'The Parson\'s block only supports versions named: {$a->version}.';
 $string['stackBlock_parsons_unknown_mathjax_version'] = 'The Parson\'s block only supports MathJax versions {$a->mjversion}, please check your site administration settings for the mathjax version.';
 $string['stackBlock_parsons_ref']         = 'The Parson\'s block only supports referencing inputs present in the same CASText section \'{$a->var}\' does not exist here.';
-$string['stackBlock_parsons_param']       = 'The Parson\'s block supports only these parameters in this context: \'{$a->param}\'.';
+$string['stackBlock_parsons_param']       = 'The {$a->block} block supports only these parameters in this context: \'{$a->param}\'.';
 $string['stackBlock_parsons_contents']    = 'The contents of a Parson\'s block must be a either a JSON of the form {#stackjson_stringify(steps)#}, where \'steps\' is the two-dimensional Maxima array containing key, value pairs of items, or of the form {\'steps\' : {#stackjson_stringify(steps)#}, \'options\' : {JSON containing Sortable options}, \'header\' : [List of headers], \'available_header\' : \'string containing header for the available list\', \'index\' : [List containing the index]}, where the \'options\', \'header\', \'available_header\', and \'index\' keys are optional. Alternatively, the contents of the Parsons block may contain raw JSON equivalents. If using raw JSON inside the Parsons bock, numeric keys are not supported due to issues with re-ordering; please use descriptive tags. Note that all steps must be strings. See https://docs.stack-assessment.org/en/Authoring/Parsons/ for details.';
 $string['stackBlock_incorrect_header_length'] = 'The list of headers should have the same length as the number of columns passed to the block header.';
 $string['stackBlock_incorrect_available_header_type'] = 'The header for the available list should be passed as a string or a list of length one.';
@@ -1875,6 +1898,23 @@ $string['calc_int_methods_parts_indefinite_fact'] = '\[
 or alternatively: \[\int f(x)g(x)\,\mathrm{d}x=f(x)\,\int
 g(x)\mathrm{d}x -\int {\mathrm{d}f\over \mathrm{d}x}\left\{\int g(x)\mathrm{d}x\right\}\mathrm{d}x.\]';
 
+$string['free_text_name'] = 'Free-text inputs';
+// phpcs:disable moodle.Strings.ForbiddenStrings.Found
+$string['free_text_fact'] = 'This input allows you to type in free text, e.g. your complete working or mathematical proof.
+<ol>
+<li>You can type markdown text.</li>
+<li>You can type AsciiMath between backticks for mathematics: <code>`...`</code></li>
+<li>You can include LaTeX between brackets, <code>\(...\)</code> for inline mathematics and <code>\[...\]</code> displayed mathematics.</li>
+<li>If activated by the teacher, calculations between <code>{@...@}</code> will be automatically evaluated.</li>
+</ol>
+<p>AsciiMath has two forms.  <em>Inline</em> AsciiMath starts and ends with a backtick, e.g. <code>`sum_(k=1)^oo 1/(n^2)=pi^2/6`</code>.</p>
+<p><em>Displayed</em> AsciiMath starts and ends with a backtick on an empty line, and mathematics lines in between.  E.g.
+<pre>`<br>x^2-5x+6=0<br>(x-3)(x-2)=0<br>`</pre>
+<p>More specific documentation on markdown, AsciiMath and LaTeX is available online.</p>';
+$string['free_text_calc'] = 'This input allows you embed simple calculations between <code>{@...@}</code>, rather than reaching for an external calculator.';
+$string['free_text_calc_min'] = '{@...@}';
+$string['free_text_toolong'] = 'Your answer should not be more than {$a->max} characters long. It is currently {$a->current} characters.';
+// phpcs:enable moodle.Strings.ForbiddenStrings.Found
 $string['Illegal_singleton_power'] = 'This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
 $string['Illegal_singleton_floats'] = 'This input does not accept decimal numbers in the given form. This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
 $string['Illegal_singleton_integer'] = 'This input does not accept integer values. This input requires a numeric value presented in one of the following forms: <code>{$a->forms}</code>';
