@@ -134,7 +134,7 @@ class StackQuestionLoader {
             self::get_default('question', 'questionvariables', 'ta1:1;');
         if (get_config('qtype_stack', 'stackapi')) {
             // Temporary addition for free-text to match saving from edit form.
-            $question->questionvariables         = str_replace("\n", "\r\n", $question->questionvariables);
+            $question->questionvariables     = preg_replace("/(?<!\r)\n/", "\r\n", $question->questionvariables);
         }
         $question->questionnote              =
             isset($xmldata->question->questionnote->text) ? (string) $xmldata->question->questionnote->text :
