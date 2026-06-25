@@ -16,6 +16,7 @@ Issues with [github milestone 4.13.0](https://github.com/maths/moodle-qtype_stac
 5. Allow most input types to use the extra option 'manualgraded'.
 6. Expand the use of "align" and "monospace" input options to textarea and equiv inputs.
 7. Move chemistry data and some core functions into the Maxima supported code.  Load these with `stack_chemistry_declare(true);` in the question variables.
+8. Redesign of question dashboard layout.
 
 
 ## Better testing
