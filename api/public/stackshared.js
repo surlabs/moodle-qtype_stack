@@ -280,13 +280,13 @@ function answer() {
                 } else {
                     document.getElementById('errors').innerText = '';
                 }
-                renameIframeHolders();
                 if (!json.isgradable) {
                     // Should we display this or nothing (like Moodle)?
                     document.getElementById('stackapi_validity').innerText
                         = ' Please supply additional valid answers.';
                     return;
                 }
+                renameIframeHolders();
                 if (displayType === FULLDISPLAY) {
                     document.getElementById('score').innerText
                         = (json.score * json.scoreweights.total).toFixed(2) +
