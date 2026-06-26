@@ -23,6 +23,7 @@
 
 namespace qtype_stack;
 
+use StackLexerSeparators;
 use qtype_stack_testcase;
 use stack_parser_options;
 use MP_Root;
@@ -195,5 +196,29 @@ final class parser_test extends qtype_stack_testcase {
         }
 
         $this->assertSame($expectedtokens, $tokens);
+    }
+
+    /**
+     * Test malformed exponent syntax does not crash the lexer.
+     *
+     * @dataProvider malformed_exponent_provider
+     *
+     * @param string $input
+     * @param array $expectedtokens
+     */
+    public function test_malformed_exponent_lexes_cleanly_comma(
+        string $input,
+        array $expectedtokens
+        ): void {
+            $po = stack_parser_options::get_cas_config();
+            $po->separators = StackLexerSeparators::Comma;
+            $lexer = $po->get_lexer($input);
+
+            $tokens = [];
+            while (($token = $lexer->get_next_token()) !== null) {
+                $tokens[] = $token->value;
+            }
+
+            $this->assertSame($expectedtokens, $tokens);
     }
 }
